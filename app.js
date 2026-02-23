@@ -1,9 +1,28 @@
 /**
- * The Alchemist's Quill
+ * The Alchemist's Quill — with Real Firebase Login
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// Local fallback transmutations (rich dataset)
+// Firebase imports (must be at top)
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+
+// Your real Firebase config (from console — paste here or use env var)
+const firebaseConfig = {
+  apiKey: "AIzaSyDj5obiuI5Bghx8yF7UXrkmazTNTAqX1Bk",
+  authDomain: "alchemists-quill.firebaseapp.com",
+  projectId: "alchemists-quill",
+  storageBucket: "alchemists-quill.firebasestorage.app",
+  messagingSenderId: "715648815341",
+  appId: "1:715648815341:web:88fb5a5496d25e91ec7ce4",
+  measurementId: "G-6J6W8HF9ZV"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+// Rich local fallback transmutations
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -59,9 +78,6 @@ const transmutations = {
   }
 };
 
-/**
- * Local fallback transmutation
- */
 function transmuteText(text, style) {
   const patterns = transmutations[style] || transmutations.shakespeare;
   let result = text.toLowerCase();
@@ -78,9 +94,6 @@ function transmuteText(text, style) {
   return prefix + result + suffix;
 }
 
-/**
- * Unified OpenAI call (transmute / generate / analyze)
- */
 async function callOpenAI(text, style, mode) {
   try {
     const response = await fetch('/api/transmute', {
@@ -88,7 +101,6 @@ async function callOpenAI(text, style, mode) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, style, mode })
     });
-
     const data = await response.json();
     if (!data.success) throw new Error(data.error || 'Failed');
     return data.transmuted || data.poem || data.analysis || "The spirits whisper faintly...";
@@ -101,9 +113,6 @@ async function callOpenAI(text, style, mode) {
   }
 }
 
-/**
- * Ink drop visual effect
- */
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
   drop.className = 'ink-drop';
@@ -113,30 +122,23 @@ function createInkDrop(x, y) {
   setTimeout(() => drop.remove(), 1000);
 }
 
-/**
- * Glow on alchemical symbols
- */
 function initAlchemicalSymbols() {
   document.querySelectorAll('.alchemical-symbol').forEach(symbol => {
     symbol.addEventListener('mouseenter', () => {
-      const colors = ['#BFAF8F', '#D4A017', '#A0895F'];
+      const colors = ['#D4AF37', '#BFAF8F', '#A0895F'];
       symbol.style.textShadow = `0 0 20px ${colors[Math.floor(Math.random() * colors.length)]}`;
     });
-    symbol.addEventListener('mouseleave', () => {
-      symbol.style.textShadow = '';
-    });
+    symbol.addEventListener('mouseleave', () => symbol.style.textShadow = '');
   });
 }
 
-// ====================== MAIN APP ======================
+// Main app
 document.addEventListener('DOMContentLoaded', () => {
-  // Remove loader
   const candle = document.getElementById('candleLoader');
   if (candle) setTimeout(() => candle.remove(), 3000);
 
   initAlchemicalSymbols();
 
-  // Core elements
   const input = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
   const transmuteBtn = document.getElementById('transmuteBtn');
@@ -146,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentMode = 'transmute';
 
-  // Create mode pills (beside TRANSMUTE)
+  // Create mode pills
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
-  // Insert mode pills right before TRANSMUTE button
+  // Insert pills right before TRANSMUTE button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
   // Mode switching
@@ -166,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
 
       if (currentMode === 'transmute') {
-        input.placeholder = "Enter thy modern tongue here...";
+        input.placeholder = "Enter thy modern plea here...";
         styleSelect.style.display = 'block';
         styleLabel.style.display = 'block';
       } else if (currentMode === 'ghostwriter') {
@@ -189,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     styleSelect.appendChild(opt);
   }
 
-  // Transmute action
+  // Transmute logic
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) {
@@ -231,12 +233,110 @@ document.addEventListener('DOMContentLoaded', () => {
       transmuteBtn.disabled = false;
     }
   });
+
+  // ────────────────────────────────────────────────
+  // REAL LOGIN SYSTEM (Firebase)
+  // ────────────────────────────────────────────────
+
+  let currentUser = null;
+
+  // Listen for auth changes
+  auth.onAuthStateChanged(user => {
+    currentUser = user;
+    updateEnterButton();
+  });
+
+  // Update ENTER button
+  function updateEnterButton() {
+    const btn = document.querySelector('.btn-enter');
+    if (!btn) return;
+
+    if (currentUser) {
+      btn.textContent = currentUser.displayName?.split(' ')[0] || 'Account';
+      btn.onclick = () => {
+        signOut(auth);
+        alert('Signed out');
+      };
+    } else {
+      btn.textContent = 'ENTER';
+      btn.onclick = showLoginModal;
+    }
+  }
+
+  // Show login modal
+  function showLoginModal() {
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;color:white;';
+
+    modal.innerHTML = `
+      <div style="background:#111;padding:2.5rem;border-radius:12px;width:90%;max-width:400px;text-align:center;">
+        <h2 style="font-size:2.2rem;margin-bottom:1.5rem;">Enter the Quill</h2>
+        
+        <button id="googleBtn" style="width:100%;padding:1rem;background:#4285F4;color:white;border:none;border-radius:6px;margin-bottom:1.5rem;cursor:pointer;font-size:1.1rem;">
+          Sign in with Google
+        </button>
+
+        <div style="margin:1.5rem 0;color:#777;">or</div>
+
+        <input id="email" type="email" placeholder="Email" style="width:100%;padding:0.9rem;margin-bottom:1rem;background:#222;border:1px solid #444;color:white;border-radius:6px;">
+        <input id="password" type="password" placeholder="Password" style="width:100%;padding:0.9rem;margin-bottom:1.5rem;background:#222;border:1px solid #444;color:white;border-radius:6px;">
+
+        <button id="signInBtn" style="width:100%;padding:1rem;background:#D4AF37;color:black;border:none;border-radius:6px;cursor:pointer;margin-bottom:1rem;font-size:1.1rem;">
+          Sign In
+        </button>
+
+        <button id="signUpBtn" style="background:none;border:none;color:#D4AF37;cursor:pointer;font-size:1rem;">
+          Create account
+        </button>
+
+        <button onclick="this.closest('div').parentElement.remove()" style="margin-top:2rem;background:none;border:none;color:#777;cursor:pointer;">
+          Close
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.querySelector('#googleBtn').onclick = async () => {
+      try {
+        await signInWithPopup(auth, googleProvider);
+        modal.remove();
+      } catch (e) {
+        alert('Google sign-in failed: ' + e.message);
+      }
+    };
+
+    modal.querySelector('#signInBtn').onclick = async () => {
+      const email = modal.querySelector('#email').value;
+      const pass = modal.querySelector('#password').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        modal.remove();
+      } catch (e) {
+        alert('Sign in failed: ' + e.message);
+      }
+    };
+
+    modal.querySelector('#signUpBtn').onclick = async () => {
+      const email = modal.querySelector('#email').value;
+      const pass = modal.querySelector('#password').value;
+      try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        modal.remove();
+      } catch (e) {
+        alert('Sign up failed: ' + e.message);
+      }
+    };
+  }
+
+  // Initialize button state on load
+  updateEnterButton();
 });
 
-// Utilities
+// Utilities (unchanged)
 function copyText() {
   const text = document.getElementById('outputText').textContent;
-  navigator.clipboard.writeText(text).then(() => alert("Copied to thy parchment!"));
+  navigator.clipboard.writeText(text).then(() => alert("Copied!"));
 }
 
 function speakText() {
