@@ -3,26 +3,18 @@
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// Firebase imports (must be at top)
+// Firebase imports
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 
-// Your real Firebase config (from console — paste here or use env var)
-const firebaseConfig = {
-  apiKey: "AIzaSyDj5obiuI5Bghx8yF7UXrkmazTNTAqX1Bk",
-  authDomain: "alchemists-quill.firebaseapp.com",
-  projectId: "alchemists-quill",
-  storageBucket: "alchemists-quill.firebasestorage.app",
-  messagingSenderId: "715648815341",
-  appId: "1:715648815341:web:88fb5a5496d25e91ec7ce4",
-  measurementId: "G-6J6W8HF9ZV"
-};
+// Load config from Vercel env var (safe — no keys in GitHub)
+const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG || '{}');
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Rich local fallback transmutations
+// Local fallback transmutations (rich)
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -148,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentMode = 'transmute';
 
-  // Create mode pills
+  // Mode pills (beside TRANSMUTE)
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
@@ -157,10 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
-  // Insert pills right before TRANSMUTE button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
-  // Mode switching
   modeContainer.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
       currentMode = btn.dataset.mode;
@@ -183,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Add Gen Z option
   if (!styleSelect.querySelector('option[value="genz"]')) {
     const opt = document.createElement('option');
     opt.value = 'genz';
@@ -191,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
     styleSelect.appendChild(opt);
   }
 
-  // Transmute logic
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) {
@@ -235,35 +223,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ────────────────────────────────────────────────
-  // REAL LOGIN SYSTEM (Firebase)
+  // REAL LOGIN (Firebase)
   // ────────────────────────────────────────────────
 
   let currentUser = null;
 
-  // Listen for auth changes
   auth.onAuthStateChanged(user => {
     currentUser = user;
     updateEnterButton();
   });
 
-  // Update ENTER button
   function updateEnterButton() {
     const btn = document.querySelector('.btn-enter');
     if (!btn) return;
 
     if (currentUser) {
       btn.textContent = currentUser.displayName?.split(' ')[0] || 'Account';
-      btn.onclick = () => {
-        signOut(auth);
-        alert('Signed out');
-      };
+      btn.onclick = () => signOut(auth).then(() => alert('Signed out'));
     } else {
       btn.textContent = 'ENTER';
       btn.onclick = showLoginModal;
     }
   }
 
-  // Show login modal
   function showLoginModal() {
     const modal = document.createElement('div');
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;color:white;';
@@ -329,11 +311,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Initialize button state on load
   updateEnterButton();
 });
 
-// Utilities (unchanged)
+// Utilities
 function copyText() {
   const text = document.getElementById('outputText').textContent;
   navigator.clipboard.writeText(text).then(() => alert("Copied!"));
@@ -354,4 +335,4 @@ function shareText() {
   } else {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   }
-      }
+    }
