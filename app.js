@@ -164,3 +164,95 @@ function shareText() {
 console.log("The Alchemist's Quill — Conjured by Abiud Keter & Kimi");
 console.log('"We are such stuff as dreams are made on."');
           
+/**
+ * The Alchemist's Quill — With OpenAI Integration
+ * Conjured by Abiud Keter & Kimi
+ */
+
+// ... keep your existing transmutations object as FALLBACK ...
+
+// NEW: OpenAI-powered transmutation
+async function transmuteWithAI(text, style) {
+  try {
+    const response = await fetch('/api/transmute', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text, style })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.error || 'Transmutation failed');
+    }
+
+    return data.transmuted;
+
+  } catch (error) {
+    console.error('AI Transmutation failed:', error);
+    // Fallback to local transmutation if API fails
+    return transmuteText(text, style);
+  }
+}
+
+// Update your event listener
+document.addEventListener('DOMContentLoaded', () => {
+  // ... existing candle and symbol code ...
+
+  const transmuteBtn = document.getElementById('transmuteBtn');
+  const modernInput = document.getElementById('modernInput');
+  const styleSelect = document.getElementById('styleSelect');
+  const outputSection = document.getElementById('outputSection');
+  const outputText = document.getElementById('outputText');
+  const styleLabel = document.getElementById('styleLabel');
+
+  const styleNames = {
+    shakespeare: "The Bard's Rendering (AI):",
+    victorian: "The Gentleperson's Rendering (AI):",
+    poe: "The Gothic Rendering (AI):",
+    romantic: "The Lover's Rendering (AI):"
+  };
+
+  transmuteBtn.addEventListener('click', async (e) => {
+    const input = modernInput.value.trim();
+    if (!input) {
+      alert("Prithee, enter some text first!");
+      return;
+    }
+
+    // Show loading state
+    transmuteBtn.textContent = 'Transmuting...';
+    transmuteBtn.disabled = true;
+
+    const rect = transmuteBtn.getBoundingClientRect();
+    createInkDrop(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+    const style = styleSelect.value;
+    
+    try {
+      // Use AI transmutation
+      const transmuted = await transmuteWithAI(input, style);
+      
+      outputText.textContent = transmuted;
+      styleLabel.textContent = styleNames[style];
+      outputSection.style.display = 'block';
+      outputSection.classList.add('revealed', 'quill-writing');
+      
+      setTimeout(() => {
+        outputSection.classList.remove('quill-writing');
+      }, 500);
+
+      outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    } catch (error) {
+      alert('The spirits are restless. Try again anon.');
+      console.error(error);
+    } finally {
+      // Reset button
+      transmuteBtn.textContent = 'Transmute';
+      transmuteBtn.disabled = false;
+    }
+  });
+});
