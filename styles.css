@@ -1,9 +1,9 @@
 :root {
-  --bg:        #FFFFFF;          /* pure white background */
-  --text:      #0F0F0F;          /* deep near-black text */
-  --gray:      #4A4A4A;          /* soft medium gray for muted elements */
-  --light-gray:#E0E0E0;          /* very light gray for borders/dividers */
-  --border:    #D0D0D0;          /* subtle divider color */
+  --bg:        #000000;          /* pure black background */
+  --text:      #FFFFFF;          /* pure white text */
+  --gray:      #AAAAAA;          /* light gray for muted elements */
+  --light-gray:#333333;          /* dark gray for borders/dividers */
+  --border:    #444444;          /* subtle dark border */
 }
 
 * {
@@ -16,98 +16,98 @@ body {
   font-family: 'Georgia', 'Times New Roman', serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.8;
+  line-height: 1.85;
   min-height: 100vh;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 3rem;               /* generous side padding for spaciousness */
+.main-content {
+  width: 100%;
+  max-width: 880px;
+  padding: 8rem 2rem 12rem;      /* huge vertical space – content floats in center */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 header {
-  padding: 6rem 0 4rem;          /* lots of top space */
+  padding: 6rem 0 5rem;
   text-align: center;
-  border-bottom: 1px solid var(--border);
 }
 
 .logo-text {
   font-family: 'Playfair Display', serif;
-  font-size: 4.5rem;
+  font-size: 5.2rem;
   font-weight: 400;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.2rem;
 }
 
 .tagline {
-  font-size: 1.45rem;
+  font-size: 1.5rem;
   color: var(--gray);
   font-style: italic;
-  margin: 1.5rem 0 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .quote {
   font-family: 'Playfair Display', serif;
-  font-size: 2rem;
+  font-size: 2.3rem;
   font-style: italic;
-  max-width: 760px;
-  margin: 5rem auto 6rem;        /* massive breathing room around quote */
+  max-width: 740px;
+  margin: 6rem auto 8rem;
   line-height: 1.55;
-  text-align: center;
 }
 
 .mode-pills {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin: 4rem 0 5rem;           /* huge vertical space */
+  gap: 2.2rem;
+  margin: 5rem 0 6rem;
   flex-wrap: wrap;
 }
 
 .pill {
-  padding: 0.9rem 2rem;
+  padding: 1rem 2.2rem;
   background: transparent;
   border: 1px solid var(--light-gray);
   color: var(--gray);
   border-radius: 999px;
   cursor: pointer;
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
   transition: all 0.4s ease;
   white-space: nowrap;
 }
 
-.pill:hover {
-  color: var(--text);
-  border-color: var(--text);
-  background: rgba(15, 15, 15, 0.02);
-}
-
+.pill:hover,
 .pill.active {
-  border-color: var(--text);
   color: var(--text);
-  font-weight: 500;
+  border-color: var(--text);
 }
 
 .input-section {
-  max-width: 720px;
-  margin: 0 auto 5rem;           /* massive bottom space */
+  width: 100%;
+  max-width: 680px;
+  margin-bottom: 6rem;
 }
 
 textarea {
   width: 100%;
-  min-height: 180px;
-  padding: 1.8rem;
+  min-height: 220px;
+  padding: 2rem;
   border: 1px solid var(--border);
   border-radius: 0;
   font-family: 'Georgia', serif;
-  font-size: 1.25rem;
-  line-height: 1.8;
+  font-size: 1.35rem;
+  line-height: 1.9;
   background: transparent;
+  color: var(--text);
   resize: vertical;
   transition: border-color 0.5s ease;
 }
@@ -122,62 +122,59 @@ textarea:focus {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 1.8rem;
-  margin: 3rem 0 4rem;
+  gap: 2rem;
+  margin: 4rem 0 5rem;
 }
 
 select {
-  padding: 1rem 1.8rem;
+  padding: 1.2rem 2rem;
   border: 1px solid var(--border);
   border-radius: 0;
   background: transparent;
-  font-family: 'Helvetica Neue', sans-serif;
-  font-size: 1rem;
   color: var(--text);
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 1.05rem;
   cursor: pointer;
   min-width: 220px;
 }
 
 #transmuteBtn {
-  padding: 1.1rem 3.5rem;
+  padding: 1.2rem 4rem;
   background: var(--text);
-  color: white;
+  color: var(--bg);
   border: none;
   border-radius: 0;
   font-family: 'Helvetica Neue', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.4s ease;
-  letter-spacing: 0.08em;
+  transition: background 0.4s ease;
 }
 
 #transmuteBtn:hover {
-  background: #1A1A1A;
-  transform: translateY(-2px);
+  background: var(--gray);
 }
 
 .output-section {
+  width: 100%;
   max-width: 760px;
-  margin: 6rem auto 8rem;        /* enormous space for premium feel */
-  padding: 2.5rem 3rem;
+  margin: 8rem auto 10rem;
+  padding: 3rem 2.5rem;
   border: 1px solid var(--border);
-  border-radius: 0;
 }
 
 .output-header {
   font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: var(--gray);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   text-align: center;
-  letter-spacing: 0.05em;
 }
 
 .output-text {
   font-family: 'Georgia', serif;
-  font-size: 1.5rem;
-  line-height: 1.9;
+  font-size: 1.65rem;
+  line-height: 2;
   color: var(--text);
   text-align: left;
 }
@@ -185,19 +182,19 @@ select {
 .output-actions {
   display: flex;
   justify-content: center;
-  gap: 2.5rem;
-  margin-top: 3rem;
+  gap: 3rem;
+  margin-top: 4rem;
 }
 
 .btn-secondary {
-  padding: 0.9rem 2rem;
+  padding: 1rem 2.5rem;
   background: transparent;
   border: 1px solid var(--gray);
   color: var(--gray);
   border-radius: 0;
   cursor: pointer;
   font-family: 'Helvetica Neue', sans-serif;
-  font-size: 1rem;
+  font-size: 1.05rem;
   transition: all 0.4s ease;
 }
 
@@ -208,20 +205,20 @@ select {
 
 footer {
   text-align: center;
-  padding: 6rem 0 4rem;
+  padding: 8rem 0 6rem;
   color: var(--gray);
-  font-size: 0.95rem;
+  font-size: 1rem;
   border-top: 1px solid var(--border);
 }
 
-/* Mobile adjustments — keep it spacious */
+/* Mobile – maintain spacious centered feel */
 @media (max-width: 768px) {
   .container {
-    padding: 0 1.5rem;
+    padding: 0 1.8rem;
   }
 
   .mode-pills {
-    gap: 1rem;
+    gap: 1.2rem;
   }
 
   .pill {
@@ -231,15 +228,15 @@ footer {
 
   .controls {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   #transmuteBtn {
     width: 100%;
-    max-width: 400px;
+    max-width: 380px;
   }
 
   .quote {
-    font-size: 1.45rem;
+    font-size: 1.7rem;
   }
   }
