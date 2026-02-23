@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shakespearean Poetry Workshop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --parchment: #f4e8d0;
+            --aged-paper: #e6d5b8;
+            --ink: #2c241b;
+            --gold: #d4af37;
+            --crimson: #8b2635;
+            --deep-ink: #1a1510;
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--deep-ink);
+            color: var(--ink);
+        }
+        
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        
+        .bg-texture {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"), linear-gradient(135deg, #1a1510 0%, #2c241b 50%, #1a1510 100%);
+        }
+        
+        .particle {
+            position: fixed;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .workshop-card {
+            background: var(--parchment);
+            border: 3px solid var(--gold);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 100px rgba(139, 38, 53, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .workshop-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(212, 175, 55, 0.2), inset 0 0 100px rgba(139, 38, 53, 0.08);
+            border-color: var(--crimson);
+        }
+        
+        .parchment-input {
+            background: var(--aged-paper);
+            border: 2px solid #c9b896;
+            color: var(--ink);
+            font-family: 'Cormorant Garamond', serif;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C8B6F' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .parchment-input:focus {
+            outline: none;
+            border-color: var(--crimson);
+            box-shadow: 0 0 15px rgba(139, 38, 53, 0.2);
+            background: var(--parchment);
+        }
+        
+        .medieval-btn {
+            background: linear-gradient(135deg, var(--crimson) 0%, #6b1c28 100%);
+            border: 2px solid var(--gold);
+            color: var(--parchment);
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .medieval-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .medieval-btn:hover::before { left: 100%; }
+        .medieval-btn:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(139, 38, 53, 0.4); }
+        
+        .output-scroll {
+            background: var(--aged-paper);
+            border: 2px solid #c9b896;
+            position: relative;
+            font-style: italic;
+            line-height: 1.8;
+        }
+        
+        .output-scroll::before, .output-scroll::after {
+            content: '❦';
+            position: absolute;
+            color: var(--crimson);
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+        
+        .output-scroll::before { top: 10px; left: 15px; }
+        .output-scroll::after { bottom: 10px; right: 15px; transform: rotate(180deg); }
+        
+        .meter-bar {
+            height: 8px;
+            background: linear-gradient(90deg, var(--crimson), var(--gold));
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+        
+        .ornament { color: var(--gold); opacity: 0.6; font-size: 2rem; line-height: 1; }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .section-divider::before {
+            content: '⚜';
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--parchment);
+            padding: 0 1rem;
+            color: var(--gold);
+        }
+        
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: linear-gradient(135deg, #8b2635, #6b1c28);
+            color: #f4e8d0;
+            border-radius: 9999px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            border: 1px solid #d4af37;
+        }
+        
+        .ai-badge-dot {
+            width: 8px; height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4ade80;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="bg-texture"></div>
+    <div id="particles"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+        
+        <header class="text-center mb-12">
+            <div class="ornament mb-4">⚜ ⚜ ⚜</div>
+            <h1 class="font-cinzel text-4xl md:text-6xl font-bold text-[#d4af37] mb-4 tracking-wider drop-shadow-lg">
+                The Shakespearean<br>Poetry Workshop
+            </h1>
+            <p class="text-[#e6d5b8] text-xl md:text-2xl italic opacity-80 max-w-2xl mx-auto">
+                "All the world's a stage, and all the men and women merely players..."
+            </p>
+            <div class="mt-4">
+                <span class="ai-badge">
+                    <span class="ai-badge-dot"></span>
+                    AI Powered
+                </span>
+            </div>
+            <div class="section-divider mt-8"></div>
+        </header>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+
+            <!-- Transmutation Engine -->
+            <div class="workshop-card rounded-lg p-6">
+                <div class="text-center mb-6">
+                    <div class="text-5xl mb-4">⚗️</div>
+                    <h2 class="font-cinzel text-2xl font-bold text-[#8b2635] mb-2">The Transmutation Engine</h2>
+                    <p class="text-sm text-[#5c4a3a] italic">Convert thy modern tongue into ages past</p>
+                </div>
+
+                <div class="space-y-4">
+                    <textarea id="modernInput" class="parchment-input w-full h-32 p-4 rounded text-lg resize-none" 
+                        placeholder="Enter thy modern prose here, good sir or madam..."></textarea>
+                    
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="useAI" checked class="w-4 h-4 accent-[#8b2635]">
+                        <span class="text-sm font-cinzel text-[#5c4a3a]">Use AI (GPT-4)</span>
+                    </label>
+                    
+                    <button onclick="transmuteText()" id="transmuteBtn" class="medieval-btn w-full py-3 rounded font-bold text-lg">
+                        Transmute
+                    </button>
+
+                    <div id="transmutationOutput" class="output-scroll hidden min-h-[120px] p-4 rounded text-[#2c241b]">
+                        <p class="text-lg"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ghostwriter's Quill -->
+            <div class="workshop-card rounded-lg p-6">
+                <div class="text-center mb-6">
+                    <div class="text-5xl mb-4">🪶</div>
+                    <h2 class="font-cinzel text-2xl font-bold text-[#8b2635] mb-2">The Ghostwriter's Quill</h2>
+                    <p class="text-sm text-[#5c4a3a] italic">Summon original sonnets from mere whispers</p>
+                </div>
+
+                <div class="space-y-4">
+                    <input type="text" id="themeInput" class="parchment-input w-full p-4 rounded text-lg" 
+                        placeholder="Speak a theme (love, loss, nature...)">
+                    
+                    <select id="toneSelect" class="parchment-input w-full p-3 rounded text-lg">
+                        <option value="passionate">Passionate & Romantic</option>
+                        <option value="melancholic">Melancholic & Somber</option>
+                        <option value="philosophical">Philosophical & Wise</option>
+                        <option value="comic">Comic & Light</option>
+                    </select>
+
+                    <button onclick="summonSonnet()" id="sonnetBtn" class="medieval-btn w-full py-3 rounded font-bold text-lg">
+                        Summon Sonnet
+                    </button>
+
+                    <div id="sonnetOutput" class="output-scroll hidden min-h-[200px] p-4 rounded text-[#2c241b]">
+                        <p class="text-lg leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Critic's Eye -->
+            <div class="workshop-card rounded-lg p-6">
+                <div class="text-center mb-6">
+                    <div class="text-5xl mb-4">👁️</div>
+                    <h2 class="font-cinzel text-2xl font-bold text-[#8b2635] mb-2">The Critic's Eye</h2>
+                    <p class="text-sm text-[#5c4a3a] italic">Analyze meter, rhyme, and rhetorical devices</p>
+                </div>
+
+                <div class="space-y-4">
+                    <textarea id="analysisInput" class="parchment-input w-full h-32 p-4 rounded text-lg resize-none" 
+                        placeholder="Paste verse here for scrutiny..."></textarea>
+                    
+                    <button onclick="analyzeVerse()" id="analyzeBtn" class="medieval-btn w-full py-3 rounded font-bold text-lg">
+                        Analyze
+                    </button>
+
+                    <div id="analysisOutput" class="hidden space-y-3">
+                        <div class="bg-[#e6d5b8] p-3 rounded border border-[#c9b896]">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-cinzel font-bold text-[#8b2635]">Iambic Pentameter</span>
+                                <span id="meterScore" class="font-bold text-[#2c241b]">0%</span>
+                            </div>
+                            <div class="w-full bg-[#c9b896] rounded-full h-2">
+                                <div id="meterBar" class="meter-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#e6d5b8] p-3 rounded border border-[#c9b896]">
+                            <span class="font-cinzel font-bold text-[#8b2635] block mb-2">Rhyme Scheme</span>
+                            <div id="rhymeScheme" class="flex flex-wrap gap-2 justify-center"></div>
+                        </div>
+
+                        <div class="bg-[#e6d5b8] p-3 rounded border border-[#c9b896]">
+                            <span class="font-cinzel font-bold text-[#8b2635] block mb-2">Rhetorical Devices</span>
+                            <div id="devicesFound" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="text-center text-[#d4af37] opacity-60">
+            <div class="ornament mb-2">❦ ❦ ❦</div>
+            <p class="font-cinzel text-sm">Crafted with ink and code • <span id="year"></span></p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Create particles
+        for (let i = 0; i < 15; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.width = Math.random() * 4 + 2 + 'px';
+            p.style.height = p.style.width;
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            document.getElementById('particles').appendChild(p);
+        }
+        
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Shakespearean mapping
+        const shakespeareanMap = {
+            'you': 'thou', 'your': 'thy', 'yours': 'thine',
+            'are': 'art', 'were': 'wert', 'have': 'hath',
+            'do': 'doth', 'does': 'doth', 'will': 'shalt',
+            'shall': 'shalt', 'my': 'mine', 'hello': 'hail',
+            'goodbye': 'farewell', 'yes': 'aye', 'no': 'nay',
+            'maybe': 'perchance', 'perhaps': 'perchance',
+            'very': 'most', 'truly': 'forsooth', 'really': 'verily'
+        };
+
+        const sonnets = {
+            passionate: "Shall I compare thee to a summer's day?\nThou art more lovely and more temperate:\nRough winds do shake the darling buds of May,\nAnd summer's lease hath all too short a date;\nSometime too hot the eye of heaven shines,\nAnd often is his gold complexion dimm'd;\nAnd every fair from fair sometime declines,\nBy chance or nature's changing course untrimm'd;\nBut thy eternal summer shall not fade\nNor lose possession of that fair thou ow'st;\nNor shall Death brag thou wander'st in his shade,\nWhen in eternal lines to time thou grow'st:\n   So long as men can breathe or eyes can see,\n   So long lives this, and this gives life to thee.",
+            melancholic: "When to the sessions of sweet silent thought\nI summon up remembrance of things past,\nI sigh the lack of many a thing I sought,\nAnd with old woes new wail my dear time's waste:\nThen can I drown an eye, unused to flow,\nFor precious friends hid in death's dateless night,\nAnd weep afresh love's long since cancell'd woe,\nAnd moan the expense of many a vanish'd sight:\nThen can I grieve at grievances foregone,\nAnd heavily from woe to woe tell o'er\nThe sad account of fore-bemoaned moan,\nWhich I new pay as if not paid before.\n   But if the while I think on thee, dear friend,\n   All losses are restored and sorrows end.",
+            philosophical: "Let me not to the marriage of true minds\nAdmit impediments. Love is not love\nWhich alters when it alteration finds,\nOr bends with the remover to remove:\nO no! it is an ever-fixed mark\nThat looks on tempests and is never shaken;\nIt is the star to every wandering bark,\nWhose worth's unknown, although his height be taken.\nLove's not Time's fool, though rosy lips and cheeks\nWithin his bending sickle's compass come:\nLove alters not with his brief hours and weeks,\nBut bears it out even to the edge of doom.\n   If this be error and upon me proved,\n   I never writ, nor no man ever loved.",
+            comic: "My mistress' eyes are nothing like the sun;\nCoral is far more red than her lips' red;\nIf snow be white, why then her breasts are dun;\nIf hairs be wires, black wires grow on her head.\nI have seen roses damask'd, red and white,\nBut no such roses see I in her cheeks;\nAnd in some perfumes is there more delight\nThan in the breath that from my mistress reeks.\nI love to hear her speak, yet well I know\nThat music hath a far more pleasing sound;\nI grant I never saw a goddess go;\nMy mistress, when she walks, treads on the ground:\n   And yet, by heaven, I think my love as rare\n   As any she belied with false compare."
+        };
+
+        async function transmuteText() {
+            const input = document.getElementById('modernInput').value;
+            const useAI = document.getElementById('useAI').checked;
+            const outputDiv = document.getElementById('transmutationOutput');
+            const outputText = outputDiv.querySelector('p');
+            const btn = document.getElementById('transmuteBtn');
+            
+            if (!input.trim()) return alert('Pray, enter some text!');
+            
+            btn.innerHTML = '<span class="loading"></span> Transmuting...';
+            outputDiv.classList.remove('hidden');
+            outputText.innerHTML = '';
+            
+            let result;
+            
+            if (useAI) {
+                try {
+                    const res = await fetch('/api/transmute', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text: input })
+                    });
+                    const data = await res.json();
+                    result = data.transmuted;
+                } catch (e) {
+                    result = fallbackTransmute(input);
+                }
+            } else {
+                result = fallbackTransmute(input);
+            }
+            
+            typewriter(result, outputText);
+            btn.innerHTML = 'Transmute';
+        }
+
+        function fallbackTransmute(text) {
+            let result = text.toLowerCase();
+            Object.keys(shakespeareanMap).forEach(key => {
+                result = result.replace(new RegExp(`\\b${key}\\b`, 'gi'), shakespeareanMap[key]);
+            });
+            const flourishes = ['Forsooth, ', 'Hark! ', 'Prithee, ', 'Marry, ', 'Verily, '];
+            if (Math.random() > 0.7) result = flourishes[Math.floor(Math.random() * flourishes.length)] + result;
+            if (!result.match(/[.!?]$/)) result += '!", quoth he.';
+            return result.charAt(0).toUpperCase() + result.slice(1);
+        }
+
+        function summonSonnet() {
+            const tone = document.getElementById('toneSelect').value;
+            const outputDiv = document.getElementById('sonnetOutput');
+            const outputText = outputDiv.querySelector('p');
+            const btn = document.getElementById('sonnetBtn');
+            
+            btn.innerHTML = '<span class="loading"></span> Summoning...';
+            outputDiv.classList.remove('hidden');
+            outputText.innerHTML = '';
+            
+            setTimeout(() => {
+                typewriter(sonnets[tone], outputText);
+                btn.innerHTML = 'Summon Sonnet';
+            }, 1500);
+        }
+
+        function analyzeVerse() {
+            const input = document.getElementById('analysisInput').value;
+            const btn = document.getElementById('analyzeBtn');
+            
+            if (!input.trim()) return alert('Pray, provide verse!');
