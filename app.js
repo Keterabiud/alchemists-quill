@@ -3,7 +3,7 @@
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// Rich fallback transmutations
+// Local fallback transmutations (rich dataset)
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -59,6 +59,9 @@ const transmutations = {
   }
 };
 
+/**
+ * Local fallback transmutation
+ */
 function transmuteText(text, style) {
   const patterns = transmutations[style] || transmutations.shakespeare;
   let result = text.toLowerCase();
@@ -75,47 +78,57 @@ function transmuteText(text, style) {
   return prefix + result + suffix;
 }
 
-// Unified AI call handler
+/**
+ * Unified OpenAI call (transmute / generate / analyze)
+ */
 async function callOpenAI(text, style, mode) {
   try {
-    const res = await fetch('/api/transmute', {
+    const response = await fetch('/api/transmute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, style, mode })
     });
-    const data = await res.json();
-    if (data.success) return data.transmuted || data.poem || data.analysis;
-    throw new Error(data.error || 'Failed');
-  } catch (err) {
-    console.warn('OpenAI failed, using fallback');
+
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || 'Failed');
+    return data.transmuted || data.poem || data.analysis || "The spirits whisper faintly...";
+  } catch (error) {
+    console.warn('OpenAI failed → fallback');
     if (mode === 'transmute') return transmuteText(text, style);
-    if (mode === 'ghostwriter') return "In ancient halls where moonlight gleams,\nA weary soul doth chase its dreams...";
-    if (mode === 'critic') return "Meter: mostly iambic\nRhyme: ABAB\nDevices: metaphor, alliteration";
+    if (mode === 'ghostwriter') return "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams...";
+    if (mode === 'critic') return "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
     return "The veil is thin tonight...";
   }
 }
 
-// Visuals
+/**
+ * Ink drop visual effect
+ */
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
   drop.className = 'ink-drop';
-  drop.style.left = x + 'px';
-  drop.style.top = y + 'px';
+  drop.style.left = `${x}px`;
+  drop.style.top = `${y}px`;
   document.body.appendChild(drop);
   setTimeout(() => drop.remove(), 1000);
 }
 
+/**
+ * Glow on alchemical symbols
+ */
 function initAlchemicalSymbols() {
-  document.querySelectorAll('.alchemical-symbol').forEach(s => {
-    s.addEventListener('mouseenter', () => {
-      const c = ['#8B4513','#DAA520','#CD853F','#B8860B'];
-      s.style.textShadow = `0 0 30px ${c[Math.floor(Math.random()*c.length)]}`;
+  document.querySelectorAll('.alchemical-symbol').forEach(symbol => {
+    symbol.addEventListener('mouseenter', () => {
+      const colors = ['#BFAF8F', '#D4A017', '#A0895F'];
+      symbol.style.textShadow = `0 0 20px ${colors[Math.floor(Math.random() * colors.length)]}`;
     });
-    s.addEventListener('mouseleave', () => s.style.textShadow = '');
+    symbol.addEventListener('mouseleave', () => {
+      symbol.style.textShadow = '';
+    });
   });
 }
 
-// Main
+// ====================== MAIN APP ======================
 document.addEventListener('DOMContentLoaded', () => {
   // Remove loader
   const candle = document.getElementById('candleLoader');
@@ -125,15 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Core elements
   const input = document.getElementById('modernInput');
-  const styleSel = document.getElementById('styleSelect');
+  const styleSelect = document.getElementById('styleSelect');
   const transmuteBtn = document.getElementById('transmuteBtn');
-  const outputSec = document.getElementById('outputSection');
-  const outputTxt = document.getElementById('outputText');
-  const label = document.getElementById('styleLabel');
+  const outputSection = document.getElementById('outputSection');
+  const outputText = document.getElementById('outputText');
+  const styleLabel = document.getElementById('styleLabel');
 
   let currentMode = 'transmute';
 
-  // Create mode selector pills (beside TRANSMUTE)
+  // Create mode pills (beside TRANSMUTE)
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
@@ -142,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
-  // Insert mode pills right before the TRANSMUTE button
+  // Insert mode pills right before TRANSMUTE button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
   // Mode switching
@@ -154,94 +167,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (currentMode === 'transmute') {
         input.placeholder = "Enter thy modern tongue here...";
-        styleSel.style.display = 'block';
-        label.style.display = 'block';
+        styleSelect.style.display = 'block';
+        styleLabel.style.display = 'block';
       } else if (currentMode === 'ghostwriter') {
-        input.placeholder = "Tell me what kind of poem/verse you desire...";
-        styleSel.style.display = 'none';
-        label.style.display = 'none';
+        input.placeholder = "Describe the poem you desire...";
+        styleSelect.style.display = 'none';
+        styleLabel.style.display = 'none';
       } else if (currentMode === 'critic') {
-        input.placeholder = "Paste the verse you wish to analyze...";
-        styleSel.style.display = 'none';
-        label.style.display = 'none';
+        input.placeholder = "Paste a verse to analyze...";
+        styleSelect.style.display = 'none';
+        styleLabel.style.display = 'none';
       }
     });
   });
 
-  // Add Gen Z to dropdown
-  if (!styleSel.querySelector('[value="genz"]')) {
+  // Add Gen Z option
+  if (!styleSelect.querySelector('option[value="genz"]')) {
     const opt = document.createElement('option');
     opt.value = 'genz';
     opt.textContent = 'Gen Z Slang';
-    styleSel.appendChild(opt);
+    styleSelect.appendChild(opt);
   }
 
   // Transmute action
   transmuteBtn.addEventListener('click', async () => {
-    const val = input.value.trim();
-    if (!val) {
+    const value = input.value.trim();
+    if (!value) {
       alert("Prithee, enter some text first!");
       return;
     }
 
-    const origBtn = transmuteBtn.textContent;
+    const originalText = transmuteBtn.textContent;
     transmuteBtn.textContent = currentMode === 'critic' ? 'Analyzing...' : 
                               currentMode === 'ghostwriter' ? 'Summoning...' : 'Transmuting...';
     transmuteBtn.disabled = true;
 
     const rect = transmuteBtn.getBoundingClientRect();
-    createInkDrop(rect.left + rect.width/2, rect.top + rect.height/2);
+    createInkDrop(rect.left + rect.width / 2, rect.top + rect.height / 2);
 
     let result = '';
 
     try {
       if (currentMode === 'transmute') {
-        result = await callOpenAI(val, styleSel.value, 'transmute');
+        result = await callOpenAI(value, styleSelect.value, 'transmute');
       } else if (currentMode === 'ghostwriter') {
-        result = await callOpenAI(val, 'shakespeare', 'ghostwriter');
+        result = await callOpenAI(value, 'shakespeare', 'ghostwriter');
       } else if (currentMode === 'critic') {
-        result = await callOpenAI(val, 'shakespeare', 'critic');
+        result = await callOpenAI(value, 'shakespeare', 'critic');
       }
 
-      outputTxt.textContent = result;
-      label.textContent = currentMode === 'transmute' ? 
-        (styleSel.options[styleSel.selectedIndex]?.text || 'Rendered Verse') : 
-        (currentMode === 'ghostwriter' ? "The Ghostwriter's Quill" : "Critic's Eye Analysis");
+      outputText.textContent = result;
+      styleLabel.textContent = currentMode === 'transmute' ? 
+        styleSelect.options[styleSelect.selectedIndex].text : 
+        (currentMode === 'ghostwriter' ? "Ghostwriter's Quill" : "Critic's Eye");
 
-      outputSec.style.display = 'block';
-      outputSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } catch (e) {
+      outputSection.style.display = 'block';
+      outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (err) {
       alert('The spirits are restless. Try again anon.');
-      console.error(e);
+      console.error(err);
     } finally {
-      transmuteBtn.textContent = origBtn;
+      transmuteBtn.textContent = originalText;
       transmuteBtn.disabled = false;
     }
   });
 });
 
-// Utilities (unchanged)
+// Utilities
 function copyText() {
-  const t = document.getElementById('outputText').textContent;
-  navigator.clipboard.writeText(t).then(() => alert("Copied to thy parchment!"));
+  const text = document.getElementById('outputText').textContent;
+  navigator.clipboard.writeText(text).then(() => alert("Copied to thy parchment!"));
 }
 
 function speakText() {
-  const t = document.getElementById('outputText').textContent;
-  const u = new SpeechSynthesisUtterance(t);
-  u.rate = 0.85;
-  u.pitch = 0.95;
-  speechSynthesis.speak(u);
+  const text = document.getElementById('outputText').textContent;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.85;
+  utterance.pitch = 0.95;
+  speechSynthesis.speak(utterance);
 }
 
 function shareText() {
-  const t = document.getElementById('outputText').textContent;
+  const text = document.getElementById('outputText').textContent;
   if (navigator.share) {
-    navigator.share({ title: "The Alchemist's Quill", text: t });
+    navigator.share({ title: "The Alchemist's Quill", text });
   } else {
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}`, '_blank');
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   }
-}
-
-console.log("The Alchemist's Quill — Conjured by Abiud Kipkemboi Keter");
-console.log("We are such stuff as dreams are made on.");
+      }
