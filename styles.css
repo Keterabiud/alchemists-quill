@@ -288,3 +288,10 @@ footer {
         flex-direction: column;
     }
 }
+.ai-badge {
+  font-size: 0.75rem;
+  color: var(--ash);
+  text-align: center;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
