@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Alchemist's Quill</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg viewBox="0 0 100 100" class="logo-icon">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+                    <line x1="50" y1="25" x2="50" y2="70" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M50 70 L45 85 L55 85 Z" fill="#0A0A0A"/>
+                    <line x1="50" y1="35" x2="35" y2="25" stroke="#0A0A0A" stroke-width="2"/>
+                    <line x1="50" y1="40" x2="30" y2="32" stroke="#0A0A0A" stroke-width="2"/>
+                    <line x1="50" y1="45" x2="32" y2="42" stroke="#0A0A0A" stroke-width="2"/>
+                </svg>
+                <span class="logo-text">The Alchemist's Quill</span>
+            </div>
+            <nav>
+                <a href="#pricing">Pricing</a>
+                <a href="#api">API</a>
+                <button class="btn-enter">Enter</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h1 class="tagline">
+                    "Hark! What light through yonder<br>
+                    window breaks? Speak, and I shall<br>
+                    render thy words in verse most sweet."
+                </h1>
+                
+                <div class="transform-box">
+                    <div class="input-section">
+                        <textarea id="modernInput" placeholder="Enter thy modern plea here..." rows="4"></textarea>
+                        <div class="controls">
+                            <select id="styleSelect">
+                                <option value="shakespeare">Shakespearean</option>
+                                <option value="victorian">Victorian</option>
+                                <option value="poe">Poe-esque</option>
+                                <option value="romantic">Romantic</option>
+                            </select>
+                            <button id="transmuteBtn" class="btn-primary">Transmute</button>
+                        </div>
+                    </div>
+
+                    <div class="output-section" id="outputSection" style="display: none;">
+                        <div class="output-header">
+                            <span class="style-label" id="styleLabel">The Bard's Rendering:</span>
+                        </div>
+                        <div class="output-text" id="outputText"></div>
+                        <div class="output-actions">
+                            <button class="btn-secondary" onclick="copyText()">Copy</button>
+                            <button class="btn-secondary" onclick="speakText()">Speak Aloud</button>
+                            <button class="btn-secondary" onclick="shareText()">Share</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature">
+                    <h3>The Transmutation Engine</h3>
+                    <p>Convert thy modern tongue into ages past.</p>
+                </div>
+                <div class="feature">
+                    <h3>The Ghostwriter's Quill</h3>
+                    <p>Summon original sonnets from mere whispers.</p>
+                </div>
+                <div class="feature">
+                    <h3>The Critic's Eye</h3>
+                    <p>Analyze meter, rhyme, and rhetorical devices.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p class="credit-label">Conjured by</p>
+            <p class="credit-names">Abiud Keter <span class="ampersand">&</span> Kimi</p>
+            <p class="quote">"We are such stuff as dreams are made on."</p>
+            <p class="copyright">— The Tempest</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
