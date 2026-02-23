@@ -163,4 +163,99 @@ function shareText() {
 
 console.log("The Alchemist's Quill — Conjured by Abiud Keter & Kimi");
 console.log('"We are such stuff as dreams are made on."');
-                    
+                    /**
+ * VISUAL FLAIR & ANIMATIONS
+ * Ink effects, candle loader, alchemical interactions
+ */
+
+// Remove candle loader after animation
+document.addEventListener('DOMContentLoaded', () => {
+    const candle = document.getElementById('candleLoader');
+    if (candle) {
+        setTimeout(() => {
+            candle.remove();
+        }, 3000);
+    }
+    
+    // Initialize alchemical symbol interactions
+    initAlchemicalSymbols();
+});
+
+// Ink drop effect on transmute
+function createInkDrop(x, y) {
+    const drop = document.createElement('div');
+    drop.className = 'ink-drop';
+    drop.style.left = x + 'px';
+    drop.style.top = y + 'px';
+    document.body.appendChild(drop);
+    
+    setTimeout(() => drop.remove(), 1000);
+}
+
+// Add ink effect to transmute button
+document.addEventListener('DOMContentLoaded', () => {
+    const transmuteBtn = document.getElementById('transmuteBtn');
+    if (transmuteBtn) {
+        transmuteBtn.addEventListener('click', (e) => {
+            const rect = transmuteBtn.getBoundingClientRect();
+            createInkDrop(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            
+            // Add quill animation to output
+            const outputSection = document.getElementById('outputSection');
+            if (outputSection) {
+                outputSection.classList.add('revealed');
+                outputSection.classList.add('quill-writing');
+                setTimeout(() => {
+                    outputSection.classList.remove('quill-writing');
+                }, 500);
+            }
+        });
+    }
+});
+
+// Alchemical symbol hover effects
+function initAlchemicalSymbols() {
+    const symbols = document.querySelectorAll('.alchemical-symbol');
+    
+    symbols.forEach(symbol => {
+        symbol.addEventListener('mouseenter', () => {
+            // Random glow color based on symbol
+            const colors = ['#8B4513', '#DAA520', '#CD853F', '#B8860B'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            symbol.style.textShadow = `0 0 30px ${randomColor}`;
+        });
+        
+        symbol.addEventListener('mouseleave', () => {
+            symbol.style.textShadow = '';
+        });
+    });
+}
+
+// Parallax effect on scroll
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            const scrolled = window.pageYOffset;
+            const symbols = document.querySelectorAll('.alchemical-symbol');
+            
+            symbols.forEach((symbol, index) => {
+                const speed = 0.5 + (index * 0.1);
+                symbol.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+            
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+
+// Add subtle flicker to candle on mouse move (if candle still exists)
+document.addEventListener('mousemove', (e) => {
+    const candle = document.getElementById('candleLoader');
+    if (candle && candle.style.opacity !== '0') {
+        const x = (e.clientX / window.innerWidth - 0.5) * 10;
+        candle.style.transform = `translate(calc(-50% + ${x}px), -50%)`;
+    }
+});
+                
