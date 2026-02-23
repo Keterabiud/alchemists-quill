@@ -86,6 +86,35 @@ async function transmuteWithAI(text, style) {
   }
 }
 
+// ====================== AUTO-NARRATE SECTION ======================
+let autoNarrate = true;     // Default: ON
+let isSpeaking = false;
+let voicesLoaded = false;
+
+// Improved speak function (supports stop + auto)
+function speakText() {
+  if (isSpeaking) {
+    speechSynthesis.cancel();
+    isSpeaking = false;
+    return;
+  }
+
+  const text = document.getElementById('outputText').textContent.trim();
+  if (!text) return;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.8;
+  utterance.pitch = 0.9;
+  utterance.volume = 0.95;
+
+  utterance.onstart = () => { isSpeaking = true; };
+  utterance.onend = () => { isSpeaking = false; };
+  utterance.onerror = () => { isSpeaking = false; };
+
+  speechSynthesis.speak(utterance);
+}
+// =================================================================
+
 // Visual effects
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
@@ -132,6 +161,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
   initAlchemicalSymbols();
 
+  // === LOAD VOICES FOR NARRATION ===
+  function loadVoices() {
+    const available = speechSynthesis.getVoices();
+    if (available.length > 0) {
+      voicesLoaded = true;
+      console.log('✅ Voices loaded for narration');
+    }
+  }
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+
   const transmuteBtn = document.getElementById('transmuteBtn');
   const modernInput = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
@@ -145,6 +185,21 @@ document.addEventListener('DOMContentLoaded', () => {
     poe: "The Gothic Rendering (AI):",
     romantic: "The Lover's Rendering (AI):"
   };
+
+  // Auto-narrate checkbox
+  const autoLabel = document.createElement('label');
+  autoLabel.style.marginLeft = '15px';
+  autoLabel.style.color = '#8B4513';
+  autoLabel.style.fontSize = '0.95rem';
+  autoLabel.innerHTML = `
+    <input type="checkbox" id="autoNarrateChk" checked style="margin-right:5px;"> 
+    Auto-narrate new verses
+  `;
+  styleSelect.parentNode.insertBefore(autoLabel, styleSelect.nextSibling);
+
+  document.getElementById('autoNarrateChk').addEventListener('change', (e) => {
+    autoNarrate = e.target.checked;
+  });
 
   transmuteBtn.addEventListener('click', async (e) => {
     const input = modernInput.value.trim();
@@ -175,6 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => outputSection.classList.remove('quill-writing'), 500);
       outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
+      // ====================== AUTO-NARRATE ON GENERATION ======================
+      if (autoNarrate && voicesLoaded && !isSpeaking) {
+        setTimeout(() => {
+          speakText();
+        }, 800);   // Wait for quill animation to finish
+      }
+      // ======================================================================
+
     } catch (error) {
       alert('The spirits are restless. Try again anon.');
       console.error(error);
@@ -191,14 +254,6 @@ function copyText() {
   navigator.clipboard.writeText(text).then(() => alert("Copied to thy parchment!"));
 }
 
-function speakText() {
-  const text = document.getElementById('outputText').textContent;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.8;
-  utterance.pitch = 0.9;
-  speechSynthesis.speak(utterance);
-}
-
 function shareText() {
   const text = document.getElementById('outputText').textContent;
   if (navigator.share) {
@@ -210,4 +265,3 @@ function shareText() {
 
 console.log("The Alchemist's Quill — Conjured by Abiud Keter & Kimi");
 console.log('"We are such stuff as dreams are made on."');
-        
