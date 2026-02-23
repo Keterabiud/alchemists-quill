@@ -1,10 +1,9 @@
 /**
- * The Alchemist's Quill — ALL THREE FEATURES ACTIVE
- * Transmutation Engine • Ghostwriter's Quill • Critic's Eye
+ * The Alchemist's Quill
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// ====================== RICH TRANSMUTATION DATABASE ======================
+// Rich fallback transmutations
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -16,266 +15,231 @@ const transmutations = {
       "friend": "companion dear", "money": "coin", "work": "toil",
       "happy": "most glad", "sad": "heavy of heart", "angry": "wroth",
       "beautiful": "fair", "ugly": "ill-favored", "cool": "passing fine",
-      "awesome": "marvelous", "bad": "wretched", "tired": "weary",
-      "hungry": "famished", "thirsty": "athirst", "sleep": "slumber",
-      "eat": "partake", "drink": "quaff", "go": "hie thee",
-      "come": "come hither", "stop": "forbear", "fast": "swift",
-      "today": "this day", "tomorrow": "the morrow", "now": "anon",
-      "great": "noble", "bad": "vile", "fun": "mirthful"
+      "awesome": "marvelous", "bad": "wretched", "tired": "weary"
     },
-    suffixes: ["— dost thou comprehend?", "— by my troth!", "— what sayest thou?", "— forsooth!", "— mark me well!", "— verily I say!", "— prithee tell!"],
-    prefixes: ["Hark! ", "Pray, ", "Mark me: ", "List! ", "Verily, ", "Behold! ", "Alas! "]
+    suffixes: ["— dost thou comprehend?", "— by my troth!", "— what sayest thou?", "— forsooth!"],
+    prefixes: ["Hark! ", "Pray, ", "Mark me: ", "List! "]
   },
   victorian: {
     greetings: {
-      "hello": "How do you do", "hi": "Good day to you", "hey": "I say!",
-      "good morning": "Good morning, sir/madam", "thank you": "I am most obliged",
-      "please": "If you would be so kind", "sorry": "I beg your pardon",
-      "yes": "Indeed", "no": "I fear not", "goodbye": "Fare thee well",
-      "love": "affection most profound", "friend": "dearest acquaintance",
-      "money": "fortune", "work": "labour", "happy": "in good spirits",
-      "sad": "rather low", "cool": "splendid", "awesome": "capital",
-      "bad": "dreadful", "tired": "quite fatigued", "great": "most excellent"
+      "hello": "How do you do", "love": "affection most profound",
+      "friend": "dearest acquaintance", "happy": "in good spirits",
+      "sad": "rather low"
     },
-    suffixes: ["— Most sincerely.", "— Your humble servant.", "— I remain yours.", "— Yours faithfully."],
-    prefixes: ["I daresay ", "It is my understanding that ", "One must admit ", "Upon my word "]
+    suffixes: ["— Most sincerely.", "— Your humble servant."],
+    prefixes: ["I daresay ", "It is my understanding that "]
   },
   poe: {
     greetings: {
-      "hello": "Dark greetings", "hi": "Shadowed salutations", "hey": "From the abyss...",
-      "good morning": "A grim morrow", "thank you": "Thy gratitude echoes in the void",
-      "sorry": "Alas, I repent", "yes": "So it is written", "no": "Nevermore",
-      "goodbye": "Farewell into the night", "love": "obsession eternal",
-      "friend": "fellow wanderer of shadows", "happy": "fleeting illusion of light",
-      "sad": "abyssal despair", "cool": "hauntingly fine", "great": "sublime terror"
+      "hello": "Dark greetings", "love": "obsession eternal",
+      "happy": "fleeting moment of light", "sad": "abyssal despair"
     },
-    suffixes: ["— nevermore.", "— in the shadows of the night.", "— quoth the raven.", "— lost in the eternal void."],
-    prefixes: ["Once upon a midnight dreary, ", "In the bleak December, ", "Deep into that darkness peering, ", "From the sepulchre of time, "]
+    suffixes: ["— nevermore.", "— in the shadows of the night."],
+    prefixes: ["Once upon a midnight dreary, ", "In the bleak December, "]
   },
   romantic: {
     greetings: {
-      "hello": "Dearest salutations", "hi": "My heart greets thee", "hey": "Oh joy!",
-      "good morning": "Dawn kisses thy soul", "thank you": "My soul sings with gratitude",
-      "sorry": "Forgive this aching heart", "yes": "With all my being", "no": "Alas, not so",
-      "goodbye": "Until the stars reunite us", "love": "passion unbound",
-      "friend": "kindred spirit", "happy": "swept by joy", "sad": "wounded by longing",
-      "beautiful": "radiant as the dawn", "cool": "ethereal", "great": "sublime"
+      "hello": "Dearest salutations", "love": "passion unbound",
+      "happy": "swept by joy"
     },
-    suffixes: ["— my heart swells!", "— forever thine.", "— in eternal rapture.", "— beneath the moon's soft glow."],
-    prefixes: ["Oh! ", "My dearest, ", "In rapture, ", "Beneath the moon, ", "As the roses bloom, "]
+    suffixes: ["— my heart swells!", "— forever thine."],
+    prefixes: ["Oh! ", "My dearest, ", "In rapture, "]
   },
   genz: {
     greetings: {
       "hello": "Yo what's good", "hi": "Heyyy", "hey": "Sup bestie",
-      "good morning": "Morningggg", "how are you": "You good?", "thank you": "Tysm",
-      "please": "Pls", "sorry": "My bad fr", "yes": "Bet", "no": "Cap",
-      "goodbye": "I'm out", "love": "I got mad rizz for you", "friend": "Bestie",
-      "money": "Bread", "work": "Grind", "happy": "Slay", "sad": "This is so depressing",
-      "cool": "Fire", "awesome": "No cap this is bussin", "bad": "Sus",
-      "tired": "I'm cooked", "hungry": "I'm starving fr", "eat": "Munch",
-      "go": "Let's dip", "come": "Pull up", "stop": "Pause", "great": "Lit af"
+      "good morning": "Morningggg", "how are you": "You good?",
+      "thank you": "Tysm", "please": "Pls", "sorry": "My bad fr",
+      "yes": "Bet", "no": "Cap", "goodbye": "I'm out", "love": "I got mad rizz for you",
+      "friend": "Bestie", "money": "Bread", "work": "Grind", "happy": "Slay",
+      "sad": "This is so depressing", "cool": "Fire", "awesome": "No cap this is bussin"
     },
-    suffixes: [" fr", " no cap", " periodt", " ong", " that's crazy", " lowkey", " highkey", " deadass"],
-    prefixes: ["Lowkey ", "Highkey ", "Bro ", "Fam ", "Deadass ", "Real talk "]
+    suffixes: [" fr", " no cap", " periodt", " ong", " that's crazy"],
+    prefixes: ["Lowkey ", "Highkey ", "Bro ", "Fam "]
   }
 };
 
 function transmuteText(text, style) {
-  const patterns = transmutations[style];
+  const patterns = transmutations[style] || transmutations.shakespeare;
   let result = text.toLowerCase();
-  for (let [modern, archaic] of Object.entries(patterns.greetings)) {
+
+  for (let [modern, archaic] of Object.entries(patterns.greetings || {})) {
     const regex = new RegExp(`\\b${modern}\\b`, 'gi');
     result = result.replace(regex, archaic);
   }
-  const prefix = Math.random() > 0.6 ? patterns.prefixes[Math.floor(Math.random() * patterns.prefixes.length)] : "";
-  const suffix = patterns.suffixes[Math.floor(Math.random() * patterns.suffixes.length)];
+
+  const prefix = Math.random() > 0.7 ? (patterns.prefixes?.[Math.floor(Math.random() * patterns.prefixes.length)] || '') : '';
+  const suffix = patterns.suffixes?.[Math.floor(Math.random() * patterns.suffixes.length)] || '';
+
   result = result.charAt(0).toUpperCase() + result.slice(1);
   return prefix + result + suffix;
 }
 
-// Unified OpenAI call (handles all three modes)
+// Unified AI call handler
 async function callOpenAI(text, style, mode) {
   try {
-    const response = await fetch('/api/transmute', {
+    const res = await fetch('/api/transmute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, style, mode })
     });
-    const data = await response.json();
-    if (!data.success) throw new Error(data.error || 'Failed');
-    return data.transmuted || data.poem || data.analysis || "The spirits whisper faintly...";
-  } catch (error) {
-    console.warn('OpenAI failed → using local fallback');
+    const data = await res.json();
+    if (data.success) return data.transmuted || data.poem || data.analysis;
+    throw new Error(data.error || 'Failed');
+  } catch (err) {
+    console.warn('OpenAI failed, using fallback');
     if (mode === 'transmute') return transmuteText(text, style);
-    if (mode === 'ghostwriter') return "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams...";
-    if (mode === 'critic') return "Meter: iambic pentameter (mostly)\nRhyme scheme: ABAB\nDevices: metaphor, alliteration, assonance, imagery";
+    if (mode === 'ghostwriter') return "In ancient halls where moonlight gleams,\nA weary soul doth chase its dreams...";
+    if (mode === 'critic') return "Meter: mostly iambic\nRhyme: ABAB\nDevices: metaphor, alliteration";
     return "The veil is thin tonight...";
   }
 }
 
-// Visual effects
+// Visuals
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
   drop.className = 'ink-drop';
-  drop.style.left = `${x}px`;
-  drop.style.top = `${y}px`;
+  drop.style.left = x + 'px';
+  drop.style.top = y + 'px';
   document.body.appendChild(drop);
   setTimeout(() => drop.remove(), 1000);
 }
 
 function initAlchemicalSymbols() {
-  const symbols = document.querySelectorAll('.alchemical-symbol');
-  symbols.forEach(symbol => {
-    symbol.addEventListener('mouseenter', () => {
-      const colors = ['#8B4513', '#DAA520', '#CD853F', '#B8860B'];
-      symbol.style.textShadow = `0 0 30px ${colors[Math.floor(Math.random() * colors.length)]}`;
+  document.querySelectorAll('.alchemical-symbol').forEach(s => {
+    s.addEventListener('mouseenter', () => {
+      const c = ['#8B4513','#DAA520','#CD853F','#B8860B'];
+      s.style.textShadow = `0 0 30px ${c[Math.floor(Math.random()*c.length)]}`;
     });
-    symbol.addEventListener('mouseleave', () => symbol.style.textShadow = '');
+    s.addEventListener('mouseleave', () => s.style.textShadow = '');
   });
 }
 
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      const scrolled = window.pageYOffset;
-      document.querySelectorAll('.alchemical-symbol').forEach((s, i) => {
-        s.style.transform = `translateY(${scrolled * (0.5 + i * 0.1)}px)`;
-      });
-      ticking = false;
-    });
-    ticking = true;
-  }
-});
-
-// Main application
+// Main
 document.addEventListener('DOMContentLoaded', () => {
+  // Remove loader
   const candle = document.getElementById('candleLoader');
   if (candle) setTimeout(() => candle.remove(), 3000);
 
   initAlchemicalSymbols();
 
+  // Core elements
+  const input = document.getElementById('modernInput');
+  const styleSel = document.getElementById('styleSelect');
   const transmuteBtn = document.getElementById('transmuteBtn');
-  const modernInput = document.getElementById('modernInput');
-  const styleSelect = document.getElementById('styleSelect');
-  const outputSection = document.getElementById('outputSection');
-  const outputText = document.getElementById('outputText');
-  const styleLabel = document.getElementById('styleLabel');
+  const outputSec = document.getElementById('outputSection');
+  const outputTxt = document.getElementById('outputText');
+  const label = document.getElementById('styleLabel');
 
-  const styleNames = {
-    shakespeare: "The Bard's Rendering (AI):",
-    victorian: "The Gentleperson's Rendering (AI):",
-    poe: "The Gothic Rendering (AI):",
-    romantic: "The Lover's Rendering (AI):",
-    genz: "The Gen Z Rendering (AI):"
-  };
-
-  // Create mode tabs
-  const tabsContainer = document.createElement('div');
-  tabsContainer.className = 'mode-tabs';
-  tabsContainer.style.cssText = 'display:flex; gap:12px; justify-content:center; margin:25px 0; flex-wrap:wrap;';
-  tabsContainer.innerHTML = `
-    <button data-mode="transmute" class="mode-btn active">🪶 Transmutation Engine</button>
-    <button data-mode="ghostwriter" class="mode-btn">🪶 Ghostwriter's Quill</button>
-    <button data-mode="critic" class="mode-btn">👁️ Critic's Eye</button>
-  `;
-  (document.querySelector('main') || document.body).prepend(tabsContainer);
-
-  const modeBtns = tabsContainer.querySelectorAll('.mode-btn');
   let currentMode = 'transmute';
 
-  modeBtns.forEach(btn => {
+  // Create mode selector pills (beside TRANSMUTE)
+  const modeContainer = document.createElement('div');
+  modeContainer.className = 'mode-pills';
+  modeContainer.innerHTML = `
+    <button data-mode="transmute" class="pill active">Transmutation Engine 🪶</button>
+    <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill 🪶</button>
+    <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
+  `;
+
+  // Insert mode pills right before the TRANSMUTE button
+  transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
+
+  // Mode switching
+  modeContainer.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
       currentMode = btn.dataset.mode;
-      modeBtns.forEach(b => b.classList.remove('active'));
+      modeContainer.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
       if (currentMode === 'transmute') {
-        modernInput.placeholder = "Enter thy modern tongue here...";
-        styleSelect.style.display = 'inline-block';
-        styleLabel.style.display = 'block';
+        input.placeholder = "Enter thy modern tongue here...";
+        styleSel.style.display = 'block';
+        label.style.display = 'block';
       } else if (currentMode === 'ghostwriter') {
-        modernInput.placeholder = "Describe the poem you desire (e.g. a sonnet about lost love in the rain)";
-        styleSelect.style.display = 'none';
-        styleLabel.style.display = 'none';
+        input.placeholder = "Tell me what kind of poem/verse you desire...";
+        styleSel.style.display = 'none';
+        label.style.display = 'none';
       } else if (currentMode === 'critic') {
-        modernInput.placeholder = "Paste a verse to analyze...";
-        styleSelect.style.display = 'none';
-        styleLabel.style.display = 'none';
+        input.placeholder = "Paste the verse you wish to analyze...";
+        styleSel.style.display = 'none';
+        label.style.display = 'none';
       }
     });
   });
 
-  // Add Gen Z option
-  if (!styleSelect.querySelector('option[value="genz"]')) {
+  // Add Gen Z to dropdown
+  if (!styleSel.querySelector('[value="genz"]')) {
     const opt = document.createElement('option');
     opt.value = 'genz';
     opt.textContent = 'Gen Z Slang';
-    styleSelect.appendChild(opt);
+    styleSel.appendChild(opt);
   }
 
+  // Transmute action
   transmuteBtn.addEventListener('click', async () => {
-    const input = modernInput.value.trim();
-    if (!input) {
+    const val = input.value.trim();
+    if (!val) {
       alert("Prithee, enter some text first!");
       return;
     }
 
-    const originalText = transmuteBtn.textContent;
-    transmuteBtn.textContent = currentMode === 'critic' ? 'Analyzing...' : (currentMode === 'ghostwriter' ? 'Summoning...' : 'Transmuting...');
+    const origBtn = transmuteBtn.textContent;
+    transmuteBtn.textContent = currentMode === 'critic' ? 'Analyzing...' : 
+                              currentMode === 'ghostwriter' ? 'Summoning...' : 'Transmuting...';
     transmuteBtn.disabled = true;
 
     const rect = transmuteBtn.getBoundingClientRect();
-    createInkDrop(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    createInkDrop(rect.left + rect.width/2, rect.top + rect.height/2);
 
-    let result = "";
+    let result = '';
 
     try {
       if (currentMode === 'transmute') {
-        result = await callOpenAI(input, styleSelect.value, 'transmute');
+        result = await callOpenAI(val, styleSel.value, 'transmute');
       } else if (currentMode === 'ghostwriter') {
-        result = await callOpenAI(input, 'shakespeare', 'ghostwriter');
+        result = await callOpenAI(val, 'shakespeare', 'ghostwriter');
       } else if (currentMode === 'critic') {
-        result = await callOpenAI(input, 'shakespeare', 'critic');
+        result = await callOpenAI(val, 'shakespeare', 'critic');
       }
 
-      outputText.textContent = result;
-      styleLabel.textContent = currentMode === 'transmute' ? styleNames[styleSelect.value] : 
-                               (currentMode === 'ghostwriter' ? "The Ghostwriter's Quill" : "The Critic's Eye");
-      outputSection.style.display = 'block';
-      outputSection.classList.add('revealed', 'quill-writing');
-      setTimeout(() => outputSection.classList.remove('quill-writing'), 500);
-      outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } catch (err) {
+      outputTxt.textContent = result;
+      label.textContent = currentMode === 'transmute' ? 
+        (styleSel.options[styleSel.selectedIndex]?.text || 'Rendered Verse') : 
+        (currentMode === 'ghostwriter' ? "The Ghostwriter's Quill" : "Critic's Eye Analysis");
+
+      outputSec.style.display = 'block';
+      outputSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (e) {
       alert('The spirits are restless. Try again anon.');
-      console.error(err);
+      console.error(e);
     } finally {
-      transmuteBtn.textContent = originalText;
+      transmuteBtn.textContent = origBtn;
       transmuteBtn.disabled = false;
     }
   });
 });
 
-// Utility functions
+// Utilities (unchanged)
 function copyText() {
-  const text = document.getElementById('outputText').textContent;
-  navigator.clipboard.writeText(text).then(() => alert("Copied to thy parchment!"));
+  const t = document.getElementById('outputText').textContent;
+  navigator.clipboard.writeText(t).then(() => alert("Copied to thy parchment!"));
 }
 
 function speakText() {
-  const text = document.getElementById('outputText').textContent;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.85;
-  utterance.pitch = 0.95;
-  speechSynthesis.speak(utterance);
+  const t = document.getElementById('outputText').textContent;
+  const u = new SpeechSynthesisUtterance(t);
+  u.rate = 0.85;
+  u.pitch = 0.95;
+  speechSynthesis.speak(u);
 }
 
 function shareText() {
-  const text = document.getElementById('outputText').textContent;
+  const t = document.getElementById('outputText').textContent;
   if (navigator.share) {
-    navigator.share({ title: "The Alchemist's Quill", text });
+    navigator.share({ title: "The Alchemist's Quill", text: t });
   } else {
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}`, '_blank');
   }
 }
 
