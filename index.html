@@ -8,12 +8,10 @@
 </head>
 <body>
 
-  <!-- Responsive Navbar -->
+  <!-- Navbar -->
   <header class="header">
     <nav class="navbar">
-      <div class="logo">
-        <span class="logo-text">Keter Aether</span>
-      </div>
+      <div class="logo">Keter Aether</div>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#">Home</a></li>
@@ -24,9 +22,7 @@
       </ul>
 
       <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </div>
     </nav>
   </header>
@@ -53,21 +49,21 @@
           <option value="kiswahili">Kiswahili</option>
         </select>
 
-        <div class="emoji-toggle">
-          <label for="emojiSwitch">Add emojis? 😄</label>
+        <label class="emoji-toggle">
+          <span>Add emojis?</span>
           <input type="checkbox" id="emojiSwitch" checked>
-        </div>
+        </label>
 
         <div class="mode-pills">
-          <button data-mode="transmute" class="pill active">Transmutation Engine 🪶</button>
-          <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill 🪶</button>
-          <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
+          <button data-mode="transmute" class="pill active">Transmutation Engine </button>
+          <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill </button>
+          <button data-mode="critic" class="pill">Critic's Eye </button>
         </div>
 
-        <button id="transmuteBtn">Let's Go! 🚀</button>
+        <button id="transmuteBtn">TRANSMUTE </button>
       </div>
 
-      <div id="outputSection" class="output-section" style="display: none;">
+      <div id="outputSection" class="output-section" style="display:none;">
         <div id="styleLabel" class="output-header"></div>
         <div id="outputText" class="output-text"></div>
         <div class="output-actions">
@@ -81,22 +77,22 @@
     <section class="features" id="features">
       <div class="feature">
         <h3>The Transmutation Engine</h3>
-        <p>Convert thy modern tongue into ages past.</p>
+        <p>Convert modern words into timeless styles.</p>
       </div>
       <div class="feature">
-        <h3>The Ghostwriter's Quill</h3>
-        <p>Summon original sonnets from mere whispers.</p>
+        <h3>Ghostwriter's Quill</h3>
+        <p>Summon original verses from a simple prompt.</p>
       </div>
       <div class="feature">
-        <h3>The Critic's Eye</h3>
-        <p>Analyze meter, rhyme, and rhetorical devices.</p>
+        <h3>Critic's Eye</h3>
+        <p>Break down meter, rhyme & literary devices.</p>
       </div>
     </section>
   </main>
 
   <footer>
     Conjured by Abiud Kipkemboi Keter<br>
-    "We are such stuff as dreams are made on."
+    <small>"We are such stuff as dreams are made on."</small>
   </footer>
 
   <script src="app.js"></script>
