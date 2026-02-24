@@ -1,17 +1,13 @@
 :root {
-  --bg:        #0A0A0A;          /* deep black */
-  --text:      #F5F5F5;          /* off-white text */
-  --gold:      #D4AF37;          /* soft luxury gold */
-  --gold-dark: #B8972E;          /* deeper gold for active/hover */
-  --gray:      #AAAAAA;          /* muted gray */
-  --border:    #222222;          /* dark subtle border */
+  --bg:        #0A0A0A;
+  --text:      #F5F5F5;
+  --gold:      #D4AF37;
+  --gold-dark: #B8972E;
+  --gray:      #AAAAAA;
+  --border:    #222222;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: 'Georgia', 'Times New Roman', serif;
@@ -44,17 +40,10 @@ header {
 .logo-icon {
   width: 48px;
   height: 48px;
-  fill: var(--gold);
-}
-
-/* Simple original quill logo SVG (you can replace <path> with your own design) */
-.logo-icon svg {
-  width: 100%;
-  height: 100%;
 }
 
 .logo-text {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 4.2rem;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -70,7 +59,7 @@ header {
 }
 
 .quote {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2.1rem;
   font-style: italic;
   max-width: 780px;
@@ -95,7 +84,7 @@ header {
   color: var(--gray);
   border-radius: 999px;
   cursor: pointer;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
   font-size: 1rem;
   letter-spacing: 0.06em;
   transition: all 0.35s ease;
@@ -151,6 +140,49 @@ textarea:focus {
   margin: 3rem 0 4rem;
 }
 
+.emoji-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  color: var(--gray);
+}
+
+.emoji-toggle label {
+  cursor: pointer;
+}
+
+#emojiSwitch {
+  width: 48px;
+  height: 24px;
+  appearance: none;
+  background: #444;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#emojiSwitch:checked {
+  background: var(--gold);
+}
+
+#emojiSwitch::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+#emojiSwitch:checked::after {
+  transform: translateX(24px);
+}
+
 select {
   padding: 1rem 1.8rem;
   border: 1px solid var(--border);
@@ -193,7 +225,7 @@ select {
 }
 
 .output-header {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.7rem;
   color: var(--gray);
   margin-bottom: 1.8rem;
@@ -240,7 +272,7 @@ footer {
   border-top: 1px solid var(--border);
 }
 
-/* Mobile – keep it spacious & centered */
+/* Mobile */
 @media (max-width: 768px) {
   .container {
     padding: 0 1.8rem;
