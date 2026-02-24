@@ -21,7 +21,7 @@ body {
   min-height: 100vh;
 }
 
-/* ── Navbar ── */
+/* Navbar */
 .header {
   width: 100%;
   padding: 1.8rem 0;
@@ -90,7 +90,7 @@ body {
   background: white;
 }
 
-/* ── Main content (centered) ── */
+/* Main content */
 .main-content {
   max-width: 900px;
   width: 100%;
@@ -117,7 +117,7 @@ body {
   line-height: 1.55;
 }
 
-/* ── Input & controls ── */
+/* Input & controls */
 .input-section {
   max-width: 760px;
   margin: 0 auto 6rem;
@@ -204,7 +204,7 @@ select {
   cursor: pointer;
 }
 
-/* ── Output ── */
+/* Output */
 .output-section {
   max-width: 780px;
   margin: 6rem auto;
@@ -240,7 +240,7 @@ select {
   cursor: pointer;
 }
 
-/* ── Features ── */
+/* Features */
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -253,7 +253,7 @@ select {
   margin-bottom: 1rem;
 }
 
-/* ── Responsive ── */
+/* Responsive */
 @media (max-width: 992px) {
   .nav-links {
     position: fixed;
@@ -279,4 +279,4 @@ select {
   .controls {
     flex-direction: column;
   }
-  }
+}
