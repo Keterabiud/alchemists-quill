@@ -1,9 +1,9 @@
 /**
- * Keter Aether – Casual & Friendly Version
+ * Keter Aether - Casual & Friendly Version
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// Rich fallback transmutations (expanded + Kiswahili)
+// Enriched transmutations (including Kiswahili)
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -16,8 +16,7 @@ const transmutations = {
       "love": "love most true", "friend": "companion dear", "my friend": "good my friend",
       "money": "coin", "work": "toil", "happy": "most glad", "sad": "heavy of heart",
       "beautiful": "fair", "cool": "passing fine", "awesome": "marvelous",
-      "today": "this day", "tomorrow": "the morrow", "yesterday": "yestereve",
-      "great": "noble", "bad": "wretched", "tired": "weary"
+      "today": "this day", "tomorrow": "the morrow", "yesterday": "yestereve"
     },
     suffixes: ["— dost thou comprehend?", "— by my troth!", "— what sayest thou?", "— forsooth!"],
     prefixes: ["Hark! ", "Pray, ", "Mark me: ", "List! "]
@@ -87,16 +86,13 @@ const transmutations = {
       "love": "Mapenzi", "friend": "Rafiki", "my friend": "Rafiki yangu",
       "money": "Pesa", "work": "Kazi", "happy": "Furaha", "sad": "Huzuni",
       "beautiful": "Mzuri sana", "cool": "Poa", "awesome": "Mshangao mkubwa",
-      "tired": "Nimechoka", "hungry": "Njaa inanisumbua", "food": "Chakula"
+      "tired": "Nimechoka", "hungry": "Njaa inanisumbua"
     },
     suffixes: ["— kweli?", "— sawa?", "— ndiyo basi.", "— pole sana.", "— asante kwa moyo wangu."],
     prefixes: ["Eeeh, ", "Mambo ", "Sasa ", "Rafiki, ", "Ndugu, "]
   }
 };
 
-/**
- * Local fallback transmutation
- */
 function transmuteText(text, style) {
   const patterns = transmutations[style] || transmutations.shakespeare;
   let result = text.toLowerCase();
@@ -113,9 +109,6 @@ function transmuteText(text, style) {
   return prefix + result + suffix;
 }
 
-/**
- * Call OpenAI or fallback
- */
 async function callOpenAI(text, style, mode) {
   try {
     const response = await fetch('/api/transmute', {
@@ -129,15 +122,10 @@ async function callOpenAI(text, style, mode) {
   } catch (error) {
     console.warn('OpenAI failed → fallback');
     if (mode === 'transmute') return transmuteText(text, style);
-    if (mode === 'ghostwriter') return "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams...";
-    if (mode === 'critic') return "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
     return "The veil is thin tonight...";
   }
 }
 
-/**
- * Ink drop animation
- */
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
   drop.className = 'ink-drop';
@@ -147,9 +135,6 @@ function createInkDrop(x, y) {
   setTimeout(() => drop.remove(), 1000);
 }
 
-/**
- * Glow on alchemical symbols
- */
 function initAlchemicalSymbols() {
   document.querySelectorAll('.alchemical-symbol').forEach(symbol => {
     symbol.addEventListener('mouseenter', () => {
@@ -160,12 +145,8 @@ function initAlchemicalSymbols() {
   });
 }
 
-// ────────────────────────────────────────────────
-// MAIN APP
-// ────────────────────────────────────────────────
-
+// Main app
 document.addEventListener('DOMContentLoaded', () => {
-  // Remove loader
   const candle = document.getElementById('candleLoader');
   if (candle) setTimeout(() => candle.remove(), 3000);
 
@@ -184,18 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Emoji toggle
   if (emojiSwitch) {
-    emojiSwitch.addEventListener('change', (e) => {
-      addEmojis = e.target.checked;
-    });
+    emojiSwitch.addEventListener('change', (e) => addEmojis = e.target.checked);
   }
 
   // Mode pills
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
-    <button data-mode="transmute" class="pill active">Normal → Magic 🪄</button>
-    <button data-mode="ghostwriter" class="pill">Poem Mode 📜</button>
-    <button data-mode="critic" class="pill">Roast Mode 🔥</button>
+    <button data-mode="transmute" class="pill active">Transmutation Engine 🪶</button>
+    <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill 🪶</button>
+    <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
@@ -211,35 +190,24 @@ document.addEventListener('DOMContentLoaded', () => {
         styleSelect.style.display = 'block';
         styleLabel.style.display = 'block';
       } else if (currentMode === 'ghostwriter') {
-        input.placeholder = "Tell me what poem vibe you want... 📝";
+        input.placeholder = "Describe the poem you desire... 📝";
         styleSelect.style.display = 'none';
         styleLabel.style.display = 'none';
       } else if (currentMode === 'critic') {
-        input.placeholder = "Paste some lines for me to roast... 👀";
+        input.placeholder = "Paste a verse to analyze... 👀";
         styleSelect.style.display = 'none';
         styleLabel.style.display = 'none';
       }
     });
   });
 
-  // Add all styles including Kiswahili
-  const styles = [
-    { value: 'shakespeare', text: 'Shakespearean' },
-    { value: 'victorian', text: 'Victorian' },
-    { value: 'poe', text: 'Poe (Gothic)' },
-    { value: 'romantic', text: 'Romantic' },
-    { value: 'genz', text: 'Gen Z Slang' },
-    { value: 'kiswahili', text: 'Kiswahili' }
-  ];
-
-  styles.forEach(s => {
-    if (!styleSelect.querySelector(`option[value="${s.value}"]`)) {
-      const opt = document.createElement('option');
-      opt.value = s.value;
-      opt.textContent = s.text;
-      styleSelect.appendChild(opt);
-    }
-  });
+  // Add Kiswahili option
+  if (!styleSelect.querySelector('option[value="kiswahili"]')) {
+    const opt = document.createElement('option');
+    opt.value = 'kiswahili';
+    opt.textContent = 'Kiswahili';
+    styleSelect.appendChild(opt);
+  }
 
   // Transmute button
   transmuteBtn.addEventListener('click', async () => {
@@ -267,9 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
         result = await callOpenAI(value, 'shakespeare', 'critic');
       }
 
-      // Add emoji if enabled
       if (addEmojis) {
-        const emojis = ['🔥', '✨', '😎', '💫', '🌟', '🥳', '🚀', '🪄', '💖', '😂'];
+        const emojis = ['🔥', '✨', '😎', '💫', '🌟', '🥳', '🚀', '🪄', '💖'];
         result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
       }
 
@@ -291,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Utilities
 function copyText() {
   const text = document.getElementById('outputText').textContent;
-  navigator.clipboard.writeText(text).then(() => alert("Copied to thy parchment! 🎉"));
+  navigator.clipboard.writeText(text).then(() => alert("Copied! 🎉"));
 }
 
 function speakText() {
@@ -309,4 +276,4 @@ function shareText() {
   } else {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   }
-        }
+          }
