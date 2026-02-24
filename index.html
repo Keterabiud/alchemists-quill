@@ -5,101 +5,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Keter Aether</title>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <header>
+
+  <!-- Responsive Navbar -->
+  <header class="header">
+    <nav class="navbar">
       <div class="logo">
-        <svg viewBox="0 0 100 100" class="logo-icon">
-          <circle cx="50" cy="50" r="45" fill="none" stroke="#0A0A0A" stroke-width="2"/>
-          <line x1="50" y1="25" x2="50" y2="70" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round"/>
-          <path d="M50 70 L45 85 L55 85 Z" fill="#0A0A0A"/>
-          <line x1="50" y1="35" x2="35" y2="25" stroke="#0A0A0A" stroke-width="2"/>
-          <line x1="50" y1="40" x2="30" y2="32" stroke="#0A0A0A" stroke-width="2"/>
-          <line x1="50" y1="45" x2="32" y2="42" stroke="#0A0A0A" stroke-width="2"/>
-        </svg>
         <span class="logo-text">Keter Aether</span>
       </div>
-      <nav>
-        <a href="#">Pricing</a>
-        <a href="#">API</a>
-        <button class="btn-enter">ENTER</button>
-      </nav>
-    </header>
 
-    <main>
-      <section class="hero">
-        <h1 class="tagline">Turn everyday words into something fun & magical ✨</h1>
-        <p class="quote">
-          "Hark! What light through yonder window breaks? Speak, and I shall render thy words in verse most sweet."
-        </p>
-      </section>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">API</a></li>
+        <li><button class="btn-enter" id="enterBtn">ENTER</button></li>
+      </ul>
 
-      <div class="transform-box">
-        <div class="input-section">
-          <textarea id="modernInput" placeholder="Type something fun here... 😏" rows="8"></textarea>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
 
-          <div class="controls">
-            <select id="styleSelect">
-              <option value="shakespeare">Shakespearean</option>
-              <option value="victorian">Victorian</option>
-              <option value="poe">Poe (Gothic)</option>
-              <option value="romantic">Romantic</option>
-              <option value="genz">Gen Z Slang</option>
-              <option value="kiswahili">Kiswahili</option>
-            </select>
+  <main class="main-content">
+    <div class="hero">
+      <h1>Keter Aether</h1>
+      <p class="tagline">Turn everyday words into something fun & magical ✨</p>
+      <div class="quote">
+        "Hark! What light through yonder window breaks? Speak, and I shall render thy words in verse most sweet."
+      </div>
+    </div>
 
-            <div class="emoji-toggle">
-              <label for="emojiSwitch">Add emojis? 😄</label>
-              <input type="checkbox" id="emojiSwitch" checked />
-            </div>
+    <div class="transform-box">
+      <textarea id="modernInput" placeholder="Type something fun here... 😏" rows="6"></textarea>
 
-            <div class="mode-pills">
-              <button data-mode="transmute" class="pill active">Transmutation Engine 🪶</button>
-              <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill 🪶</button>
-              <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
-            </div>
+      <div class="controls">
+        <select id="styleSelect">
+          <option value="shakespeare">Shakespearean</option>
+          <option value="victorian">Victorian</option>
+          <option value="poe">Poe (Gothic)</option>
+          <option value="romantic">Romantic</option>
+          <option value="genz">Gen Z Slang</option>
+          <option value="kiswahili">Kiswahili</option>
+        </select>
 
-            <button id="transmuteBtn" class="btn-primary">Let's Go! 🚀</button>
-          </div>
+        <div class="emoji-toggle">
+          <label for="emojiSwitch">Add emojis? 😄</label>
+          <input type="checkbox" id="emojiSwitch" checked>
         </div>
 
-        <div id="outputSection" class="output-section" style="display: none;">
-          <div class="output-header" id="styleLabel"></div>
-          <div class="output-text" id="outputText"></div>
-
-          <div class="output-actions">
-            <button class="btn-secondary" onclick="copyText()">Copy</button>
-            <button class="btn-secondary" onclick="speakText()">Speak Aloud</button>
-            <button class="btn-secondary" onclick="shareText()">Share</button>
-          </div>
+        <div class="mode-pills">
+          <button data-mode="transmute" class="pill active">Transmutation Engine 🪶</button>
+          <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill 🪶</button>
+          <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
         </div>
+
+        <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
-      <section class="features">
-        <div class="feature">
-          <h3>The Transmutation Engine</h3>
-          <p>Convert thy modern tongue into ages past.</p>
+      <div id="outputSection" class="output-section" style="display: none;">
+        <div id="styleLabel" class="output-header"></div>
+        <div id="outputText" class="output-text"></div>
+        <div class="output-actions">
+          <button onclick="copyText()">Copy</button>
+          <button onclick="speakText()">Speak Aloud</button>
+          <button onclick="shareText()">Share</button>
         </div>
-        <div class="feature">
-          <h3>The Ghostwriter's Quill</h3>
-          <p>Summon original sonnets from mere whispers.</p>
-        </div>
-        <div class="feature">
-          <h3>The Critic's Eye</h3>
-          <p>Analyze meter, rhyme, and rhetorical devices.</p>
-        </div>
-      </section>
-    </main>
+      </div>
+    </div>
 
-    <footer>
-      <p class="credit-label">Conjured by</p>
-      <p class="credit-names">Abiud Keter</p>
-      <p class="quote">"We are such stuff as dreams are made on."</p>
-      <p class="copyright">— The Tempest</p>
-    </footer>
-  </div>
+    <section class="features" id="features">
+      <div class="feature">
+        <h3>The Transmutation Engine</h3>
+        <p>Convert thy modern tongue into ages past.</p>
+      </div>
+      <div class="feature">
+        <h3>The Ghostwriter's Quill</h3>
+        <p>Summon original sonnets from mere whispers.</p>
+      </div>
+      <div class="feature">
+        <h3>The Critic's Eye</h3>
+        <p>Analyze meter, rhyme, and rhetorical devices.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Conjured by Abiud Kipkemboi Keter<br>
+    "We are such stuff as dreams are made on."
+  </footer>
 
   <script src="app.js"></script>
 </body>
