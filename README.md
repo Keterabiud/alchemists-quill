@@ -1,2 +1,3 @@
-# alchemists-quill
-Transform modern prose into Shakespearean, Victorian, Poe-esque, and Romantic verse. An AI-powered writing tool for poets, playwrights, and dreamers. 
+# Keter Aether
+Turn everyday words into Shakespearean, Victorian, Poe-esque, Romantic, Gen Z, or Kiswahili verse. ✨
+An AI-powered writing tool for poets, playwrights, and dreamers.
