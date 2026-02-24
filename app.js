@@ -1,22 +1,25 @@
 /**
- * Keter Aether – Casual & Magical
+ * Keter Aether – Final Complete Version
+ * Casual, friendly, magical text transformation
  * Conjured by Abiud Kipkemboi Keter
  */
 
+// Fallback transmutations (rich dictionary)
 const transmutations = {
   shakespeare: {
     greetings: {
       "hello": "Hail", "hi": "Hark", "hey": "Ho there",
-      "good morning": "Good morrow", "how are you": "How fares thee",
-      "thank you": "I give thee thanks", "please": "Prithee",
-      "sorry": "I do beseech thy pardon", "yes": "Aye", "no": "Nay",
-      "goodbye": "Farewell", "love": "love most true",
-      "friend": "companion dear", "money": "coin", "work": "toil",
-      "happy": "most glad", "sad": "heavy of heart", "beautiful": "fair",
-      "cool": "passing fine", "awesome": "marvelous"
+      "good morning": "Good morrow", "good evening": "Good den",
+      "how are you": "How fares thee", "how you doing": "What cheer?",
+      "thank you": "I give thee thanks", "thanks": "Gramercy",
+      "please": "Prithee", "sorry": "I do beseech thy pardon",
+      "yes": "Aye", "no": "Nay", "goodbye": "Fare thee well", "bye": "Adieu",
+      "love": "love most true", "friend": "companion dear", "my friend": "good my friend",
+      "money": "coin", "work": "toil", "happy": "most glad", "sad": "heavy of heart",
+      "beautiful": "fair", "cool": "passing fine", "awesome": "marvelous"
     },
     suffixes: ["— dost thou comprehend?", "— by my troth!", "— forsooth!"],
-    prefixes: ["Hark! ", "Pray, ", "Mark me: "]
+    prefixes: ["Hark! ", "Pray, ", "Mark me: ", "List! "]
   },
   kiswahili: {
     greetings: {
@@ -31,9 +34,12 @@ const transmutations = {
     suffixes: ["— kweli?", "— sawa?", "— ndiyo basi."],
     prefixes: ["Eeeh, ", "Mambo ", "Sasa "]
   }
-  // Add other styles as needed
+  // Add other styles as needed (victorian, poe, romantic, genz)
 };
 
+/**
+ * Local fallback transmutation
+ */
 function transmuteText(text, style) {
   const patterns = transmutations[style] || transmutations.shakespeare;
   let result = text.toLowerCase();
@@ -48,6 +54,9 @@ function transmuteText(text, style) {
   return prefix + result.charAt(0).toUpperCase() + result.slice(1) + suffix;
 }
 
+/**
+ * Call backend or fallback
+ */
 async function callOpenAI(text, style, mode) {
   try {
     const response = await fetch('/api/transmute', {
@@ -64,6 +73,9 @@ async function callOpenAI(text, style, mode) {
   }
 }
 
+/**
+ * Ink drop animation
+ */
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
   drop.className = 'ink-drop';
@@ -73,6 +85,7 @@ function createInkDrop(x, y) {
   setTimeout(() => drop.remove(), 1000);
 }
 
+// Main app
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
@@ -151,4 +164,4 @@ function shareText() {
   const text = document.getElementById('outputText').textContent;
   navigator.share?.({ title: "Keter Aether", text }) ||
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-    }
+      }
