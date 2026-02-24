@@ -1,9 +1,11 @@
 /**
- * Keter Aether – Casual & Magical
+ * Keter Aether – Final Version
+ * Casual, friendly, magical text transformation tool
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// Enriched fallback transmutations (including Kiswahili)
+// ────────────────────────────────────────────────
+// FALLBACK TRANSMUTATIONS (local dictionary)
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -17,8 +19,7 @@ const transmutations = {
       "money": "coin", "work": "toil", "happy": "most glad", "sad": "heavy of heart",
       "angry": "wroth", "beautiful": "fair", "pretty": "comely", "ugly": "ill-favoured",
       "cool": "passing fine", "awesome": "marvelous", "great": "noble",
-      "bad": "wretched", "tired": "weary", "hungry": "fain would eat", "food": "meat",
-      "today": "this day", "tomorrow": "the morrow", "yesterday": "yestereve"
+      "bad": "wretched", "tired": "weary", "hungry": "fain would eat", "food": "meat"
     },
     suffixes: [
       "— dost thou comprehend?", "— by my troth!", "— what sayest thou?",
@@ -36,8 +37,7 @@ const transmutations = {
       "please": "If you please", "sorry": "I beg your pardon",
       "yes": "Indeed", "no": "Not at all", "goodbye": "Farewell",
       "love": "my dear", "friend": "my good fellow", "money": "funds",
-      "work": "occupation", "happy": "in good spirits", "sad": "rather low",
-      "beautiful": "most charming", "cool": "quite splendid"
+      "work": "occupation", "happy": "in good spirits", "sad": "rather low"
     },
     suffixes: ["— Most sincerely.", "— Your humble servant.", "— I remain yours truly."],
     prefixes: ["I daresay ", "It is my understanding that ", "Pray allow me to say "]
@@ -98,8 +98,7 @@ const transmutations = {
       "love": "Mapenzi", "friend": "Rafiki", "my friend": "Rafiki yangu",
       "money": "Pesa", "work": "Kazi", "happy": "Furaha", "sad": "Huzuni",
       "beautiful": "Mzuri sana", "cool": "Poa", "awesome": "Mshangao mkubwa",
-      "tired": "Nimechoka", "hungry": "Njaa inanisumbua", "food": "Chakula",
-      "today": "Leo", "tomorrow": "Kesho", "yesterday": "Jana"
+      "tired": "Nimechoka", "hungry": "Njaa inanisumbua", "food": "Chakula"
     },
     suffixes: [
       "— kweli?", "— sawa?", "— ndiyo basi.", "— pole sana.", "— asante kwa moyo wangu.",
@@ -112,7 +111,7 @@ const transmutations = {
 };
 
 /**
- * Local fallback transmutation function
+ * Local fallback: simple word replacement + random prefix/suffix
  */
 function transmuteText(text, style) {
   const patterns = transmutations[style] || transmutations.shakespeare;
@@ -131,7 +130,7 @@ function transmuteText(text, style) {
 }
 
 /**
- * Call OpenAI (or fallback to local transmutation)
+ * Try to call backend OpenAI endpoint, fallback to local if fails
  */
 async function callOpenAI(text, style, mode) {
   try {
@@ -140,20 +139,27 @@ async function callOpenAI(text, style, mode) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, style, mode })
     });
+
+    if (!response.ok) throw new Error('API response not OK');
+
     const data = await response.json();
-    if (!data.success) throw new Error(data.error || 'Failed');
+
+    if (!data.success) throw new Error(data.error || 'API failed');
+
     return data.transmuted || data.poem || data.analysis || "The spirits whisper faintly...";
   } catch (error) {
-    console.warn('OpenAI failed → fallback');
-    if (mode === 'transmute') return transmuteText(text, style);
-    if (mode === 'ghostwriter') return "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams...";
-    if (mode === 'critic') return "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
-    return "The veil is thin tonight...";
+    console.warn('OpenAI call failed → using local fallback', error);
+    if (mode === 'transmute') {
+      return transmuteText(text, style);
+    }
+    return mode === 'ghostwriter'
+      ? "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams..."
+      : "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
   }
 }
 
 /**
- * Ink drop animation
+ * Create ink drop animation on button click
  */
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
@@ -165,7 +171,7 @@ function createInkDrop(x, y) {
 }
 
 /**
- * Glow effect on alchemical symbols (if any)
+ * Glow effect on alchemical symbols (optional – if you have any)
  */
 function initAlchemicalSymbols() {
   document.querySelectorAll('.alchemical-symbol').forEach(symbol => {
@@ -178,11 +184,11 @@ function initAlchemicalSymbols() {
 }
 
 // ────────────────────────────────────────────────
-// MAIN APPLICATION LOGIC
+// MAIN APP LOGIC
 // ────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Remove loading candle if present
+  // Remove loader if present
   const candle = document.getElementById('candleLoader');
   if (candle) setTimeout(() => candle.remove(), 3000);
 
@@ -200,26 +206,25 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'transmute';
   let addEmojis = true;
 
-  // Emoji toggle listener
+  // ── Emoji toggle ──
   if (emojiSwitch) {
     emojiSwitch.addEventListener('change', (e) => {
       addEmojis = e.target.checked;
     });
   }
 
-  // Create mode pills
+  // ── Mode pills ──
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
-    <button data-mode="transmute" class="pill active">Transmutation Engine </button>
-    <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill </button>
-    <button data-mode="critic" class="pill">Critic's Eye </button>
+    <button data-mode="transmute" class="pill active">Transmutation Engine 🪶</button>
+    <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill 🪶</button>
+    <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
-  // Insert mode pills right before the transmute button
+  // Insert pills right before the transmute button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
-  // Mode switching logic
   modeContainer.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
       currentMode = btn.dataset.mode;
@@ -242,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Add Kiswahili option if not already present
+  // ── Add Kiswahili option if missing ──
   if (!styleSelect.querySelector('option[value="kiswahili"]')) {
     const opt = document.createElement('option');
     opt.value = 'kiswahili';
@@ -250,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     styleSelect.appendChild(opt);
   }
 
-  // Transmute button handler
+  // ── TRANSMUTE BUTTON ──
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) {
@@ -291,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert("Oops, spirits acting up today 😂 Try again?");
       console.error(err);
     } finally {
-      transmuteBtn.textContent = "TRANSMUTE";
+      transmuteBtn.textContent = "Let's Go! 🚀";
       transmuteBtn.disabled = false;
     }
   });
@@ -321,4 +326,4 @@ function shareText() {
   } else {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   }
-        }
+    }
