@@ -1,10 +1,10 @@
 /**
  * Keter Aether – Final Complete Version
- * Casual, friendly, magical text transformation
+ * Casual & Magical Text Transformation Tool
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// Fallback transmutations (rich dictionary)
+// Rich fallback transmutations (all styles + Kiswahili)
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -37,8 +37,7 @@ const transmutations = {
       "please": "If you please", "sorry": "I beg your pardon",
       "yes": "Indeed", "no": "Not at all", "goodbye": "Farewell",
       "love": "my dear", "friend": "my good fellow", "money": "funds",
-      "work": "occupation", "happy": "in good spirits", "sad": "rather low",
-      "beautiful": "most charming", "cool": "quite splendid"
+      "work": "occupation", "happy": "in good spirits", "sad": "rather low"
     },
     suffixes: ["— Most sincerely.", "— Your humble servant.", "— I remain yours truly."],
     prefixes: ["I daresay ", "It is my understanding that ", "Pray allow me to say "]
@@ -141,30 +140,23 @@ async function callOpenAI(text, style, mode) {
       body: JSON.stringify({ text, style, mode })
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error('API error');
 
     const data = await response.json();
-
-    if (!data.success) {
-      throw new Error(data.error || 'API returned failure');
-    }
+    if (!data.success) throw new Error(data.error || 'Failed');
 
     return data.transmuted || data.poem || data.analysis || "The spirits whisper faintly...";
   } catch (error) {
-    console.warn('OpenAI call failed → fallback used', error);
-    if (mode === 'transmute') {
-      return transmuteText(text, style);
-    }
-    return mode === 'ghostwriter'
-      ? "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams..."
-      : "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
+    console.warn('OpenAI failed → using local fallback');
+    if (mode === 'transmute') return transmuteText(text, style);
+    if (mode === 'ghostwriter') return "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams...";
+    if (mode === 'critic') return "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
+    return "The veil is thin tonight...";
   }
 }
 
 /**
- * Ink drop animation on button click
+ * Ink drop animation
  */
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
@@ -189,17 +181,15 @@ function initAlchemicalSymbols() {
 }
 
 // ────────────────────────────────────────────────
-// MAIN APPLICATION
+// MAIN APP
 // ────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Remove loader candle if present
   const candle = document.getElementById('candleLoader');
   if (candle) setTimeout(() => candle.remove(), 3000);
 
   initAlchemicalSymbols();
 
-  // DOM elements
   const input = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
   const transmuteBtn = document.getElementById('transmuteBtn');
@@ -211,14 +201,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'transmute';
   let addEmojis = true;
 
-  // ── Emoji toggle ──
+  // Emoji toggle
   if (emojiSwitch) {
     emojiSwitch.addEventListener('change', (e) => {
       addEmojis = e.target.checked;
     });
   }
 
-  // ── Mode pills ──
+  // Mode pills
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
@@ -227,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
-  // Insert pills before the transmute button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
   modeContainer.querySelectorAll('.pill').forEach(btn => {
@@ -239,20 +228,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentMode === 'transmute') {
         input.placeholder = "Type something fun here... 😏";
         styleSelect.style.display = 'block';
-        styleLabel.style.display = 'block';
       } else if (currentMode === 'ghostwriter') {
         input.placeholder = "Describe the poem you desire... 📝";
         styleSelect.style.display = 'none';
-        styleLabel.style.display = 'none';
       } else if (currentMode === 'critic') {
         input.placeholder = "Paste a verse to analyze... 👀";
         styleSelect.style.display = 'none';
-        styleLabel.style.display = 'none';
       }
     });
   });
 
-  // ── Add Kiswahili option if missing ──
+  // Add Kiswahili option
   if (!styleSelect.querySelector('option[value="kiswahili"]')) {
     const opt = document.createElement('option');
     opt.value = 'kiswahili';
@@ -260,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     styleSelect.appendChild(opt);
   }
 
-  // ── TRANSMUTE BUTTON ──
+  // Transmute button
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) {
@@ -286,7 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
         result = await callOpenAI(value, 'shakespeare', 'critic');
       }
 
-      // Add random emoji if toggle is on
       if (addEmojis) {
         const emojis = ['🔥', '✨', '😎', '💫', '🌟', '🥳', '🚀', '🪄', '💖', '😂'];
         result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
@@ -307,10 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ────────────────────────────────────────────────
-// UTILITY FUNCTIONS
-// ────────────────────────────────────────────────
-
+// Utilities
 function copyText() {
   const text = document.getElementById('outputText').textContent;
   navigator.clipboard.writeText(text).then(() => alert("Copied! 🎉"));
@@ -331,4 +313,4 @@ function shareText() {
   } else {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   }
-}
+        }
