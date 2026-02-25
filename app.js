@@ -143,20 +143,23 @@ async function callOpenAI(text, style, mode) {
     if (!response.ok) throw new Error('API error');
 
     const data = await response.json();
+
     if (!data.success) throw new Error(data.error || 'Failed');
 
     return data.transmuted || data.poem || data.analysis || "The spirits whisper faintly...";
   } catch (error) {
-    console.warn('OpenAI failed → using local fallback');
-    if (mode === 'transmute') return transmuteText(text, style);
-    if (mode === 'ghostwriter') return "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams...";
-    if (mode === 'critic') return "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
-    return "The veil is thin tonight...";
+    console.warn('OpenAI call failed → fallback used', error);
+    if (mode === 'transmute') {
+      return transmuteText(text, style);
+    }
+    return mode === 'ghostwriter'
+      ? "In shadowed halls where moonlight gleams,\nA lonely soul doth chase its dreams..."
+      : "Meter: iambic pentameter\nRhyme: ABAB\nDevices: metaphor, alliteration, imagery";
   }
 }
 
 /**
- * Ink drop animation
+ * Ink drop animation on button click
  */
 function createInkDrop(x, y) {
   const drop = document.createElement('div');
@@ -181,15 +184,17 @@ function initAlchemicalSymbols() {
 }
 
 // ────────────────────────────────────────────────
-// MAIN APP
+// MAIN APPLICATION
 // ────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Remove loader candle if present
   const candle = document.getElementById('candleLoader');
   if (candle) setTimeout(() => candle.remove(), 3000);
 
   initAlchemicalSymbols();
 
+  // DOM elements
   const input = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
   const transmuteBtn = document.getElementById('transmuteBtn');
@@ -201,14 +206,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'transmute';
   let addEmojis = true;
 
-  // Emoji toggle
+  // ── Emoji toggle ──
   if (emojiSwitch) {
     emojiSwitch.addEventListener('change', (e) => {
       addEmojis = e.target.checked;
     });
   }
 
-  // Mode pills
+  // ── Mode pills ──
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
@@ -217,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
+  // Insert pills before the transmute button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
   modeContainer.querySelectorAll('.pill').forEach(btn => {
@@ -238,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Add Kiswahili option
+  // ── Add Kiswahili option if missing ──
   if (!styleSelect.querySelector('option[value="kiswahili"]')) {
     const opt = document.createElement('option');
     opt.value = 'kiswahili';
@@ -246,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     styleSelect.appendChild(opt);
   }
 
-  // Transmute button
+  // ── TRANSMUTE BUTTON ──
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) {
@@ -272,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         result = await callOpenAI(value, 'shakespeare', 'critic');
       }
 
+      // Add random emoji if toggle is on
       if (addEmojis) {
         const emojis = ['🔥', '✨', '😎', '💫', '🌟', '🥳', '🚀', '🪄', '💖', '😂'];
         result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
@@ -292,7 +299,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Utilities
+// ────────────────────────────────────────────────
+// UTILITY FUNCTIONS
+// ────────────────────────────────────────────────
+
 function copyText() {
   const text = document.getElementById('outputText').textContent;
   navigator.clipboard.writeText(text).then(() => alert("Copied! 🎉"));
@@ -313,4 +323,4 @@ function shareText() {
   } else {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   }
-        }
+      }
