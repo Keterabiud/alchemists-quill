@@ -1,9 +1,9 @@
 /**
- * Keter Aether – Final Complete Version with Worker + Groq Integration
+ * Keter Aether – Final Complete Version with Cloudflare Worker + Groq
  * Conjured by Abiud Kipkemboi Keter
  */
 
-// Rich fallback transmutations (used when Worker/API fails)
+// Rich fallback transmutations (used when Worker fails)
 const transmutations = {
   shakespeare: {
     greetings: {
@@ -25,65 +25,6 @@ const transmutations = {
       "— forsooth!", "— marry!", "— i' faith!", "— verily!"
     ],
     prefixes: ["Hark! ", "Pray, ", "Mark me: ", "List! ", "Good sir, ", "Alas! "]
-  },
-
-  victorian: {
-    greetings: {
-      "hello": "How do you do", "hi": "Good day to you",
-      "good morning": "Good morning", "good evening": "Good evening",
-      "how are you": "How are you keeping?", "how you doing": "How do you fare?",
-      "thank you": "Much obliged", "thanks": "I am most grateful",
-      "please": "If you please", "sorry": "I beg your pardon",
-      "yes": "Indeed", "no": "Not at all", "goodbye": "Farewell",
-      "love": "my dear", "friend": "my good fellow", "money": "funds",
-      "work": "occupation", "happy": "in good spirits", "sad": "rather low"
-    },
-    suffixes: ["— Most sincerely.", "— Your humble servant.", "— I remain yours truly."],
-    prefixes: ["I daresay ", "It is my understanding that ", "Pray allow me to say "]
-  },
-
-  poe: {
-    greetings: {
-      "hello": "Dark greetings", "hi": "Hail from the shadows",
-      "good morning": "Bleak morn", "good evening": "Dismal eve",
-      "how are you": "How fares thy soul?", "thank you": "Gratitude from the void",
-      "sorry": "Pardon from the abyss", "yes": "So be it", "no": "Nevermore",
-      "goodbye": "Farewell into darkness", "love": "eternal torment", "friend": "fellow shade",
-      "happy": "fleeting illusion", "sad": "abyssal despair", "beautiful": "ghastly fair",
-      "cool": "sepulchral chill"
-    },
-    suffixes: ["— nevermore.", "— in the shadows of the night.", "— lost to eternity."],
-    prefixes: ["Once upon a midnight dreary, ", "In the bleak December, ", "Deep into that darkness peering, "]
-  },
-
-  romantic: {
-    greetings: {
-      "hello": "Dearest salutations", "hi": "My heart greets thee",
-      "good morning": "Dawn's tender kiss", "good evening": "Twilight's embrace",
-      "how are you": "How does thy spirit soar?", "thank you": "My soul is grateful",
-      "please": "I beseech thee", "sorry": "Forgive my trembling heart",
-      "yes": "With all my being", "no": "Alas, nay", "goodbye": "Until we meet again",
-      "love": "my eternal flame", "friend": "kindred spirit", "beautiful": "divine beauty",
-      "happy": "rapture fills me", "sad": "my heart weeps"
-    },
-    suffixes: ["— my heart swells!", "— forever thine.", "— in passion's thrall."],
-    prefixes: ["Oh! ", "My dearest, ", "In rapture, ", "Beloved, "]
-  },
-
-  genz: {
-    greetings: {
-      "hello": "Yo what's good", "hi": "Heyyy", "hey": "Sup bestie",
-      "good morning": "Morningggg", "good evening": "Eveninggg",
-      "how are you": "You good?", "how you holding up": "You holding?",
-      "thank you": "Tysm", "thanks": "Appreciate you fr",
-      "please": "Pls", "sorry": "My bad fr", "yes": "Bet", "no": "Cap",
-      "goodbye": "I'm out", "bye": "Deuces", "love": "I got mad rizz for you",
-      "friend": "Bestie", "money": "Bread", "work": "Grind", "happy": "Slay",
-      "sad": "This is so depressing", "cool": "Fire", "awesome": "Bussin",
-      "beautiful": "Serving looks", "tired": "I'm cooked", "hungry": "Starving fr"
-    },
-    suffixes: ["fr", "no cap", "periodt", "ong", "that's crazy", "lowkey", "highkey"],
-    prefixes: ["Lowkey ", "Highkey ", "Bro ", "Fam ", "Deadass ", "Nahhh "]
   },
 
   kiswahili: {
@@ -173,11 +114,6 @@ function createInkDrop(x, y) {
 // ────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Remove loader candle if present
-  const candle = document.getElementById('candleLoader');
-  if (candle) setTimeout(() => candle.remove(), 3000);
-
-  // DOM elements
   const input = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
   const transmuteBtn = document.getElementById('transmuteBtn');
@@ -189,14 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'transmute';
   let addEmojis = true;
 
-  // ── Emoji toggle ──
-  if (emojiSwitch) {
-    emojiSwitch.addEventListener('change', (e) => {
-      addEmojis = e.target.checked;
-    });
-  }
+  // Emoji toggle
+  emojiSwitch.addEventListener('change', (e) => {
+    addEmojis = e.target.checked;
+  });
 
-  // ── Mode pills ──
+  // Create mode pills dynamically
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
@@ -205,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
-  // Insert pills before the transmute button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
   modeContainer.querySelectorAll('.pill').forEach(btn => {
@@ -227,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ── Add Kiswahili option if missing ──
+  // Add Kiswahili option if missing
   if (!styleSelect.querySelector('option[value="kiswahili"]')) {
     const opt = document.createElement('option');
     opt.value = 'kiswahili';
@@ -235,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     styleSelect.appendChild(opt);
   }
 
-  // ── TRANSMUTE BUTTON ──
+  // Main button click handler
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) {
@@ -243,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const originalText = transmuteBtn.textContent;
     transmuteBtn.textContent = "Cooking up some magic... ✨";
     transmuteBtn.disabled = true;
 
@@ -255,7 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       result = await callOpenAI(value, styleSelect.value, currentMode);
 
-      // Add random emoji if toggle is on
       if (addEmojis) {
         const emojis = ['🔥', '✨', '😎', '💫', '🌟', '🥳', '🚀', '🪄', '💖', '😂'];
         result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
@@ -267,8 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
       outputSection.style.display = 'block';
       outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch (err) {
+      console.error('Transformation error:', err);
       alert("Oops, spirits acting up today 😂 Try again?");
-      console.error(err);
       result = transmuteText(value, styleSelect.value);
       outputText.textContent = result;
       outputSection.style.display = 'block';
@@ -279,10 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ────────────────────────────────────────────────
-// UTILITY FUNCTIONS
-// ────────────────────────────────────────────────
-
+// Utility functions
 function copyText() {
   const text = document.getElementById('outputText').textContent;
   navigator.clipboard.writeText(text).then(() => alert("Copied! 🎉"));
@@ -303,4 +231,4 @@ function shareText() {
   } else {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   }
-      }
+}
