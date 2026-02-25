@@ -15,41 +15,117 @@ const transmutations = {
       "yes": "Aye", "no": "Nay", "goodbye": "Fare thee well", "bye": "Adieu",
       "love": "love most true", "friend": "companion dear", "my friend": "good my friend",
       "money": "coin", "work": "toil", "happy": "most glad", "sad": "heavy of heart",
-      "beautiful": "fair", "cool": "passing fine", "awesome": "marvelous"
+      "angry": "wroth", "beautiful": "fair", "pretty": "comely", "ugly": "ill-favoured",
+      "cool": "passing fine", "awesome": "marvelous", "great": "noble",
+      "bad": "wretched", "tired": "weary", "hungry": "fain would eat", "food": "meat",
+      "today": "this day", "tomorrow": "the morrow", "yesterday": "yestereve"
     },
-    suffixes: ["— dost thou comprehend?", "— by my troth!", "— forsooth!"],
-    prefixes: ["Hark! ", "Pray, ", "Mark me: "]
+    suffixes: [
+      "— dost thou comprehend?", "— by my troth!", "— what sayest thou?",
+      "— forsooth!", "— marry!", "— i' faith!", "— verily!"
+    ],
+    prefixes: ["Hark! ", "Pray, ", "Mark me: ", "List! ", "Good sir, ", "Alas! "]
   },
+
+  victorian: {
+    greetings: {
+      "hello": "How do you do", "hi": "Good day to you",
+      "good morning": "Good morning", "good evening": "Good evening",
+      "how are you": "How are you keeping?", "how you doing": "How do you fare?",
+      "thank you": "Much obliged", "thanks": "I am most grateful",
+      "please": "If you please", "sorry": "I beg your pardon",
+      "yes": "Indeed", "no": "Not at all", "goodbye": "Farewell",
+      "love": "my dear", "friend": "my good fellow", "money": "funds",
+      "work": "occupation", "happy": "in good spirits", "sad": "rather low"
+    },
+    suffixes: ["— Most sincerely.", "— Your humble servant.", "— I remain yours truly."],
+    prefixes: ["I daresay ", "It is my understanding that ", "Pray allow me to say "]
+  },
+
+  poe: {
+    greetings: {
+      "hello": "Dark greetings", "hi": "Hail from the shadows",
+      "good morning": "Bleak morn", "good evening": "Dismal eve",
+      "how are you": "How fares thy soul?", "thank you": "Gratitude from the void",
+      "sorry": "Pardon from the abyss", "yes": "So be it", "no": "Nevermore",
+      "goodbye": "Farewell into darkness", "love": "eternal torment", "friend": "fellow shade",
+      "happy": "fleeting illusion", "sad": "abyssal despair", "beautiful": "ghastly fair",
+      "cool": "sepulchral chill"
+    },
+    suffixes: ["— nevermore.", "— in the shadows of the night.", "— lost to eternity."],
+    prefixes: ["Once upon a midnight dreary, ", "In the bleak December, ", "Deep into that darkness peering, "]
+  },
+
+  romantic: {
+    greetings: {
+      "hello": "Dearest salutations", "hi": "My heart greets thee",
+      "good morning": "Dawn's tender kiss", "good evening": "Twilight's embrace",
+      "how are you": "How does thy spirit soar?", "thank you": "My soul is grateful",
+      "please": "I beseech thee", "sorry": "Forgive my trembling heart",
+      "yes": "With all my being", "no": "Alas, nay", "goodbye": "Until we meet again",
+      "love": "my eternal flame", "friend": "kindred spirit", "beautiful": "divine beauty",
+      "happy": "rapture fills me", "sad": "my heart weeps"
+    },
+    suffixes: ["— my heart swells!", "— forever thine.", "— in passion's thrall."],
+    prefixes: ["Oh! ", "My dearest, ", "In rapture, ", "Beloved, "]
+  },
+
+  genz: {
+    greetings: {
+      "hello": "Yo what's good", "hi": "Heyyy", "hey": "Sup bestie",
+      "good morning": "Morningggg", "good evening": "Eveninggg",
+      "how are you": "You good?", "how you holding up": "You holding?",
+      "thank you": "Tysm", "thanks": "Appreciate you fr",
+      "please": "Pls", "sorry": "My bad fr", "yes": "Bet", "no": "Cap",
+      "goodbye": "I'm out", "bye": "Deuces", "love": "I got mad rizz for you",
+      "friend": "Bestie", "money": "Bread", "work": "Grind", "happy": "Slay",
+      "sad": "This is so depressing", "cool": "Fire", "awesome": "Bussin",
+      "beautiful": "Serving looks", "tired": "I'm cooked", "hungry": "Starving fr"
+    },
+    suffixes: ["fr", "no cap", "periodt", "ong", "that's crazy", "lowkey", "highkey"],
+    prefixes: ["Lowkey ", "Highkey ", "Bro ", "Fam ", "Deadass ", "Nahhh "]
+  },
+
   kiswahili: {
     greetings: {
       "hello": "Habari", "hi": "Mambo", "hey": "Sasa",
-      "good morning": "Habari za asubuhi", "how are you": "Habari yako?",
-      "thank you": "Asante", "please": "Tafadhali", "sorry": "Samahani",
+      "good morning": "Habari za asubuhi", "good evening": "Habari za jioni",
+      "how are you": "Habari yako?", "how you doing": "Uko aje?",
+      "thank you": "Asante", "thanks": "Asante sana",
+      "please": "Tafadhali", "sorry": "Samahani",
       "yes": "Ndiyo", "no": "Hapana", "goodbye": "Kwaheri",
-      "love": "Mapenzi", "friend": "Rafiki", "money": "Pesa",
-      "happy": "Furaha", "sad": "Huzuni", "beautiful": "Mzuri sana",
-      "cool": "Poa", "awesome": "Mshangao mkubwa"
+      "love": "Mapenzi", "friend": "Rafiki", "my friend": "Rafiki yangu",
+      "money": "Pesa", "work": "Kazi", "happy": "Furaha", "sad": "Huzuni",
+      "beautiful": "Mzuri sana", "cool": "Poa", "awesome": "Mshangao mkubwa",
+      "tired": "Nimechoka", "hungry": "Njaa inanisumbua", "food": "Chakula"
     },
-    suffixes: ["— kweli?", "— sawa?", "— ndiyo basi."],
-    prefixes: ["Eeeh, ", "Mambo ", "Sasa "]
+    suffixes: [
+      "— kweli?", "— sawa?", "— ndiyo basi.", "— pole sana.", "— asante kwa moyo wangu.",
+      "— basi hivyo.", "— yapo!"
+    ],
+    prefixes: [
+      "Eeeh, ", "Mambo ", "Sasa ", "Rafiki, ", "Ndugu, ", "Jamani, "
+    ]
   }
 };
 
 /**
- * Local fallback transmutation (used if Worker fails)
+ * Local fallback transmutation function
  */
 function transmuteText(text, style) {
   const patterns = transmutations[style] || transmutations.shakespeare;
   let result = text.toLowerCase();
 
   for (let [modern, archaic] of Object.entries(patterns.greetings || {})) {
-    result = result.replace(new RegExp(`\\b${modern}\\b`, 'gi'), archaic);
+    const regex = new RegExp(`\\b${modern}\\b`, 'gi');
+    result = result.replace(regex, archaic);
   }
 
-  const prefix = Math.random() > 0.7 ? patterns.prefixes?.[Math.floor(Math.random() * patterns.prefixes.length)] || '' : '';
+  const prefix = Math.random() > 0.7 ? (patterns.prefixes?.[Math.floor(Math.random() * patterns.prefixes.length)] || '') : '';
   const suffix = patterns.suffixes?.[Math.floor(Math.random() * patterns.suffixes.length)] || '';
 
-  return prefix + result.charAt(0).toUpperCase() + result.slice(1) + suffix;
+  result = result.charAt(0).toUpperCase() + result.slice(1);
+  return prefix + result + suffix;
 }
 
 /**
@@ -93,7 +169,7 @@ function createInkDrop(x, y) {
 }
 
 // ────────────────────────────────────────────────
-// MAIN APPLICATION LOGIC
+// MAIN APPLICATION
 // ────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -113,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addEmojis = e.target.checked;
   });
 
-  // Dynamically create mode pills (only once)
+  // Create mode pills dynamically (only once)
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
@@ -122,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
   `;
 
-  // Insert before the button
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
   modeContainer.querySelectorAll('.pill').forEach(btn => {
@@ -156,10 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) {
-      alert("Heyy, type something first 😅");
+      alert("Heyy, type something first lah 😅");
       return;
     }
 
+    const originalText = transmuteBtn.textContent;
     transmuteBtn.textContent = "Cooking up some magic... ✨";
     transmuteBtn.disabled = true;
 
@@ -182,8 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
       outputSection.style.display = 'block';
       outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch (err) {
-      console.error('Error in transformation:', err);
-      alert("Oops, something went wrong with the spirits 😂 Try again?");
+      alert("Oops, spirits acting up today 😂 Try again?");
+      console.error(err);
       result = transmuteText(value, styleSelect.value);
       outputText.textContent = result;
       outputSection.style.display = 'block';
