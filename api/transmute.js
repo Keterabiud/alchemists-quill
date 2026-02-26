@@ -1,4 +1,4 @@
-// api/transmute.js - Vercel API route (fixed body parsing)
+// api/transmute.js - Vercel API route
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,7 +9,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Manually read and parse the body (this is the correct way in Vercel)
     let body = '';
     for await (const chunk of req) {
       body += chunk.toString();
@@ -32,7 +31,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'llama-3.1-70b-versatile',
+        model: 'llama-3.2-90b-vision-instruct',  // Currently supported model
         messages: [
           {
             role: 'system',
