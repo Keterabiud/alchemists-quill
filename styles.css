@@ -231,6 +231,7 @@ select, .emoji-toggle {
   justify-content: center;
   gap: 1.5rem;
   margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
 .output-actions button {
@@ -303,4 +304,4 @@ select, .emoji-toggle {
   .hero-logo {
     height: 160px;
   }
-  }
+                                }
