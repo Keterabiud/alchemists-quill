@@ -1,5 +1,4 @@
 // api/transmute.js - Vercel API route
-// Now focused on style/tone/dialect rewrite (not forced poetry)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -19,7 +18,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'No valid text provided' });
     }
 
-    // Different behavior depending on mode
     let systemPrompt = '';
 
     if (mode === 'ghostwriter') {
@@ -27,10 +25,10 @@ export default async function handler(req, res) {
     } else if (mode === 'critic') {
       systemPrompt = `You are a literary critic. Provide a detailed analysis of the following text: meter, rhyme scheme, literary devices, tone, imagery, symbolism.`;
     } else {
-      // Default: Transmute / tone shift
-      systemPrompt = `You are a master of language styles. Rewrite the following text exactly in the style of ${style}. 
-Keep the meaning the same, just change how it's said — use the vocabulary, grammar, slang, tone and expressions typical of that style/era/dialect.
-Do NOT turn it into a poem unless asked. Output only the rewritten text — no explanations, no introductions.`;
+      // Main mode: everyday sentence / tone / dialect shift
+      systemPrompt = `You are a master of language styles, dialects, slang and historical tones. Rewrite the following everyday sentence or phrase exactly in the style of ${style}. 
+Keep the original meaning and length similar — just change the vocabulary, grammar, expressions, slang and tone to match that era/culture/dialect perfectly.
+Do NOT turn it into a poem or add extra content unless the mode is ghostwriter. Output ONLY the rewritten text — no introductions, no explanations.`;
     }
 
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -40,13 +38,13 @@ Do NOT turn it into a poem unless asked. Output only the rewritten text — no e
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-120b',  // stable, creative model
+        model: 'openai/gpt-oss-120b',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text.trim() }
         ],
         temperature: 0.8,
-        max_tokens: 500,
+        max_tokens: 600,
         top_p: 0.95
       })
     });
@@ -76,4 +74,4 @@ Do NOT turn it into a poem unless asked. Output only the rewritten text — no e
       error: error.message || 'Internal server error'
     });
   }
-        }
+}
