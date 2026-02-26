@@ -1,77 +1,27 @@
 /**
- * Keter Aether – Quick Groq Direct Test Version
- * Conjured by Abiud Kipkemboi Keter
+ * Keter Aether – Clean Pages Functions + Groq Version
  */
 
-// Fallback dictionary (only used if Groq fails)
-const transmutations = {
-  shakespeare: {
-    greetings: {
-      "hello": "Hail", "hi": "Hark", "hey": "Ho there",
-      "good morning": "Good morrow", "how are you": "How fares thee",
-      "thank you": "I give thee thanks", "please": "Prithee",
-      "sorry": "I do beseech thy pardon", "yes": "Aye", "no": "Nay",
-      "goodbye": "Farewell", "love": "love most true",
-      "friend": "companion dear", "happy": "most glad", "sad": "heavy of heart",
-      "beautiful": "fair", "cool": "passing fine", "awesome": "marvelous"
-    },
-    suffixes: ["— dost thou comprehend?", "— by my troth!", "— forsooth!"],
-    prefixes: ["Hark! ", "Pray, ", "Mark me: "]
-  }
-  // add more styles later if needed
-};
-
-function transmuteText(text, style) {
-  const patterns = transmutations[style] || transmutations.shakespeare;
-  let result = text.toLowerCase();
-
-  for (let [modern, archaic] of Object.entries(patterns.greetings || {})) {
-    result = result.replace(new RegExp(`\\b${modern}\\b`, 'gi'), archaic);
-  }
-
-  const prefix = Math.random() > 0.7 ? patterns.prefixes?.[Math.floor(Math.random() * patterns.prefixes.length)] || '' : '';
-  const suffix = patterns.suffixes?.[Math.floor(Math.random() * patterns.suffixes.length)] || '';
-
-  return prefix + result.charAt(0).toUpperCase() + result.slice(1) + suffix;
-}
-
-// Call Groq directly (temporary – key visible in browser)
-async function callGroq(text, style, mode) {
+async function callOpenAI(text, style, mode) {
   try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('/api/transmute', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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' // 
-      },
-      body: JSON.stringify({
-        model: 'llama-3.1-70b-versatile',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a master poet. Transform into ${style} style. ${
-              mode === 'ghostwriter' ? 'Write a full poem.' : 
-              mode === 'critic' ? 'Analyze meter, rhyme, devices.' : ''
-            } Output only the result.`
-          },
-          { role: 'user', content: text }
-        ],
-        temperature: 0.9,
-        max_tokens: 800
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, style, mode })
     });
 
-    if (!response.ok) throw new Error('Groq error');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const data = await response.json();
-    return data.choices?.[0]?.message?.content?.trim() || 'The spirits are silent...';
-  } catch (e) {
-    console.error(e);
-    return transmuteText(text, style); // fallback
+    if (!data.success) throw new Error(data.error || 'Failed');
+
+    return data.transmuted || 'The spirits are silent...';
+  } catch (error) {
+    console.error('API call failed:', error);
+    return "Fallback: " + text.toUpperCase(); // simple fallback for testing
   }
 }
 
-// Main app logic (keep this exactly as you have, but use callGroq instead)
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
@@ -106,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         input.placeholder = "Type something fun here... 😏";
         styleSelect.style.display = 'block';
       } else {
-        input.placeholder = currentMode === 'ghostwriter' ? "Describe the poem you desire..." : "Paste lines to analyze...";
+        input.placeholder = currentMode === 'ghostwriter' ? "Describe the poem..." : "Paste lines to analyze...";
         styleSelect.style.display = 'none';
       }
     });
@@ -119,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     transmuteBtn.textContent = "Cooking... ✨";
     transmuteBtn.disabled = true;
 
-    let result = await callGroq(value, styleSelect.value, currentMode);
+    let result = await callOpenAI(value, styleSelect.value, currentMode);
 
     if (addEmojis) {
       const emojis = ['🔥','✨','😎','💫','🌟','🥳','🚀','🪄','💖','😂'];
@@ -152,4 +102,4 @@ function shareText() {
   const text = document.getElementById('outputText').textContent;
   navigator.share?.({ title: "Keter Aether", text }) ||
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-      }
+                                }
