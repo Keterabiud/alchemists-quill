@@ -40,7 +40,7 @@ Do NOT turn it into a poem unless asked. Output only the rewritten text — no e
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'mixtral-8x7b-32768',  // stable, creative model
+        model: 'openai/gpt-oss-120b',  // stable, creative model
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text.trim() }
