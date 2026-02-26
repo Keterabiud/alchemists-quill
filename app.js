@@ -1,6 +1,5 @@
 /**
- * Keter Aether – Final Vercel Version
- * Core feature: style/tone/dialect/slang shifting
+ * Keter Aether – Final Version with Rotating Intro Quotes
  */
 
 async function callOpenAI(text, style, mode) {
@@ -21,11 +20,27 @@ async function callOpenAI(text, style, mode) {
   } catch (error) {
     console.error('API call failed:', error);
     alert(`Oops! ${error.message || 'The spirits are acting up. Try again?'}`);
-    return text; // keep original on error
+    return text;
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Rotating intro quotes
+  const quotes = [
+    `"Hark! What light through yonder window breaks?<br>Speak, and I shall render thy words in verse most sweet."`,
+    `"In the crucible of words, the mundane becomes the mystical..."`,
+    `"From mortal tongue to eternal echo — speak, and be transformed."`,
+    `"The quill awaits your breath. What shall we conjure today?"`,
+    `"Words are but clay — let the alchemist shape them anew."`
+  ];
+
+  const quoteElement = document.getElementById('rotatingQuote');
+  if (quoteElement) {
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    quoteElement.innerHTML = randomQuote;
+    quoteElement.classList.add('visible');
+  }
+
   const input = document.getElementById('modernInput');
   const styleSelect = document.getElementById('styleSelect');
   const transmuteBtn = document.getElementById('transmuteBtn');
@@ -144,4 +159,4 @@ function shareText() {
   const text = document.getElementById('outputText').textContent;
   navigator.share?.({ title: "Keter Aether creation", text }) ||
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-}
+    }
