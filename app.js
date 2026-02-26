@@ -1,5 +1,6 @@
 /**
- * Keter Aether – Final Vercel Version (openai/gpt-oss-120b)
+ * Keter Aether – Final Vercel Version
+ * Core feature: style/tone/dialect/slang shifting
  */
 
 async function callOpenAI(text, style, mode) {
@@ -20,7 +21,7 @@ async function callOpenAI(text, style, mode) {
   } catch (error) {
     console.error('API call failed:', error);
     alert(`Oops! ${error.message || 'The spirits are acting up. Try again?'}`);
-    return text; // keep original text on error
+    return text; // keep original on error
   }
 }
 
@@ -98,10 +99,45 @@ function copyText() {
 }
 
 function speakText() {
-  const text = document.getElementById('outputText').textContent;
-  const u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.9;
-  speechSynthesis.speak(u);
+  const text = document.getElementById('outputText').textContent.trim();
+  if (!text) return alert("Nothing to speak yet 😅");
+
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  const voices = speechSynthesis.getVoices();
+  const niceVoice = voices.find(v => 
+    v.name.includes('Google') || 
+    v.name.includes('Microsoft') || 
+    v.name.includes('Natural') ||
+    v.lang.startsWith('en-')
+  ) || voices[0];
+
+  utterance.voice = niceVoice;
+  utterance.rate = 0.9;
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
+
+  const currentStyle = document.getElementById('styleLabel').textContent.toLowerCase();
+  if (currentStyle.includes('gen z') || currentStyle.includes('sheng')) {
+    utterance.rate = 1.1;
+    utterance.pitch = 1.15;
+  } else if (currentStyle.includes('victorian') || currentStyle.includes('shakespeare')) {
+    utterance.rate = 0.85;
+    utterance.pitch = 0.9;
+  } else if (currentStyle.includes('german')) {
+    utterance.lang = 'de-DE';
+  }
+
+  utterance.onend = () => console.log("Speech finished");
+  utterance.onerror = (e) => console.error("Speech error:", e);
+
+  speechSynthesis.speak(utterance);
+}
+
+function stopSpeech() {
+  speechSynthesis.cancel();
 }
 
 function shareText() {
