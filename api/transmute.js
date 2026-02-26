@@ -1,15 +1,12 @@
-// api/transmute.js - Vercel API route (using active Groq model)
+// api/transmute.js - Vercel API route
+// Now focused on style/tone/dialect rewrite (not forced poetry)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({
-      success: false,
-      error: 'Method not allowed - use POST'
-    });
+    return res.status(405).json({ success: false, error: 'Method not allowed - use POST' });
   }
 
   try {
-    // Read raw body (Vercel way)
     let body = '';
     for await (const chunk of req) {
       body += chunk.toString();
@@ -19,10 +16,21 @@ export default async function handler(req, res) {
     const { text, style, mode } = parsedBody;
 
     if (!text || typeof text !== 'string' || text.trim() === '') {
-      return res.status(400).json({
-        success: false,
-        error: 'No valid text provided'
-      });
+      return res.status(400).json({ success: false, error: 'No valid text provided' });
+    }
+
+    // Different behavior depending on mode
+    let systemPrompt = '';
+
+    if (mode === 'ghostwriter') {
+      systemPrompt = `You are a master poet. Write a full, original poem based on the prompt in the style of ${style}.`;
+    } else if (mode === 'critic') {
+      systemPrompt = `You are a literary critic. Provide a detailed analysis of the following text: meter, rhyme scheme, literary devices, tone, imagery, symbolism.`;
+    } else {
+      // Default: Transmute / tone shift
+      systemPrompt = `You are a master of language styles. Rewrite the following text exactly in the style of ${style}. 
+Keep the meaning the same, just change how it's said — use the vocabulary, grammar, slang, tone and expressions typical of that style/era/dialect.
+Do NOT turn it into a poem unless asked. Output only the rewritten text — no explanations, no introductions.`;
     }
 
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -32,19 +40,13 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-20b',// ← ACTIVE & POWERFUL MODEL (Feb 2026)
+        model: 'mixtral-8x7b-32768',  // stable, creative model
         messages: [
-          {
-            role: 'system',
-            content: `You are a master poet and literary alchemist. Transform the input text into perfect ${style} style. Be elegant, immersive, and creative.
-${mode === 'ghostwriter' ? 'Write a full, original poem based on the prompt.' : ''}
-${mode === 'critic' ? 'Provide a detailed literary analysis: meter, rhyme scheme, literary devices, tone, imagery, symbolism.' : ''}
-Output ONLY the final result — no explanations, no introductions, no markdown fences, no extra text.`
-          },
+          { role: 'system', content: systemPrompt },
           { role: 'user', content: text.trim() }
         ],
-        temperature: 0.85,
-        max_tokens: 900,
+        temperature: 0.8,
+        max_tokens: 500,
         top_p: 0.95
       })
     });
@@ -58,16 +60,13 @@ Output ONLY the final result — no explanations, no introductions, no markdown 
     }
 
     const data = await groqResponse.json();
-    let transmuted = data.choices?.[0]?.message?.content?.trim() || 'The spirits are silent...';
+    let result = data.choices?.[0]?.message?.content?.trim() || 'The spirits are silent...';
 
-    transmuted = transmuted
-      .replace(/^```[\w]*\n?/, '')
-      .replace(/```$/, '')
-      .trim();
+    result = result.replace(/^```[\w]*\n?/, '').replace(/```$/, '').trim();
 
     return res.status(200).json({
       success: true,
-      transmuted
+      transmuted: result
     });
 
   } catch (error) {
@@ -77,4 +76,4 @@ Output ONLY the final result — no explanations, no introductions, no markdown 
       error: error.message || 'Internal server error'
     });
   }
-}
+        }
