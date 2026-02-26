@@ -1,5 +1,5 @@
 /**
- * Keter Aether – Final Version with Rotating Intro Quotes
+ * Keter Aether – Final Version
  */
 
 async function callOpenAI(text, style, mode) {
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const outputText = document.getElementById('outputText');
   const styleLabel = document.getElementById('styleLabel');
   const emojiSwitch = document.getElementById('emojiSwitch');
+  const typewriterSwitch = document.getElementById('typewriterSwitch');
 
   let currentMode = 'transmute';
   let addEmojis = true;
@@ -94,11 +95,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let result = await callOpenAI(value, styleSelect.value, currentMode);
 
     if (addEmojis) {
-      const emojis = ['🔥','✨','😎','💫','🌟','🥳','🚀','🪄','💖','😂'];
-      result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
+      const diverseEmojis = [
+        '🔥', '✨', '😎', '💫', '🌟', '🥳', '🚀', '🪄', '💖', '😂',
+        '🌙', '⚡', '🖤', '💀', '🕯️', '📜', '🪶', '🔮', '🌌', '🪐',
+        '👑', '🦇', '🍷', '🕸️', '🪦', '🕳️', '🧛', '🧙', '🪞', '🪭',
+        '🌹', '🥀', '🖋️', '🕰️', '🗝️', '🪬', '🪦', '🪨', '🌑', '🌒'
+      ];
+      result += ' ' + diverseEmojis[Math.floor(Math.random() * diverseEmojis.length)];
     }
 
-    outputText.textContent = result;
+    const useTypewriter = typewriterSwitch.checked;
+
+    outputText.classList.toggle('typewriter', useTypewriter);
+
+    if (useTypewriter) {
+      outputText.textContent = ''; // clear
+      typeWriter(result);
+    } else {
+      outputText.textContent = result;
+    }
+
     styleLabel.textContent = styleSelect.options[styleSelect.selectedIndex].text;
     outputSection.style.display = 'block';
     outputSection.scrollIntoView({ behavior: 'smooth' });
@@ -106,6 +122,24 @@ document.addEventListener('DOMContentLoaded', () => {
     transmuteBtn.textContent = originalBtnText;
     transmuteBtn.disabled = false;
   });
+
+  // Typewriter ASMR effect
+  function typeWriter(text, index = 0) {
+    if (index < text.length) {
+      const char = text.charAt(index);
+      outputText.textContent += char;
+
+      const sound = document.getElementById('typewriterClick');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.volume = 0.18; // soft ASMR level
+        sound.play().catch(() => {});
+      }
+
+      const delay = 50 + Math.random() * 90; // 50–140 ms
+      setTimeout(() => typeWriter(text, index + 1), delay);
+    }
+  }
 });
 
 function copyText() {
@@ -159,4 +193,4 @@ function shareText() {
   const text = document.getElementById('outputText').textContent;
   navigator.share?.({ title: "Keter Aether creation", text }) ||
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-    }
+                                                  }
