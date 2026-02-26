@@ -1,5 +1,5 @@
 /**
- * Keter Aether – Clean Pages Functions + Groq Version
+ * Keter Aether – Vercel Version (calls /api/transmute)
  */
 
 async function callOpenAI(text, style, mode) {
@@ -15,10 +15,10 @@ async function callOpenAI(text, style, mode) {
     const data = await response.json();
     if (!data.success) throw new Error(data.error || 'Failed');
 
-    return data.transmuted || 'The spirits are silent...';
+    return data.transmuted || 'The spirits whisper faintly...';
   } catch (error) {
     console.error('API call failed:', error);
-    return "Fallback: " + text.toUpperCase(); // simple fallback for testing
+    return "Fallback: " + text; // simple fallback
   }
 }
 
@@ -56,11 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
         input.placeholder = "Type something fun here... 😏";
         styleSelect.style.display = 'block';
       } else {
-        input.placeholder = currentMode === 'ghostwriter' ? "Describe the poem..." : "Paste lines to analyze...";
+        input.placeholder = currentMode === 'ghostwriter' ? "Describe the poem you desire..." : "Paste lines to analyze...";
         styleSelect.style.display = 'none';
       }
     });
   });
+
+  if (!styleSelect.querySelector('option[value="kiswahili"]')) {
+    const opt = document.createElement('option');
+    opt.value = 'kiswahili';
+    opt.textContent = 'Kiswahili';
+    styleSelect.appendChild(opt);
+  }
 
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
