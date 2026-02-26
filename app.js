@@ -70,9 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
   modeContainer.innerHTML = `
-    <button data-mode="transmute" class="pill active">Transmutation Engine 🪶</button>
-    <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill 🪶</button>
-    <button data-mode="critic" class="pill">Critic's Eye 👁️</button>
+    <button data-mode="transmute" class="pill active">Transmutation Engine</button>
+    <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill</button>
+    <button data-mode="critic" class="pill">Critic's Eye</button>
   `;
 
   transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
@@ -173,4 +173,4 @@ function shareText() {
   const text = document.getElementById('outputText').textContent;
   navigator.share?.({ title: "Keter Aether creation", text }) ||
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-        }
+}
