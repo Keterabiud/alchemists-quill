@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'llama-3.2-90b-vision-instruct',// ← ACTIVE & POWERFUL MODEL (Feb 2026)
+        model: 'openai/gpt-oss-20b',// ← ACTIVE & POWERFUL MODEL (Feb 2026)
         messages: [
           {
             role: 'system',
