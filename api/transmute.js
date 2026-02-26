@@ -1,4 +1,4 @@
-// api/transmute.js - Vercel API route
+// api/transmute.js - Vercel API route (using active Groq model)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,6 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Read raw body (Vercel way)
     let body = '';
     for await (const chunk of req) {
       body += chunk.toString();
@@ -31,14 +32,14 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'llama-3.2-90b-vision-instruct',  // Currently supported model
+        model: 'llama3-70b-8192',  // ← ACTIVE & POWERFUL MODEL (Feb 2026)
         messages: [
           {
             role: 'system',
             content: `You are a master poet and literary alchemist. Transform the input text into perfect ${style} style. Be elegant, immersive, and creative.
 ${mode === 'ghostwriter' ? 'Write a full, original poem based on the prompt.' : ''}
 ${mode === 'critic' ? 'Provide a detailed literary analysis: meter, rhyme scheme, literary devices, tone, imagery, symbolism.' : ''}
-Output only the final result — no explanations or extra text.`
+Output ONLY the final result — no explanations, no introductions, no markdown fences, no extra text.`
           },
           { role: 'user', content: text.trim() }
         ],
