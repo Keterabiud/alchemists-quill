@@ -27,10 +27,9 @@
   </header>
 
   <main class="main-content">
-    <!-- Full-screen smoky logo hero -->
-    <section class="hero-full">
+    <section class="hero">
       <div class="hero-overlay">
-        <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo-full"/>
+        <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
         <p class="tagline">Turn everyday words into something fun & magical ✨</p>
         <blockquote id="rotatingQuote" class="quote"></blockquote>
       </div>
@@ -39,7 +38,7 @@
     <section class="input-section">
       <textarea
         id="modernInput"
-        placeholder="Type something fun here... 😏"
+        placeholder="Type your plea..."
         rows="5"
       ></textarea>
 
@@ -79,7 +78,6 @@
         <div class="output-actions">
           <button onclick="copyText()">Copy</button>
           <button onclick="speakText()">Speak Aloud</button>
-          <button onclick="stopSpeech()">Stop Speaking</button>
           <button onclick="shareText()">Share</button>
         </div>
       </div>
@@ -100,7 +98,6 @@
       </div>
     </section>
 
-    <!-- Coming Soon -->
     <section class="coming-soon">
       <h2>Coming Soon</h2>
       <p>Premium voices • Real-time speech • Voice cloning</p>
@@ -113,7 +110,6 @@
     <small>"We are such stuff as dreams are made on."</small>
   </footer>
 
-  <!-- Typewriter sound -->
   <audio id="typewriterClick" preload="auto">
     <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
   </audio>
