@@ -25,7 +25,6 @@ export default async function handler(req, res) {
     } else if (mode === 'critic') {
       systemPrompt = `You are a literary critic. Provide a detailed analysis of the following text: meter, rhyme scheme, literary devices, tone, imagery, symbolism.`;
     } else {
-      // Main mode: everyday sentence / tone / dialect shift
       systemPrompt = `You are a master of language styles, dialects, slang and historical tones. Rewrite the following everyday sentence or phrase exactly in the style of ${style}. 
 Keep the original meaning and length similar — just change the vocabulary, grammar, expressions, slang and tone to match that era/culture/dialect perfectly.
 Do NOT turn it into a poem or add extra content unless the mode is ghostwriter. Output ONLY the rewritten text — no introductions, no explanations.`;
