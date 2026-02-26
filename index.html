@@ -13,23 +13,35 @@
       <div class="logo">
         <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
       </div>
-      <ul class="nav-links">
+      <ul class="nav-links" id="navLinks">
         <li><a href="#">Home</a></li>
         <li><a href="#features">Features</a></li>
+        <li><a href="#">Pricing</a></li>
         <li><a href="#">API</a></li>
+        <li><button class="btn-enter" id="enterBtn">ENTER</button></li>
       </ul>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
     </nav>
   </header>
 
   <main class="main-content">
-    <section class="hero">
-      <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
-      <h1 class="tagline">Words Transformed • Voices Reborn</h1>
-      <blockquote id="rotatingQuote" class="quote"></blockquote>
+    <!-- Full-screen smoky logo hero -->
+    <section class="hero-full">
+      <div class="hero-overlay">
+        <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo-full"/>
+        <p class="tagline">Turn everyday words into something fun & magical ✨</p>
+        <blockquote id="rotatingQuote" class="quote"></blockquote>
+      </div>
     </section>
 
     <section class="input-section">
-      <textarea id="modernInput" placeholder="Enter your words..." rows="4"></textarea>
+      <textarea
+        id="modernInput"
+        placeholder="Type something fun here... 😏"
+        rows="5"
+      ></textarea>
 
       <div class="controls">
         <select id="styleSelect">
@@ -38,31 +50,36 @@
           <option value="poe">Poe (Gothic)</option>
           <option value="romantic">Romantic</option>
           <option value="genz">Gen Z Slang</option>
-          <option value="sheng">Sheng</option>
+          <option value="sheng">Sheng (Kenyan street)</option>
+          <option value="old-english">Old English</option>
+          <option value="emoji-genz">Emoji-fied Gen Z</option>
+          <option value="formal-british">Formal British</option>
+          <option value="sheng-english">Sheng + English mix</option>
           <option value="german">German</option>
           <option value="kiswahili">Kiswahili</option>
         </select>
 
-        <label class="toggle">
+        <label class="emoji-toggle">
+          <span>Add emojis?</span>
           <input type="checkbox" id="emojiSwitch" checked />
-          <span>Emojis</span>
         </label>
 
-        <label class="toggle">
+        <label class="typewriter-toggle">
+          <span>Typewriter ASMR?</span>
           <input type="checkbox" id="typewriterSwitch" />
-          <span>Typewriter</span>
         </label>
 
-        <button id="transmuteBtn">Transmute</button>
+        <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
-      <div id="outputSection" class="output-section">
+      <div id="outputSection" class="output-section" style="display:none;">
         <div id="styleLabel" class="output-header"></div>
         <div id="outputText" class="output-text"></div>
 
         <div class="output-actions">
           <button onclick="copyText()">Copy</button>
-          <button onclick="speakText()">Speak</button>
+          <button onclick="speakText()">Speak Aloud</button>
+          <button onclick="stopSpeech()">Stop Speaking</button>
           <button onclick="shareText()">Share</button>
         </div>
       </div>
@@ -71,28 +88,35 @@
     <section class="features" id="features">
       <div class="feature">
         <h3>Transmutation Engine</h3>
-        <p>Shift tone, dialect, era, slang</p>
+        <p>Convert modern words into timeless styles.</p>
       </div>
       <div class="feature">
-        <h3>Ghostwriter</h3>
-        <p>Original poetry on demand</p>
+        <h3>Ghostwriter's Quill</h3>
+        <p>Summon original verses from a simple prompt.</p>
       </div>
       <div class="feature">
-        <h3>Critic’s Eye</h3>
-        <p>Literary analysis</p>
+        <h3>Critic's Eye</h3>
+        <p>Break down meter, rhyme & literary devices.</p>
       </div>
     </section>
 
+    <!-- Coming Soon -->
     <section class="coming-soon">
       <h2>Coming Soon</h2>
-      <p>Premium voices • Real-time speech • Voice cloning • Multi-language mastery</p>
+      <p>Premium voices • Real-time speech • Voice cloning</p>
       <p>Follow <a href="https://x.com/abiudketerr" target="_blank">@abiudketerr</a></p>
     </section>
   </main>
 
   <footer class="footer">
-    <p>© 2025 Keter Aether — by KETER</p>
+    <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
+    <small>"We are such stuff as dreams are made on."</small>
   </footer>
+
+  <!-- Typewriter sound -->
+  <audio id="typewriterClick" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="app.js"></script>
 </body>
