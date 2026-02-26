@@ -1,4 +1,4 @@
-// api/transmute.js - Vercel serverless API route
+// api/transmute.js - Vercel API route (fixed body parsing)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,8 +9,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = await req.json();
-    const { text, style, mode } = body;
+    // Manually read and parse the body (this is the correct way in Vercel)
+    let body = '';
+    for await (const chunk of req) {
+      body += chunk.toString();
+    }
+
+    const parsedBody = body ? JSON.parse(body) : {};
+    const { text, style, mode } = parsedBody;
 
     if (!text || typeof text !== 'string' || text.trim() === '') {
       return res.status(400).json({
@@ -30,13 +36,10 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'system',
-            content: `You are a master poet and literary alchemist.
-Transform the input text into perfect ${style} style. Be elegant, immersive, and creative.
-
+            content: `You are a master poet and literary alchemist. Transform the input text into perfect ${style} style. Be elegant, immersive, and creative.
 ${mode === 'ghostwriter' ? 'Write a full, original poem based on the prompt.' : ''}
 ${mode === 'critic' ? 'Provide a detailed literary analysis: meter, rhyme scheme, literary devices, tone, imagery, symbolism.' : ''}
-
-Output ONLY the final result — no explanations, no introductions, no markdown fences, no extra text.`
+Output only the final result — no explanations or extra text.`
           },
           { role: 'user', content: text.trim() }
         ],
@@ -50,7 +53,7 @@ Output ONLY the final result — no explanations, no introductions, no markdown 
       const errorData = await groqResponse.json().catch(() => ({}));
       return res.status(groqResponse.status).json({
         success: false,
-        error: errorData.error?.message || 'Groq API request failed'
+        error: errorData.error?.message || `Groq API error (${groqResponse.status})`
       });
     }
 
@@ -66,8 +69,9 @@ Output ONLY the final result — no explanations, no introductions, no markdown 
       success: true,
       transmuted
     });
+
   } catch (error) {
-    console.error('Server error:', error);
+    console.error('Function error:', error.message);
     return res.status(500).json({
       success: false,
       error: error.message || 'Internal server error'
