@@ -7,7 +7,6 @@
   --radius: 12px;
   --transition: all 0.3s ease;
   --shadow-gold: 0 0 30px rgba(212, 175, 55, 0.4);
-  --shadow-smoky: 0 0 40px rgba(100, 100, 100, 0.6);
 }
 
 * {
@@ -50,42 +49,86 @@ body {
   transform: scale(1.05);
 }
 
-/* Hero with very big smoky logo */
+/* Hero with medium smoky logo */
 .hero {
-  height: 100vh;
-  min-height: 800px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 8rem 2rem 10rem;
   text-align: center;
-  overflow: hidden;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('/images/logo-smoky.png') center/cover no-repeat;
-  filter: brightness(0.45) contrast(1.15);
-  z-index: 1;
+.hero-logo {
+  height: 280px; /* medium size as original earliest design */
+  max-width: 90%;
+  margin-bottom: 3rem;
+  filter: var(--shadow-gold);
+  transition: var(--transition);
 }
 
-.hero > * {
-  position: relative;
-  z-index: 2;
+.hero-logo:hover {
+  transform: scale(1.05);
 }
 
 .tagline {
-  font-size: 3rem;
-  color: white;
-  margin: 2rem 0;
-  text-shadow: 0 0 20px rgba(0,0,0,0.8);
+  font-size: 2.8rem;
+  color: var(--gray);
+  margin: 2rem 0 3rem;
 }
 
 .quote {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-style: italic;
-  color: #e0e0e0;
   max-width: 900px;
-  margin:
+  margin: 0 auto;
+}
+
+/* Input section */
+.input-section {
+  max-width: 760px;
+  margin: 6rem auto;
+  padding: 0 2rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 160px;
+  padding: 1.5rem;
+  background: #111;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1.25rem;
+  resize: vertical;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+select, .emoji-toggle, .typewriter-toggle {
+  padding: 0.8rem 1.4rem;
+  background: #111;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+#transmuteBtn {
+  padding: 1.2rem 3.5rem;
+  background: var(--gold);
+  color: black;
+  border: 2px solid rgba(212, 175, 55, 0.6);
+  border-radius: 12px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+  min-width: 240px;
+}
+
+#transmuteBtn:hover {
+  background: #e5c158;
