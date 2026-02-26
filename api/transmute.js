@@ -1,70 +1,49 @@
-// api/transmute.js — Vercel Serverless Function
-// This runs on the backend, hiding your API key
-
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const { text, style } = req.body;
+  const { text, style, mode } = req.body;
 
-  if (!text || !style) {
-    return res.status(400).json({ error: 'Missing text or style' });
+  if (!text) {
+    return res.status(400).json({ success: false, error: 'No text provided' });
   }
-
-  // Style prompts for OpenAI
-  const stylePrompts = {
-    shakespeare: `Rewrite this in Shakespearean English. Use thee/thou/thy, archaic words, and Elizabethan flair. Add dramatic flair: "${text}"`,
-    victorian: `Rewrite this in Victorian era English. Be formal, proper, and slightly stiff: "${text}"`,
-    poe: `Rewrite this in Edgar Allan Poe's gothic, melancholic style. Dark, brooding, poetic: "${text}"`,
-    romantic: `Rewrite this in Romantic era poetry style. Passionate, nature-focused, emotional like Byron or Shelley: "${text}"`
-  };
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'llama-3.1-70b-versatile',
         messages: [
           {
             role: 'system',
-            content: 'You are a master of historical literary styles. Rewrite user text exactly as requested.'
+            content: `You are a master poet and literary alchemist. Transform the input text into perfect ${style} style. Be elegant, immersive, and creative.
+${mode === 'ghostwriter' ? 'Write a full, original poem based on the prompt.' : ''}
+${mode === 'critic' ? 'Provide a detailed literary analysis: meter, rhyme scheme, literary devices, tone, imagery, symbolism.' : ''}
+Output only the final result — no explanations or extra text.`
           },
-          {
-            role: 'user',
-            content: stylePrompts[style] || stylePrompts.shakespeare
-          }
+          { role: 'user', content: text }
         ],
-        max_tokens: 500,
-        temperature: 0.8
+        temperature: 0.9,
+        max_tokens: 800,
+        top_p: 0.95
       })
     });
 
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error.message);
+    if (!groqRes.ok) {
+      return res.status(groqRes.status).json({ success: false, error: 'Groq API error' });
     }
 
-    const transmuted = data.choices[0].message.content.trim();
+    const data = await groqRes.json();
+    const transmuted = data.choices?.[0]?.message?.content?.trim() || 'No response...';
 
-    res.status(200).json({ 
-      success: true, 
-      original: text,
-      style: style,
-      transmuted: transmuted 
-    });
-
+    return res.status(200).json({ success: true, transmuted });
   } catch (error) {
-    console.error('OpenAI Error:', error);
-    res.status(500).json({ 
-      error: 'Transmutation failed', 
-      details: error.message 
-    });
+    console.error(error);
+    return res.status(500).json({ success: false, error: error.message });
   }
 }
