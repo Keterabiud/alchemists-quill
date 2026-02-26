@@ -1,5 +1,5 @@
 /**
- * Keter Aether – Final Version
+ * Keter Aether – Full Final app.js
  */
 
 async function callOpenAI(text, style, mode) {
@@ -25,6 +25,25 @@ async function callOpenAI(text, style, mode) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Mobile menu toggle
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a, button').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+      });
+    });
+  }
+
   // Random button texts
   const buttonPhrases = [
     "Let's Go! 🚀",
@@ -47,13 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
     "Utter the forbidden phrase..."
   ];
 
+  // Set random button text
   const transmuteBtn = document.getElementById('transmuteBtn');
-  const randomBtnText = buttonPhrases[Math.floor(Math.random() * buttonPhrases.length)];
-  transmuteBtn.textContent = randomBtnText;
+  if (transmuteBtn) {
+    const randomBtnText = buttonPhrases[Math.floor(Math.random() * buttonPhrases.length)];
+    transmuteBtn.textContent = randomBtnText;
+  }
 
+  // Set random placeholder
   const input = document.getElementById('modernInput');
-  const randomPlaceholder = placeholders[Math.floor(Math.random() * placeholders.length)];
-  input.placeholder = randomPlaceholder;
+  if (input) {
+    const randomPlaceholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+    input.placeholder = randomPlaceholder;
+  }
 
   const styleSelect = document.getElementById('styleSelect');
   const outputSection = document.getElementById('outputSection');
@@ -65,7 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'transmute';
   let addEmojis = true;
 
-  emojiSwitch.addEventListener('change', e => addEmojis = e.target.checked);
+  if (emojiSwitch) {
+    emojiSwitch.addEventListener('change', e => addEmojis = e.target.checked);
+  }
 
   const modeContainer = document.createElement('div');
   modeContainer.className = 'mode-pills';
@@ -75,7 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye</button>
   `;
 
-  transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
+  if (transmuteBtn && transmuteBtn.parentNode) {
+    transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
+  }
 
   modeContainer.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -96,39 +125,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  transmuteBtn.addEventListener('click', async () => {
-    const value = input.value.trim();
-    if (!value) return alert("Type something first 😅");
+  if (transmuteBtn) {
+    transmuteBtn.addEventListener('click', async () => {
+      const value = input.value.trim();
+      if (!value) return alert("Type something first 😅");
 
-    const originalBtnText = transmuteBtn.textContent;
-    transmuteBtn.innerHTML = '<span class="spinner">✨</span> Cooking...';
-    transmuteBtn.disabled = true;
+      const originalBtnText = transmuteBtn.textContent;
+      transmuteBtn.innerHTML = '<span class="spinner">✨</span> Cooking...';
+      transmuteBtn.disabled = true;
 
-    let result = await callOpenAI(value, styleSelect.value, currentMode);
+      let result = await callOpenAI(value, styleSelect.value, currentMode);
 
-    if (addEmojis) {
-      const emojis = ['🔥','✨','😎','💫','🌟','🥳','🚀','🪄','💖','😂'];
-      result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
-    }
+      if (addEmojis) {
+        const emojis = ['🔥','✨','😎','💫','🌟','🥳','🚀','🪄','💖','😂'];
+        result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
+      }
 
-    const useTypewriter = typewriterSwitch.checked;
+      const useTypewriter = typewriterSwitch?.checked || false;
 
-    outputText.classList.toggle('typewriter', useTypewriter);
+      outputText.classList.toggle('typewriter', useTypewriter);
 
-    if (useTypewriter) {
-      outputText.textContent = '';
-      typeWriter(result);
-    } else {
-      outputText.textContent = result;
-    }
+      if (useTypewriter) {
+        outputText.textContent = '';
+        typeWriter(result);
+      } else {
+        outputText.textContent = result;
+      }
 
-    styleLabel.textContent = styleSelect.options[styleSelect.selectedIndex].text;
-    outputSection.style.display = 'block';
-    outputSection.scrollIntoView({ behavior: 'smooth' });
+      styleLabel.textContent = styleSelect.options[styleSelect.selectedIndex].text;
+      outputSection.style.display = 'block';
+      outputSection.scrollIntoView({ behavior: 'smooth' });
 
-    transmuteBtn.textContent = originalBtnText;
-    transmuteBtn.disabled = false;
-  });
+      transmuteBtn.textContent = originalBtnText;
+      transmuteBtn.disabled = false;
+    });
+  }
 
   function typeWriter(text, index = 0) {
     if (index < text.length) {
@@ -148,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Utility functions
 function copyText() {
   const text = document.getElementById('outputText').textContent;
   navigator.clipboard.writeText(text).then(() => alert("Copied! 🎉"));
@@ -171,6 +203,9 @@ function stopSpeech() {
 
 function shareText() {
   const text = document.getElementById('outputText').textContent;
-  navigator.share?.({ title: "Keter Aether creation", text }) ||
+  if (navigator.share) {
+    navigator.share({ title: "Keter Aether creation", text });
+  } else {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-}
+  }
+          }
