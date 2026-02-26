@@ -24,7 +24,6 @@ body {
   min-height: 100vh;
 }
 
-/* Navbar */
 .header {
   width: 100%;
   padding: 1.8rem 0;
@@ -88,7 +87,6 @@ body {
   background: white;
 }
 
-/* Main content – centered */
 .main-content {
   max-width: 900px;
   margin: 0 auto;
@@ -121,7 +119,6 @@ body {
   line-height: 1.6;
 }
 
-/* Input section – centered */
 .input-section {
   max-width: 760px;
   margin: 0 auto 6rem;
@@ -195,13 +192,18 @@ select, .emoji-toggle {
   font-size: 1.1rem;
   cursor: pointer;
   transition: var(--transition);
+  min-width: 160px;
 }
 
 #transmuteBtn:hover {
   background: #e5c158;
 }
 
-/* Output */
+#transmuteBtn.loading {
+  background: #b8962e;
+  cursor: wait;
+}
+
 .output-section {
   max-width: 780px;
   margin: 4rem auto;
@@ -221,6 +223,7 @@ select, .emoji-toggle {
   font-size: 1.5rem;
   line-height: 1.8;
   white-space: pre-wrap;
+  text-align: left;
 }
 
 .output-actions {
@@ -245,7 +248,6 @@ select, .emoji-toggle {
   color: var(--gold);
 }
 
-/* Features – centered */
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -260,7 +262,6 @@ select, .emoji-toggle {
   margin-bottom: 0.8rem;
 }
 
-/* Footer – centered */
 .footer {
   text-align: center;
   padding: 3rem 1rem;
@@ -273,7 +274,18 @@ select, .emoji-toggle {
   color: var(--gold);
 }
 
-/* Responsive */
+/* Loading spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
 @media (max-width: 768px) {
   .nav-links {
     display: none;
@@ -291,4 +303,4 @@ select, .emoji-toggle {
   .hero-logo {
     height: 160px;
   }
-}
+  }
