@@ -1,31 +1,26 @@
 /**
- * Keter Aether – Vercel Version with Debug Logging
+ * Keter Aether – Final Vercel Version (openai/gpt-oss-120b)
  */
 
 async function callOpenAI(text, style, mode) {
   try {
-    console.log('Starting API call with:', { text, style, mode });
-
     const response = await fetch('/api/transmute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, style, mode })
     });
 
-    console.log('API response status:', response.status);
+    const data = await response.json();
 
-    const responseBody = await response.text();
-    console.log('API response body:', responseBody);
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-    const data = JSON.parse(responseBody);
-    if (!data.success) throw new Error(data.error || 'Failed');
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || `HTTP ${response.status}`);
+    }
 
     return data.transmuted || 'The spirits whisper faintly...';
   } catch (error) {
-    console.error('API call failed:', error.message);
-    return "Fallback: " + text;
+    console.error('API call failed:', error);
+    alert(`Oops! ${error.message || 'The spirits are acting up. Try again?'}`);
+    return text; // keep original text on error
   }
 }
 
@@ -60,27 +55,24 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
 
       if (currentMode === 'transmute') {
-        input.placeholder = "Type something fun here... 😏";
+        input.placeholder = "Type anything — I'll change how it sounds...";
+        styleSelect.style.display = 'block';
+      } else if (currentMode === 'ghostwriter') {
+        input.placeholder = "Describe the poem you want...";
         styleSelect.style.display = 'block';
       } else {
-        input.placeholder = currentMode === 'ghostwriter' ? "Describe the poem you desire..." : "Paste lines to analyze...";
+        input.placeholder = "Paste text to analyze...";
         styleSelect.style.display = 'none';
       }
     });
   });
 
-  if (!styleSelect.querySelector('option[value="kiswahili"]')) {
-    const opt = document.createElement('option');
-    opt.value = 'kiswahili';
-    opt.textContent = 'Kiswahili';
-    styleSelect.appendChild(opt);
-  }
-
   transmuteBtn.addEventListener('click', async () => {
     const value = input.value.trim();
     if (!value) return alert("Type something first 😅");
 
-    transmuteBtn.textContent = "Cooking... ✨";
+    const originalBtnText = transmuteBtn.textContent;
+    transmuteBtn.innerHTML = '<span class="spinner">✨</span> Cooking...';
     transmuteBtn.disabled = true;
 
     let result = await callOpenAI(value, styleSelect.value, currentMode);
@@ -95,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     outputSection.style.display = 'block';
     outputSection.scrollIntoView({ behavior: 'smooth' });
 
-    transmuteBtn.textContent = "Let's Go! 🚀";
+    transmuteBtn.textContent = originalBtnText;
     transmuteBtn.disabled = false;
   });
 });
@@ -114,6 +106,6 @@ function speakText() {
 
 function shareText() {
   const text = document.getElementById('outputText').textContent;
-  navigator.share?.({ title: "Keter Aether", text }) ||
+  navigator.share?.({ title: "Keter Aether creation", text }) ||
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-      }
+}
