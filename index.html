@@ -13,22 +13,23 @@
       <div class="logo">
         <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
       </div>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#">API</a></li>
+      </ul>
     </nav>
   </header>
 
   <main class="main-content">
     <section class="hero">
       <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
-      <p class="tagline">Words Transformed • Voices Reborn</p>
+      <h1 class="tagline">Words Transformed • Voices Reborn</h1>
       <blockquote id="rotatingQuote" class="quote"></blockquote>
     </section>
 
     <section class="input-section">
-      <textarea
-        id="modernInput"
-        placeholder="Enter your words..."
-        rows="4"
-      ></textarea>
+      <textarea id="modernInput" placeholder="Enter your words..." rows="4"></textarea>
 
       <div class="controls">
         <select id="styleSelect">
@@ -43,13 +44,13 @@
         </select>
 
         <label class="toggle">
-          <span>Emojis</span>
           <input type="checkbox" id="emojiSwitch" checked />
+          <span>Emojis</span>
         </label>
 
         <label class="toggle">
-          <span>Typewriter</span>
           <input type="checkbox" id="typewriterSwitch" />
+          <span>Typewriter</span>
         </label>
 
         <button id="transmuteBtn">Transmute</button>
@@ -84,7 +85,7 @@
 
     <section class="coming-soon">
       <h2>Coming Soon</h2>
-      <p>Premium voices • Real-time speech • Voice cloning</p>
+      <p>Premium voices • Real-time speech • Voice cloning • Multi-language mastery</p>
       <p>Follow <a href="https://x.com/abiudketerr" target="_blank">@abiudketerr</a></p>
     </section>
   </main>
@@ -92,11 +93,6 @@
   <footer class="footer">
     <p>© 2025 Keter Aether — by KETER</p>
   </footer>
-
-  <!-- Hidden typewriter sound -->
-  <audio id="typewriterClick" preload="auto">
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
-  </audio>
 
   <script src="app.js"></script>
 </body>
