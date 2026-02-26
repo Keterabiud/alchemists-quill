@@ -13,33 +13,21 @@
       <div class="logo">
         <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
       </div>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#">Home</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#">Pricing</a></li>
-        <li><a href="#">API</a></li>
-        <li><button class="btn-enter" id="enterBtn">ENTER</button></li>
-      </ul>
-      <div class="hamburger" id="hamburger">
-        <span></span><span></span><span></span>
-      </div>
     </nav>
   </header>
 
   <main class="main-content">
     <section class="hero">
-      <img src="/images/logo-smoky.png" alt="Keter Aether Smoky" class="hero-logo"/>
-      <p class="tagline">Turn everyday words into any voice, era or vibe ✨</p>
-
-      <!-- Rotating intro quote -->
+      <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
+      <p class="tagline">Words Transformed • Voices Reborn</p>
       <blockquote id="rotatingQuote" class="quote"></blockquote>
     </section>
 
     <section class="input-section">
       <textarea
         id="modernInput"
-        placeholder="Type anything — I'll change how it sounds..."
-        rows="5"
+        placeholder="Enter your words..."
+        rows="4"
       ></textarea>
 
       <div class="controls">
@@ -49,36 +37,31 @@
           <option value="poe">Poe (Gothic)</option>
           <option value="romantic">Romantic</option>
           <option value="genz">Gen Z Slang</option>
-          <option value="sheng">Sheng (Kenyan street)</option>
-          <option value="old-english">Old English</option>
-          <option value="emoji-genz">Emoji-fied Gen Z</option>
-          <option value="formal-british">Formal British</option>
-          <option value="sheng-english">Sheng + English mix</option>
+          <option value="sheng">Sheng</option>
           <option value="german">German</option>
           <option value="kiswahili">Kiswahili</option>
         </select>
 
-        <label class="emoji-toggle">
-          <span>Add emojis?</span>
+        <label class="toggle">
+          <span>Emojis</span>
           <input type="checkbox" id="emojiSwitch" checked />
         </label>
 
-        <label class="typewriter-toggle">
-          <span>Typewriter ASMR effect?</span>
-          <input type="checkbox" id="typewriterSwitch" checked />
+        <label class="toggle">
+          <span>Typewriter</span>
+          <input type="checkbox" id="typewriterSwitch" />
         </label>
 
-        <button id="transmuteBtn">Let's Go! 🚀</button>
+        <button id="transmuteBtn">Transmute</button>
       </div>
 
-      <div id="outputSection" class="output-section" style="display:none;">
+      <div id="outputSection" class="output-section">
         <div id="styleLabel" class="output-header"></div>
         <div id="outputText" class="output-text"></div>
 
         <div class="output-actions">
           <button onclick="copyText()">Copy</button>
-          <button onclick="speakText()">Speak Aloud</button>
-          <button onclick="stopSpeech()">Stop Speaking</button>
+          <button onclick="speakText()">Speak</button>
           <button onclick="shareText()">Share</button>
         </div>
       </div>
@@ -87,34 +70,27 @@
     <section class="features" id="features">
       <div class="feature">
         <h3>Transmutation Engine</h3>
-        <p>Change how people talk — modern to old, slang to formal, English to Sheng or German...</p>
+        <p>Shift tone, dialect, era, slang</p>
       </div>
       <div class="feature">
-        <h3>Ghostwriter's Quill</h3>
-        <p>Summon full original poems from a simple idea</p>
+        <h3>Ghostwriter</h3>
+        <p>Original poetry on demand</p>
       </div>
       <div class="feature">
-        <h3>Critic's Eye</h3>
-        <p>Deep literary analysis of any text</p>
+        <h3>Critic’s Eye</h3>
+        <p>Literary analysis</p>
       </div>
     </section>
 
-    <!-- Coming Soon teaser -->
     <section class="coming-soon">
       <h2>Coming Soon</h2>
-      <p class="teaser">
-        Premium voices • Real-time speech • Voice cloning • Multi-language mastery<br>
-        The full alchemical experience is brewing... ✨
-      </p>
-      <p>
-        Follow for updates: <a href="https://x.com/abiudketerr" target="_blank">@abiudketerr</a>
-      </p>
+      <p>Premium voices • Real-time speech • Voice cloning</p>
+      <p>Follow <a href="https://x.com/abiudketerr" target="_blank">@abiudketerr</a></p>
     </section>
   </main>
 
   <footer class="footer">
-    <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
-    <small>"We are such stuff as dreams are made on."</small>
+    <p>© 2025 Keter Aether — by KETER</p>
   </footer>
 
   <!-- Hidden typewriter sound -->
