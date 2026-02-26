@@ -63,6 +63,11 @@
           <input type="checkbox" id="emojiSwitch" checked />
         </label>
 
+        <label class="typewriter-toggle">
+          <span>Typewriter ASMR effect?</span>
+          <input type="checkbox" id="typewriterSwitch" checked />
+        </label>
+
         <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
@@ -111,6 +116,11 @@
     <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
     <small>"We are such stuff as dreams are made on."</small>
   </footer>
+
+  <!-- Hidden typewriter sound -->
+  <audio id="typewriterClick" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="app.js"></script>
 </body>
