@@ -4,122 +4,219 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Keter Aether</title>
-  <link rel="stylesheet" href="styles.css"/>
 
-  <!-- Clerk SDK -->
-  <script 
-    async 
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" 
-    crossorigin="anonymous"
-  ></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-  <!-- Clerk key -->
-  <script>
-    window.Clerk = window.Clerk || {};
-    window.Clerk.publishableKey = 'pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ';
-  </script>
+  <style>
+    :root {
+      --bg: #000000;
+      --gold: #d4af37;
+      --dark-card: #111111;
+      --gray: #aaaaaa;
+      --text: #f5f5f5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .login-wrapper {
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+      padding: 3rem 2rem;
+      background: rgba(17, 17, 17, 0.85);
+      border-radius: 24px;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-container {
+      margin-bottom: 2.5rem;
+    }
+
+    .logo {
+      width: 100px;
+      height: auto;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    p.subtitle {
+      font-size: 1.25rem;
+      color: var(--gray);
+      margin-bottom: 2.5rem;
+      line-height: 1.5;
+    }
+
+    .form-card {
+      background: var(--dark-card);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 1.3rem;
+    }
+
+    button.sign-in-btn {
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(90deg, #d4af37, #e5c158);
+      color: black;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+      margin-top: 1rem;
+    }
+
+    button.sign-in-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+    }
+
+    .create-account {
+      margin-top: 1.5rem;
+      color: var(--gray);
+      font-size: 1rem;
+    }
+
+    .create-account a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .create-account a:hover {
+      text-decoration: underline;
+    }
+
+    /* Hide main site until logged in */
+    #main-site {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Login Gate – FULL SCREEN, PERFECTLY CENTERED -->
+  <!-- Login Gate -->
   <div id="login-gate">
-    <div class="login-center-box">
-      <img src="/images/logo-clean.png" alt="Keter Aether" class="login-logo"/>
-      <h1>Welcome to Keter Aether</h1>
-      <p>Sign in or create an account to access the transmutation engine</p>
+    <div class="login-wrapper">
+      <div class="logo-container">
+        <img src="/images/logo-clean.png" alt="Keter Aether" class="logo"/>
+      </div>
 
-      <!-- Clerk sign-in form mounts here -->
+      <h1>Welcome to Keter Aether</h1>
+      <p class="subtitle">Sign in or create an account to access the transmutation engine</p>
+
+      <!-- Clerk sign-in form will be mounted here -->
       <div id="clerk-sign-in"></div>
     </div>
   </div>
 
-  <!-- Main site – hidden until signed in -->
-  <div id="main-site" style="display: none;">
+  <!-- Main site (hidden until signed in) -->
+  <div id="main-site">
+    <!-- Your existing header, main content, footer here -->
     <header class="header">
-      <nav class="navbar">
-        <div class="logo">
-          <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
-        </div>
-
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#">Pricing</a></li>
-          <li><a href="#">API</a></li>
-          <li><button class="btn-enter">ENTER</button></li>
-        </ul>
-
-        <div id="clerk-user" style="margin-left: auto;">
-          <div id="userButton"></div>
-        </div>
-
-        <div class="hamburger" id="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </nav>
+      <!-- Your navbar -->
     </header>
 
     <main class="main-content">
-      <!-- Your existing hero, input, features, coming-soon sections here -->
-      <section class="hero">
-        <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
-        <p class="tagline">Turn everyday words into something fun & magical ✨</p>
-        <blockquote id="rotatingQuote" class="quote"></blockquote>
-      </section>
-
-      <!-- ... rest of your main content ... -->
+      <!-- Your hero, input, features, etc. -->
     </main>
 
     <footer class="footer">
-      <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
-      <small>"We are such stuff as dreams are made on."</small>
+      <!-- Your footer -->
     </footer>
   </div>
 
-  <audio id="typewriterClick" preload="auto">
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
-  </audio>
-
-  <script src="app.js"></script>
-
-  <!-- Clerk mounting script – fixed and debugged -->
+  <!-- Clerk mounting script -->
   <script>
-    function initClerk() {
-      if (typeof Clerk === 'undefined' || !Clerk.load) {
-        setTimeout(initClerk, 1000);
-        return;
-      }
+    window.addEventListener('load', async () => {
+      await Clerk.load();
 
-      Clerk.load().then(() => {
-        console.log("Clerk loaded – mounting sign-in");
-
-        const container = document.getElementById('clerk-sign-in');
-        if (!container) {
-          console.error("No #clerk-sign-in container found");
-          return;
+      // Mount sign-in form on the login gate
+      Clerk.mountSignIn(document.getElementById('clerk-sign-in'), {
+        appearance: {
+          elements: {
+            formButtonPrimary: { backgroundColor: '#d4af37', color: '#000000' },
+            card: { backgroundColor: '#111111', borderRadius: '16px' },
+            headerTitle: { color: '#d4af37' },
+            headerSubtitle: { color: '#aaaaaa' }
+          }
         }
+      });
 
-        Clerk.mountSignIn(container, {
-          appearance: {
-            elements: {
-              formButtonPrimary: { backgroundColor: '#d4af37', color: '#000' },
-              card: { backgroundColor: '#111', borderRadius: '12px' }
-            }
-          }
-        });
-
-        Clerk.addListener('user', (user) => {
-          if (user) {
-            document.getElementById('login-gate').style.display = 'none';
-            document.getElementById('main-site').style.display = 'block';
-          }
-        });
-      }).catch(err => console.error("Clerk error:", err));
-    }
-
-    initClerk();
+      // When user signs in, hide login gate and show main site
+      Clerk.addListener('user', (user) => {
+        if (user) {
+          document.getElementById('login-gate').style.display = 'none';
+          document.getElementById('main-site').style.display = 'block';
+        }
+      });
+    });
   </script>
 </body>
 </html>
