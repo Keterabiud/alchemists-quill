@@ -21,15 +21,17 @@
 </head>
 <body>
 
-  <!-- Login Gate – first thing users see -->
+  <!-- Login Gate – FULL SCREEN & CENTERED -->
   <div id="login-gate">
-    <div class="login-container">
-      <img src="/images/logo-clean.png" alt="Keter Aether" class="login-logo"/>
-      <h1>Welcome to Keter Aether</h1>
-      <p>Sign in or create an account to access the transmutation engine</p>
+    <div class="login-wrapper">
+      <div class="login-box">
+        <img src="/images/logo-clean.png" alt="Keter Aether" class="login-logo"/>
+        <h1>Welcome to Keter Aether</h1>
+        <p>Sign in or create an account to access the transmutation engine</p>
 
-      <!-- Clerk sign-in form mounts here -->
-      <div id="clerk-sign-in"></div>
+        <!-- Clerk sign-in form appears here -->
+        <div id="clerk-sign-in" class="clerk-form"></div>
+      </div>
     </div>
   </div>
 
@@ -49,7 +51,7 @@
           <li><button class="btn-enter">ENTER</button></li>
         </ul>
 
-        <!-- Clerk user profile (avatar + dropdown) -->
+        <!-- Clerk user profile -->
         <div id="clerk-user" style="margin-left: auto;">
           <div id="userButton"></div>
         </div>
@@ -155,7 +157,7 @@
 
     <script src="app.js"></script>
 
-    <!-- Clerk logic – mount sign-in on welcome + user button on main site -->
+    <!-- Clerk mounting script -->
     <script>
       function initClerk() {
         if (typeof Clerk === 'undefined' || !Clerk.load) {
@@ -166,10 +168,9 @@
         Clerk.load().then(() => {
           console.log("Clerk loaded");
 
-          // Mount sign-in form on welcome page
-          const signInDiv = document.getElementById('clerk-sign-in');
-          if (signInDiv) {
-            Clerk.mountSignIn(signInDiv, {
+          const signInContainer = document.getElementById('clerk-sign-in');
+          if (signInContainer) {
+            Clerk.mountSignIn(signInContainer, {
               appearance: {
                 elements: {
                   formButtonPrimary: { backgroundColor: '#d4af37', color: '#000' },
@@ -177,19 +178,16 @@
                 }
               }
             });
+            console.log("Sign-in form mounted");
+          } else {
+            console.error("No #clerk-sign-in container");
           }
 
-          // Mount user button on main site navbar
-          const userButtonDiv = document.getElementById('userButton');
-          if (userButtonDiv) {
-            Clerk.mountUserButton(userButtonDiv);
-          }
-
-          // When logged in → hide login gate, show main site
           Clerk.addListener('user', (user) => {
             if (user) {
               document.getElementById('login-gate').style.display = 'none';
               document.getElementById('main-site').style.display = 'block';
+              console.log("Signed in – main site shown");
             }
           });
         }).catch(err => console.error("Clerk error:", err));
