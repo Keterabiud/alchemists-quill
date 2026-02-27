@@ -21,17 +21,15 @@
 </head>
 <body>
 
-  <!-- Login Gate – FULL SCREEN & CENTERED -->
+  <!-- Login Gate – FULL SCREEN, PERFECTLY CENTERED -->
   <div id="login-gate">
-    <div class="login-wrapper">
-      <div class="login-box">
-        <img src="/images/logo-clean.png" alt="Keter Aether" class="login-logo"/>
-        <h1>Welcome to Keter Aether</h1>
-        <p>Sign in or create an account to access the transmutation engine</p>
+    <div class="login-center-box">
+      <img src="/images/logo-clean.png" alt="Keter Aether" class="login-logo"/>
+      <h1>Welcome to Keter Aether</h1>
+      <p>Sign in or create an account to access the transmutation engine</p>
 
-        <!-- Clerk sign-in form appears here -->
-        <div id="clerk-sign-in" class="clerk-form"></div>
-      </div>
+      <!-- Clerk sign-in form mounts here -->
+      <div id="clerk-sign-in"></div>
     </div>
   </div>
 
@@ -51,7 +49,6 @@
           <li><button class="btn-enter">ENTER</button></li>
         </ul>
 
-        <!-- Clerk user profile -->
         <div id="clerk-user" style="margin-left: auto;">
           <div id="userButton"></div>
         </div>
@@ -65,135 +62,64 @@
     </header>
 
     <main class="main-content">
+      <!-- Your existing hero, input, features, coming-soon sections here -->
       <section class="hero">
         <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
         <p class="tagline">Turn everyday words into something fun & magical ✨</p>
         <blockquote id="rotatingQuote" class="quote"></blockquote>
       </section>
 
-      <section class="input-section">
-        <textarea
-          id="modernInput"
-          placeholder="Type your plea..."
-          rows="5"
-        ></textarea>
-
-        <div class="controls">
-          <select id="styleSelect">
-            <option value="shakespeare">Shakespearean</option>
-            <option value="victorian">Victorian</option>
-            <option value="poe">Poe (Gothic)</option>
-            <option value="romantic">Romantic</option>
-            <option value="genz">Gen Z Slang</option>
-            <option value="sheng">Sheng (Kenyan street)</option>
-            <option value="old-english">Old English</option>
-            <option value="emoji-genz">Emoji-fied Gen Z</option>
-            <option value="formal-british">Formal British</option>
-            <option value="sheng-english">Sheng + English mix</option>
-            <option value="german">German</option>
-            <option value="kiswahili">Kiswahili</option>
-          </select>
-
-          <label class="emoji-toggle">
-            <span>Add emojis?</span>
-            <input type="checkbox" id="emojiSwitch" checked />
-          </label>
-
-          <label class="typewriter-toggle">
-            <span>Typewriter ASMR?</span>
-            <input type="checkbox" id="typewriterSwitch" />
-          </label>
-
-          <button id="transmuteBtn">Let's Go! 🚀</button>
-        </div>
-
-        <div id="outputSection" class="output-section" style="display:none;">
-          <div id="styleLabel" class="output-header"></div>
-          <div id="outputText" class="output-text"></div>
-
-          <div class="output-actions">
-            <button onclick="copyText()">Copy</button>
-            <button onclick="speakText()">Speak Aloud</button>
-            <button onclick="shareText()">Share</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="features" id="features">
-        <div class="feature">
-          <h3>Transmutation Engine</h3>
-          <p>Change how people talk — modern to old, slang to formal, English to Sheng or German...</p>
-        </div>
-        <div class="feature">
-          <h3>Ghostwriter's Quill</h3>
-          <p>Summon original verses from a simple prompt.</p>
-        </div>
-        <div class="feature">
-          <h3>Critic's Eye</h3>
-          <p>Break down meter, rhyme & literary devices.</p>
-        </div>
-      </section>
-
-      <section class="coming-soon">
-        <h2>Coming Soon</h2>
-        <p>Premium voices • Real-time speech • Voice cloning</p>
-        <p>Follow on X: 
-          <a href="https://x.com/abiudketerr" target="_blank" class="x-link">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X" class="x-icon"/>
-            @abiudketerr
-          </a>
-        </p>
-      </section>
+      <!-- ... rest of your main content ... -->
     </main>
 
     <footer class="footer">
       <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
       <small>"We are such stuff as dreams are made on."</small>
     </footer>
+  </div>
 
-    <audio id="typewriterClick" preload="auto">
-      <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
-    </audio>
+  <audio id="typewriterClick" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
+  </audio>
 
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 
-    <!-- Clerk mounting script -->
-    <script>
-      function initClerk() {
-        if (typeof Clerk === 'undefined' || !Clerk.load) {
-          setTimeout(initClerk, 1000);
+  <!-- Clerk mounting script – fixed and debugged -->
+  <script>
+    function initClerk() {
+      if (typeof Clerk === 'undefined' || !Clerk.load) {
+        setTimeout(initClerk, 1000);
+        return;
+      }
+
+      Clerk.load().then(() => {
+        console.log("Clerk loaded – mounting sign-in");
+
+        const container = document.getElementById('clerk-sign-in');
+        if (!container) {
+          console.error("No #clerk-sign-in container found");
           return;
         }
 
-        Clerk.load().then(() => {
-          console.log("Clerk loaded");
-
-          const signInContainer = document.getElementById('clerk-sign-in');
-          if (signInContainer) {
-            Clerk.mountSignIn(signInContainer, {
-              appearance: {
-                elements: {
-                  formButtonPrimary: { backgroundColor: '#d4af37', color: '#000' },
-                  card: { backgroundColor: '#111', borderRadius: '12px' }
-                }
-              }
-            });
-            console.log("Sign-in form mounted");
-          } else {
-            console.error("No #clerk-sign-in container");
-          }
-
-          Clerk.addListener('user', (user) => {
-            if (user) {
-              document.getElementById('login-gate').style.display = 'none';
-              document.getElementById('main-site').style.display = 'block';
-              console.log("Signed in – main site shown");
+        Clerk.mountSignIn(container, {
+          appearance: {
+            elements: {
+              formButtonPrimary: { backgroundColor: '#d4af37', color: '#000' },
+              card: { backgroundColor: '#111', borderRadius: '12px' }
             }
-          });
-        }).catch(err => console.error("Clerk error:", err));
-      }
+          }
+        });
 
-      initClerk();
-    </script>
-  </body>
-  </html>
+        Clerk.addListener('user', (user) => {
+          if (user) {
+            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('main-site').style.display = 'block';
+          }
+        });
+      }).catch(err => console.error("Clerk error:", err));
+    }
+
+    initClerk();
+  </script>
+</body>
+</html>
