@@ -2,88 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keter Aether</title>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-  <!-- Clerk SDK (NOT async) -->
+  <!-- Clerk SDK (MUST NOT be async) -->
   <script
     src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
     crossorigin="anonymous">
   </script>
 
-  <style>
-    :root {
-      --bg: #000000;
-      --gold: #d4af37;
-      --dark: #0f0f0f;
-      --gray: #aaaaaa;
-      --text: #f5f5f5;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #login-gate {
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95));
-    }
-
-    .login-box {
-      text-align: center;
-      max-width: 480px;
-      width: 90%;
-      padding: 3.5rem 2.5rem;
-      background: rgba(15, 15, 15, 0.95);
-      border-radius: 28px;
-      box-shadow: 0 30px 100px rgba(0,0,0,0.9);
-      border: 1px solid rgba(212, 175, 55, 0.15);
-      backdrop-filter: blur(12px);
-    }
-
-    .logo {
-      width: 110px;
-      margin-bottom: 2.5rem;
-    }
-
-    h1 {
-      font-size: 3rem;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-    }
-
-    .subtitle {
-      font-size: 1.3rem;
-      color: var(--gray);
-      margin-bottom: 3rem;
-    }
-
-    #clerk-sign-in {
-      background: var(--dark);
-      border-radius: 20px;
-      padding: 2.2rem;
-      box-shadow: 0 12px 50px rgba(0,0,0,0.7);
-    }
-
-    #main-site {
-      display: none;
-      width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -91,76 +19,19 @@
   <!-- LOGIN GATE -->
   <div id="login-gate">
     <div class="login-box">
-      <img src="/images/logo-clean.png" alt="Keter Aether" class="logo"/>
-      <h1>Welcome to Keter Aether</h1>
-      <p class="subtitle">
-        Sign in or create an account to access the transmutation engine
-      </p>
-
+      <h1>Keter Aether</h1>
+      <p>Sign in to continue</p>
       <div id="clerk-sign-in"></div>
     </div>
   </div>
 
-  <!-- MAIN SITE -->
+  <!-- MAIN APP -->
   <div id="main-site">
-
-    <header class="header">
-      <nav class="navbar">
-
-        <div class="logo">
-          <img src="/images/logo-clean.png" alt="Keter Aether"/>
-        </div>
-
-        <ul class="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#">Pricing</a></li>
-          <li><a href="#">API</a></li>
-          <li><button class="btn-enter">ENTER</button></li>
-        </ul>
-
-        <div id="userButton" style="margin-left:auto;"></div>
-
-      </nav>
-    </header>
-
-    <main class="main-content">
-      <!-- your existing content unchanged -->
-    </main>
-
-    <footer class="footer">
-      <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
-      <small>"We are such stuff as dreams are made on."</small>
-    </footer>
-
+    <h2>You are signed in 🎉</h2>
+    <button onclick="Clerk.signOut()">Sign out</button>
   </div>
 
   <script src="app.js"></script>
-
-  <!-- CLERK INITIALIZATION -->
-  <script>
-    window.addEventListener("load", async () => {
-      if (!window.Clerk) {
-        console.error("Clerk failed to load");
-        return;
-      }
-
-      await Clerk.load({
-        publishableKey: "pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ"
-      });
-
-      const signInContainer = document.getElementById("clerk-sign-in");
-      Clerk.mountSignIn(signInContainer);
-
-      Clerk.addListener(({ user }) => {
-        if (user) {
-          document.getElementById("login-gate").style.display = "none";
-          document.getElementById("main-site").style.display = "block";
-          Clerk.mountUserButton(document.getElementById("userButton"));
-        }
-      });
-    });
-  </script>
 
 </body>
 </html>
