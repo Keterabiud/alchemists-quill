@@ -2,64 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Keter Aether – Auth Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clerk Android Test</title>
 
-  <!-- Clerk -->
+  <!-- Clerk SDK -->
   <script
-    async
-    crossorigin="anonymous"
-    data-clerk-publishable-key="pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ"
-    src="https://clerk.com/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+    crossorigin="anonymous">
+  </script>
+
+  <script>
+    window.Clerk = window.Clerk || {};
+    window.Clerk.publishableKey =
+      "pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ";
   </script>
 
   <style>
     body {
       margin: 0;
-      font-family: Georgia, serif;
-      background: #000;
-      color: #f5f5f5;
       min-height: 100vh;
+      background: black;
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
+      font-family: system-ui, sans-serif;
     }
-
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      color: #aaa;
-      margin-bottom: 1.5rem;
-    }
-
-    button {
-      padding: 0.8rem 1.6rem;
-      font-size: 1rem;
-      cursor: pointer;
+    #box {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- SIGNED OUT -->
-  <div id="signed-out" style="display:none;">
-    <h1>Keter Aether</h1>
-    <p>Sign in to continue</p>
-    <div id="clerk-sign-in"></div>
+  <div id="box">
+    <h1>Clerk Test</h1>
+    <div id="clerk"></div>
   </div>
 
-  <!-- SIGNED IN -->
-  <div id="signed-in" style="display:none;">
-    <h1>You are signed in 🎉</h1>
-    <button id="sign-out">Sign out</button>
-  </div>
+  <script>
+    window.addEventListener("load", function () {
+      if (!window.Clerk) {
+        document.body.innerHTML = "<h2>❌ Clerk failed to load</h2>";
+        return;
+      }
 
-  <!-- Your existing app.js -->
-  <script src="/app.js"></script>
+      Clerk.load().then(() => {
+        Clerk.mountSignIn("#clerk");
+      }).catch(err => {
+        document.body.innerHTML =
+          "<pre style='color:red'>" + err.message + "</pre>";
+      });
+    });
+  </script>
 
 </body>
 </html>
