@@ -13,7 +13,7 @@
     crossorigin="anonymous"
   ></script>
 
-  <!-- Initialize Clerk -->
+  <!-- Initialize Clerk with your key -->
   <script>
     window.Clerk = window.Clerk || {};
     window.Clerk.publishableKey = 'pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ';
@@ -137,32 +137,56 @@
 
   <script src="app.js"></script>
 
-  <!-- Clerk mounting script -->
+  <!-- Clerk mounting script – reliable version -->
   <script>
-    window.addEventListener('load', async () => {
-      await Clerk.load();
+    function initClerk() {
+      if (typeof Clerk === 'undefined' || !Clerk.load) {
+        console.log("Clerk SDK not ready yet – retrying...");
+        setTimeout(initClerk, 1000);
+        return;
+      }
 
-      // Mount user button (avatar + dropdown)
-      Clerk.mountUserButton(document.getElementById('userButton'), {
-        appearance: {
-          elements: {
-            userButtonAvatarBox: { width: '40px', height: '40px' },
-            userButtonPopoverCard: { borderRadius: '12px' }
+      Clerk.load().then(() => {
+        console.log("Clerk loaded successfully");
+
+        const userButtonDiv = document.getElementById('userButton');
+        if (!userButtonDiv) {
+          console.error("Element #userButton not found in DOM!");
+          return;
+        }
+
+        Clerk.mountUserButton(userButtonDiv, {
+          appearance: {
+            elements: {
+              userButtonAvatarBox: { width: '40px', height: '40px' },
+              userButtonPopoverCard: { borderRadius: '12px' }
+            }
           }
-        }
-      });
+        });
 
-      // Update status text
-      const status = document.getElementById('authStatus');
-      Clerk.addListener('user', (user) => {
-        if (user) {
-          const name = user.firstName || user.emailAddresses[0].emailAddress.split('@')[0];
-          status.textContent = `Signed in as ${name}`;
-        } else {
-          status.textContent = 'Not signed in';
+        const status = document.getElementById('authStatus');
+        if (!status) {
+          console.error("Element #authStatus not found!");
+          return;
         }
+
+        Clerk.addListener('user', (user) => {
+          if (user) {
+            const name = user.firstName || user.emailAddresses[0].emailAddress.split('@')[0];
+            status.textContent = `Signed in as ${name}`;
+            console.log("User signed in:", user.id);
+          } else {
+            status.textContent = 'Not signed in';
+            console.log("No user signed in");
+          }
+        });
+      }).catch(err => {
+        console.error("Clerk failed to load:", err.message);
       });
-    });
+    }
+
+    // Start initialization
+    initClerk();
   </script>
 </body>
-</html>
+  </html>
