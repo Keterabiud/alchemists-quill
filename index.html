@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Keter Aether</title>
   <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Clerk SDK -->
+  <script 
+    async 
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" 
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- Initialize Clerk -->
+  <script>
+    window.Clerk = window.Clerk || {};
+    window.Clerk.publishableKey = 'pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ';
+  </script>
 </head>
 <body>
 
@@ -21,6 +34,12 @@
         <li><a href="#">API</a></li>
         <li><button class="btn-enter">ENTER</button></li>
       </ul>
+
+      <!-- Clerk login area -->
+      <div id="clerk-auth" style="margin-left: auto; display: flex; align-items: center; gap: 1rem;">
+        <div id="userButton"></div>
+        <span id="authStatus" style="color: var(--gray); font-size: 0.95rem;">Not signed in</span>
+      </div>
 
       <div class="hamburger" id="hamburger">
         <span></span>
@@ -103,7 +122,7 @@
     <section class="coming-soon">
       <h2>Coming Soon</h2>
       <p>Premium voices • Real-time speech • Voice cloning</p>
-      <p>Follow on X: <a href="https://x.com/abiudketerr" target="_blank">@abiudketerr</a></p>
+      <p>Follow <a href="https://x.com/abiudketerr" target="_blank">@abiudketerr</a></p>
     </section>
   </main>
 
@@ -117,5 +136,33 @@
   </audio>
 
   <script src="app.js"></script>
+
+  <!-- Clerk mounting script -->
+  <script>
+    window.addEventListener('load', async () => {
+      await Clerk.load();
+
+      // Mount user button (avatar + dropdown)
+      Clerk.mountUserButton(document.getElementById('userButton'), {
+        appearance: {
+          elements: {
+            userButtonAvatarBox: { width: '40px', height: '40px' },
+            userButtonPopoverCard: { borderRadius: '12px' }
+          }
+        }
+      });
+
+      // Update status text
+      const status = document.getElementById('authStatus');
+      Clerk.addListener('user', (user) => {
+        if (user) {
+          const name = user.firstName || user.emailAddresses[0].emailAddress.split('@')[0];
+          status.textContent = `Signed in as ${name}`;
+        } else {
+          status.textContent = 'Not signed in';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
