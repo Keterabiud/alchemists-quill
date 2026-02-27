@@ -13,7 +13,7 @@
     crossorigin="anonymous"
   ></script>
 
-  <!-- Clerk Initialization -->
+  <!-- Clerk key -->
   <script>
     window.Clerk = window.Clerk || {};
     window.Clerk.publishableKey = 'pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ';
@@ -21,19 +21,19 @@
 </head>
 <body>
 
-  <!-- Login Gate – shown until signed in -->
-  <div id="login-gate" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg);">
-    <div style="text-align: center; padding: 2rem; max-width: 500px;">
-      <img src="/images/logo-clean.png" alt="Keter Aether" style="height: 120px; margin-bottom: 2rem;"/>
-      <h1 style="font-size: 2.8rem; margin-bottom: 1rem; color: var(--gold);">Welcome to Keter Aether</h1>
-      <p style="font-size: 1.3rem; color: var(--gray); margin-bottom: 2rem;">
-        Sign in or create an account to access the transmutation engine
-      </p>
-      <div id="clerk-sign-in" style="margin-top: 2rem; max-width: 400px; width: 100%;"></div>
+  <!-- Login Gate – first thing users see -->
+  <div id="login-gate">
+    <div class="login-container">
+      <img src="/images/logo-clean.png" alt="Keter Aether" class="login-logo"/>
+      <h1>Welcome to Keter Aether</h1>
+      <p>Sign in or create an account to access the transmutation engine</p>
+
+      <!-- Clerk sign-in form mounts here -->
+      <div id="clerk-sign-in"></div>
     </div>
   </div>
 
-  <!-- Main site content – hidden until logged in -->
+  <!-- Main site – hidden until signed in -->
   <div id="main-site" style="display: none;">
     <header class="header">
       <nav class="navbar">
@@ -49,10 +49,9 @@
           <li><button class="btn-enter">ENTER</button></li>
         </ul>
 
-        <!-- Clerk user area -->
-        <div id="clerk-auth" style="margin-left: auto; display: flex; align-items: center; gap: 1rem;">
+        <!-- Clerk user profile (avatar + dropdown) -->
+        <div id="clerk-user" style="margin-left: auto;">
           <div id="userButton"></div>
-          <span id="authStatus" style="color: var(--gray); font-size: 0.95rem;">Not signed in</span>
         </div>
 
         <div class="hamburger" id="hamburger">
@@ -156,48 +155,47 @@
 
     <script src="app.js"></script>
 
-    <!-- Clerk mounting script -->
-<script>
-  function initClerk() {
-    if (typeof Clerk === 'undefined' || !Clerk.load) {
-      console.log("Clerk not ready – retrying...");
-      setTimeout(initClerk, 1000);
-      return;
-    }
+    <!-- Clerk logic – mount sign-in on welcome + user button on main site -->
+    <script>
+      function initClerk() {
+        if (typeof Clerk === 'undefined' || !Clerk.load) {
+          setTimeout(initClerk, 1000);
+          return;
+        }
 
-    Clerk.load().then(() => {
-      console.log("Clerk loaded – mounting sign-in");
+        Clerk.load().then(() => {
+          console.log("Clerk loaded");
 
-      const signInDiv = document.getElementById('clerk-sign-in');
-      if (!signInDiv) {
-        console.error("No #clerk-sign-in div found!");
-        return;
+          // Mount sign-in form on welcome page
+          const signInDiv = document.getElementById('clerk-sign-in');
+          if (signInDiv) {
+            Clerk.mountSignIn(signInDiv, {
+              appearance: {
+                elements: {
+                  formButtonPrimary: { backgroundColor: '#d4af37', color: '#000' },
+                  card: { backgroundColor: '#111', borderRadius: '12px' }
+                }
+              }
+            });
+          }
+
+          // Mount user button on main site navbar
+          const userButtonDiv = document.getElementById('userButton');
+          if (userButtonDiv) {
+            Clerk.mountUserButton(userButtonDiv);
+          }
+
+          // When logged in → hide login gate, show main site
+          Clerk.addListener('user', (user) => {
+            if (user) {
+              document.getElementById('login-gate').style.display = 'none';
+              document.getElementById('main-site').style.display = 'block';
+            }
+          });
+        }).catch(err => console.error("Clerk error:", err));
       }
 
-      // Mount sign-in form on welcome screen
-      Clerk.mountSignIn(signInDiv, {
-        appearance: {
-          elements: {
-            formButtonPrimary: { backgroundColor: 'var(--gold)', color: 'black' },
-            card: { backgroundColor: '#111', borderRadius: '12px' }
-          }
-        }
-      });
-
-      // When user signs in, hide login gate and show main site
-      Clerk.addListener('user', (user) => {
-        if (user) {
-          document.getElementById('login-gate').style.display = 'none';
-          document.getElementById('main-site').style.display = 'block';
-          console.log("User signed in – site unlocked");
-        }
-      });
-    }).catch(err => {
-      console.error("Clerk load failed:", err.message);
-    });
-  }
-
-  initClerk();
-</script>
+      initClerk();
+    </script>
   </body>
-</html>
+  </html>
