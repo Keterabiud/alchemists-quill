@@ -273,3 +273,26 @@ select, .emoji-toggle, .typewriter-toggle {
     height: 260px;
   }
   }
+/* X/Twitter logo */
+.x-link {
+  color: var(--gold);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.x-icon {
+  height: 20px;
+  filter: brightness(0) invert(1); /* white on dark */
+}
+
+.x-link:hover .x-icon {
+  filter: brightness(1.3);
+}
+
+/* Login gate styling */
+#login-gate {
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('/images/logo-smoky.png') center/cover no-repeat;
+  color: white;
+}
