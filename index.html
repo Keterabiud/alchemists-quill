@@ -3,35 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Keter Aether</title>
+  <title>Keter Aether – Auth Test</title>
 
-  <!-- Clerk SDK (MUST NOT be async) -->
+  <!-- Clerk -->
   <script
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-    crossorigin="anonymous">
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_Z2VudGxlLWxhYnJhZG9yLTI5LmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://clerk.com/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
   </script>
 
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      background: #000;
+      color: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      padding: 0.8rem 1.6rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- LOGIN GATE -->
-  <div id="login-gate">
-    <div class="login-box">
-      <h1>Keter Aether</h1>
-      <p>Sign in to continue</p>
-      <div id="clerk-sign-in"></div>
-    </div>
+  <!-- SIGNED OUT -->
+  <div id="signed-out" style="display:none;">
+    <h1>Keter Aether</h1>
+    <p>Sign in to continue</p>
+    <div id="clerk-sign-in"></div>
   </div>
 
-  <!-- MAIN APP -->
-  <div id="main-site">
-    <h2>You are signed in 🎉</h2>
-    <button onclick="Clerk.signOut()">Sign out</button>
+  <!-- SIGNED IN -->
+  <div id="signed-in" style="display:none;">
+    <h1>You are signed in 🎉</h1>
+    <button id="sign-out">Sign out</button>
   </div>
 
-  <script src="app.js"></script>
+  <!-- Your existing app.js -->
+  <script src="/app.js"></script>
 
 </body>
 </html>
