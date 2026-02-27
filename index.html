@@ -157,38 +157,47 @@
     <script src="app.js"></script>
 
     <!-- Clerk mounting script -->
-    <script>
-      function initClerk() {
-        if (typeof Clerk === 'undefined' || !Clerk.load) {
-          console.log("Clerk not ready – retrying...");
-          setTimeout(initClerk, 1000);
-          return;
-        }
+<script>
+  function initClerk() {
+    if (typeof Clerk === 'undefined' || !Clerk.load) {
+      console.log("Clerk not ready – retrying...");
+      setTimeout(initClerk, 1000);
+      return;
+    }
 
-        Clerk.load().then(() => {
-          console.log("Clerk loaded");
+    Clerk.load().then(() => {
+      console.log("Clerk loaded – mounting sign-in");
 
-          // Mount sign-in on login gate
-          Clerk.mountSignIn(document.getElementById('clerk-sign-in'), {
-            appearance: {
-              elements: {
-                formButtonPrimary: { backgroundColor: 'var(--gold)', color: 'black' }
-              }
-            }
-          });
-
-          // Hide login gate and show main site when signed in
-          Clerk.addListener('user', (user) => {
-            if (user) {
-              document.getElementById('login-gate').style.display = 'none';
-              document.getElementById('main-site').style.display = 'block';
-              console.log("User signed in – main site unlocked");
-            }
-          });
-        }).catch(err => console.error("Clerk error:", err));
+      const signInDiv = document.getElementById('clerk-sign-in');
+      if (!signInDiv) {
+        console.error("No #clerk-sign-in div found!");
+        return;
       }
 
-      initClerk();
-    </script>
+      // Mount sign-in form on welcome screen
+      Clerk.mountSignIn(signInDiv, {
+        appearance: {
+          elements: {
+            formButtonPrimary: { backgroundColor: 'var(--gold)', color: 'black' },
+            card: { backgroundColor: '#111', borderRadius: '12px' }
+          }
+        }
+      });
+
+      // When user signs in, hide login gate and show main site
+      Clerk.addListener('user', (user) => {
+        if (user) {
+          document.getElementById('login-gate').style.display = 'none';
+          document.getElementById('main-site').style.display = 'block';
+          console.log("User signed in – site unlocked");
+        }
+      });
+    }).catch(err => {
+      console.error("Clerk load failed:", err.message);
+    });
+  }
+
+  initClerk();
+</script>
   </body>
 </html>
