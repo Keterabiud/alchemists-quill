@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Keter Aether</title>
 
+  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
     :root {
+      --bg: #000000;
       --gold: #d4af37;
-      --gold-glow: rgba(212, 175, 55, 0.6);
-      --dark: rgba(15, 15, 15, 0.92);
-      --gray: #bbbbbb;
+      --dark-card: #0f0f0f;
+      --gray: #aaaaaa;
       --text: #f5f5f5;
-      --shadow: 0 20px 80px rgba(0,0,0,0.95);
+      --shadow: 0 20px 80px rgba(0,0,0,0.9);
     }
 
     * {
@@ -29,41 +30,30 @@
       background-size: cover;
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
-      position: fixed;
+      padding: 1.5rem 2rem;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      position: sticky;
       top: 0;
-      width: 100%;
-      padding: 1.2rem 2rem;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(12px);
       z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .logo-container {
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .logo-container:hover {
-      transform: scale(1.08);
     }
 
     .logo-img {
-      height: 60px;
-      filter: drop-shadow(0 0 10px var(--gold-glow));
+      height: 80px;
+      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
     }
 
     main {
-      padding-top: 100px;
+      flex: 1;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 0 1.5rem;
+      padding: 2rem 1.5rem;
     }
 
     .hero {
@@ -72,47 +62,45 @@
     }
 
     .hero-logo {
-      width: 260px;
-      max-width: 70%;
+      width: 300px;
+      max-width: 80%;
       margin-bottom: 1.5rem;
     }
 
     .tagline {
-      font-size: 1.9rem;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: var(--gold);
+      text-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
     }
 
     textarea {
       width: 100%;
-      min-height: 140px;
+      min-height: 160px;
       padding: 1.2rem;
-      background: rgba(26, 26, 26, 0.92);
+      background: rgba(26, 26, 26, 0.9);
       border: 1px solid #444;
       border-radius: 12px;
       color: white;
       font-size: 1.1rem;
-      resize: vertical;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
     }
 
     .controls {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       justify-content: center;
-      align-items: center;
     }
 
-    select, label, button {
+    select, .toggle-group, button {
       padding: 0.9rem 1.4rem;
       background: rgba(40,40,40,0.9);
       border: 1px solid #555;
       border-radius: 10px;
       color: white;
       font-size: 1rem;
-      cursor: pointer;
     }
 
     button {
@@ -120,12 +108,13 @@
       color: black;
       border: none;
       font-weight: 600;
+      cursor: pointer;
       box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
 
     button:hover {
-      transform: translateY(-3px) scale(1.03);
+      transform: translateY(-3px);
       box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
     }
 
@@ -133,11 +122,9 @@
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      font-size: 1rem;
-      color: var(--gray);
     }
 
-    .toggle-group input[type="checkbox"] {
+    input[type="checkbox"] {
       width: 18px;
       height: 18px;
       accent-color: var(--gold);
@@ -149,15 +136,13 @@
       padding: 1.8rem;
       border: 1px solid #444;
       margin-top: 2rem;
-      min-height: 180px;
-      display: none;
+      min-height: 200px;
     }
 
     #outputText {
-      font-size: 1.18rem;
-      line-height: 1.7;
+      font-size: 1.2rem;
+      line-height: 1.6;
       white-space: pre-wrap;
-      word-wrap: break-word;
     }
 
     .output-actions {
@@ -170,7 +155,60 @@
 
     .output-actions button {
       padding: 0.8rem 1.6rem;
-      font-size: 1rem;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .feature {
+      background: rgba(20,20,20,0.9);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s;
+    }
+
+    .feature:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(212, 175, 55, 0.35);
+    }
+
+    .feature h3 {
+      font-size: 1.6rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .feature p {
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .coming-soon {
+      text-align: center;
+      margin: 5rem 0;
+      padding: 3rem;
+      background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(40,20,0,0.5));
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 0 70px rgba(212, 175, 55, 0.3);
+      animation: pulse 6s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.25); }
+      100% { box-shadow: 0 0 90px rgba(212, 175, 55, 0.5); }
+    }
+
+    .coming-soon h2 {
+      font-size: 2.8rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
     }
 
     footer {
@@ -181,10 +219,9 @@
     }
 
     @media (max-width: 600px) {
-      .hero-logo { width: 240px; }
       .tagline { font-size: 1.6rem; }
-      .btn { padding: 1.2rem; font-size: 1.1rem; }
-      .controls { flex-direction: column; align-items: stretch; }
+      .coming-soon h2 { font-size: 2.4rem; }
+      .features { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -222,19 +259,19 @@
         </select>
 
         <div class="toggle-group">
-          <input type="checkbox" id="emojiSwitch" />
+          <input type="checkbox" id="emojiSwitch" checked />
           <label for="emojiSwitch">Add emojis?</label>
         </div>
 
         <div class="toggle-group">
-          <input type="checkbox" id="typewriterSwitch" />
+          <input type="checkbox" id="typewriterSwitch" checked />
           <label for="typewriterSwitch">Typewriter ASMR?</label>
         </div>
 
         <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
-      <div id="outputSection">
+      <div id="outputSection" style="display:none;">
         <div id="outputText" class="output-text"></div>
 
         <div class="output-actions">
@@ -244,6 +281,32 @@
         </div>
       </div>
     </section>
+
+    <section class="features">
+      <div class="feature">
+        <h3>Transmutation Engine</h3>
+        <p>Change how people talk — modern to old, slang to formal, English to Sheng or German...</p>
+      </div>
+      <div class="feature">
+        <h3>Ghostwriter's Quill</h3>
+        <p>Summon original verses from a simple prompt.</p>
+      </div>
+      <div class="feature">
+        <h3>Critic's Eye</h3>
+        <p>Break down meter, rhyme & literary devices.</p>
+      </div>
+    </section>
+
+    <section class="coming-soon">
+      <h2>Coming Soon</h2>
+      <p>Premium voices • Real-time speech • Voice cloning</p>
+      <p>Follow on X: 
+        <a href="https://x.com/abiudketerr" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X" style="height:1.2em; vertical-align:middle;"/>
+          @abiudketerr
+        </a>
+      </p>
+    </section>
   </main>
 
   <footer>
@@ -252,42 +315,17 @@
   </footer>
 
   <script>
-    const outputTextEl = document.getElementById('outputText');
-    const typewriterToggle = document.getElementById('typewriterSwitch');
-    const emojiToggle = document.getElementById('emojiSwitch');
+    // Typewriter + emoji logic
+    const outputText = document.getElementById('outputText');
+    const typewriterSwitch = document.getElementById('typewriterSwitch');
+    const emojiSwitch = document.getElementById('emojiSwitch');
 
-    // Style-specific emoji sets (placed intelligently, not randomly)
-    const emojiSets = {
-      shakespeare: ['🪶', '🏰', '⚔️', '🌹', '📜', '👑'],
-      victorian: ['🕰️', '🖋️', '🪞', '🌸', '🎩', '👗'],
-      poe: ['🪦', '🦇', '🕯️', '📖', '🕸️', '☠️'],
-      romantic: ['❤️', '🌹', '🌅', '💌', '🌙', '💞'],
-      genz: ['🔥', '💀', '😭', '🤯', '🫶', '✨'],
-      sheng: ['🇰🇪', '🔥', '😂', '💪', '🫡', '👊'],
-      'old-english': ['🗡️', '🏰', '📜', '⚔️', '🛡️', '👑'],
-      'emoji-genz': ['🔥', '💀', '🫡', '🤌', '🫶', '😭'],
-      'formal-british': ['☕', '🧐', '📜', '🎩', '🖋️', '🔔'],
-      'sheng-english': ['🔥', '🇰🇪', '😂', '💪', '🫶', '👊'],
-      german: ['🍺', '🦅', '⚡', '🛡️', '📜', '🎻'],
-      kiswahili: ['🌴', '🦁', '🇰🇪', '🌅', '💃', '🪘']
-    };
-
-    function getStyleEmoji(style) {
-      const set = emojiSets[style] || emojiSets['genz'];
-      return set[Math.floor(Math.random() * set.length)];
-    }
-
-    function typeWriter(text, element, speed = 35) {
+    function typeWriter(text, element, speed = 40) {
       let i = 0;
       element.textContent = '';
       const interval = setInterval(() => {
         if (i < text.length) {
-          let char = text.charAt(i);
-          // Intelligent emoji placement: after punctuation or every \~10 chars
-          if (emojiToggle.checked && (char === '.' || char === '!' || char === '?' || char === ',' || i % 10 === 0)) {
-            char += getStyleEmoji(document.getElementById('styleSelect').value);
-          }
-          element.textContent += char;
+          element.textContent += text.charAt(i);
           i++;
           element.scrollTop = element.scrollHeight;
         } else {
@@ -296,51 +334,53 @@
       }, speed);
     }
 
-    // Simple transmutation logic (replace with real AI later)
-    function transmute(text) {
+    // Simple fake transmutation (replace with real logic when ready)
+    function generateTransmutedText() {
+      const input = document.getElementById('modernInput').value.trim();
+      if (!input) return "Please type something first...";
+
       const style = document.getElementById('styleSelect').value;
-      // Basic transformation examples
-      if (style === 'shakespeare') return text.replace(/you/g, 'thou').replace(/is/g, 'art').toUpperCase();
-      if (style === 'genz') return text.replace(/good/g, 'fire').replace(/love/g, 'vibes') + ' no cap';
-      if (style === 'old-english') return text.replace(/the/g, 'þe').toUpperCase() + ' FORSOOTH!';
-      // Default: just uppercase + flair
-      return text.toUpperCase();
+      let result = `This is a dramatic ${style} version of your text: ${input.toUpperCase()}!`;
+
+      // Basic emoji addition if toggled
+      if (emojiSwitch.checked) {
+        result = result.replace(/!/g, '! ✨').replace(/\?/g, '? 🔥');
+      }
+
+      return result;
     }
 
     document.getElementById('transmuteBtn').addEventListener('click', () => {
-      const input = document.getElementById('modernInput').value.trim();
-      if (!input) return alert("Type something first...");
-
+      const result = generateTransmutedText();
       document.getElementById('outputSection').style.display = 'block';
 
-      const result = transmute(input);
-
-      if (typewriterToggle.checked) {
-        typeWriter(result, document.getElementById('outputText'));
+      if (typewriterSwitch.checked) {
+        typeWriter(result, outputText, 35);
       } else {
-        document.getElementById('outputText').textContent = result;
+        outputText.textContent = result;
       }
     });
 
+    // Copy / Speak / Share
     function copyText() {
-      navigator.clipboard.writeText(document.getElementById('outputText').textContent)
-        .then(() => alert("Copied!"))
+      navigator.clipboard.writeText(outputText.textContent)
+        .then(() => alert("Copied to clipboard!"))
         .catch(() => alert("Copy failed"));
     }
 
     function speakText() {
-      const ut = new SpeechSynthesisUtterance(document.getElementById('outputText').textContent);
-      speechSynthesis.speak(ut);
+      const utterance = new SpeechSynthesisUtterance(outputText.textContent);
+      speechSynthesis.speak(utterance);
     }
 
     function shareText() {
       if (navigator.share) {
         navigator.share({
-          title: 'Keter Aether Creation',
-          text: document.getElementById('outputText').textContent,
-        });
+          title: 'Keter Aether Transmutation',
+          text: outputText.textContent,
+        }).catch(err => console.log("Share failed", err));
       } else {
-        alert("Share not supported");
+        alert("Share not supported on this browser");
       }
     }
   </script>
