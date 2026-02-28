@@ -1,166 +1,86 @@
-// /api/transmute.js
-// Groq + GPT-OSS-120B — FINAL STABLE VERSION
+// /api/transmute.js – Keter Aether final version
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res
-      .status(405)
-      .json({ success: false, error: 'Method not allowed – use POST' });
+    return res.status(405).json({ success: false, error: 'Method not allowed – use POST' });
   }
 
   try {
-    const { text, style = 'Modern', mode = 'transmute' } = req.body;
+    const { text, style, mode = 'transmute' } = req.body;
 
-    /* -----------------------------
-       VALIDATION
-    -------------------------------- */
-    if (!text || typeof text !== 'string' || !text.trim()) {
-      return res
-        .status(400)
-        .json({ success: false, error: 'Text is required' });
+    if (!text || typeof text !== 'string' || text.trim() === '') {
+      return res.status(400).json({ success: false, error: 'Text is required' });
     }
 
     if (text.length > 8000) {
-      return res.status(400).json({
-        success: false,
-        error: 'Input text too long (max ~8000 characters)',
-      });
+      return res.status(400).json({ success: false, error: 'Input too long (~8000 max)' });
     }
 
     const GROQ_API_KEY = process.env.GROQ_API_KEY;
     if (!GROQ_API_KEY) {
-      console.error('Missing GROQ_API_KEY');
-      return res
-        .status(500)
-        .json({ success: false, error: 'Server configuration error' });
+      return res.status(500).json({ success: false, error: 'Server config error' });
     }
 
-    /* -----------------------------
-       MODE-AWARE PROMPTING
-    -------------------------------- */
+    // SYSTEM PROMPT per mode
     let systemPrompt = '';
-    let userPrompt = '';
 
-    if (mode === 'ghostwriter') {
-      systemPrompt = `
-You are Keter Aether, a master poet and literary ghostwriter.
-
-RULES:
-- Write ORIGINAL poetry or prose
-- Do NOT rewrite the user's text
-- Do NOT explain
-- Do NOT add meta commentary
-- Output ONLY the finished literary work
-- Use elegant, expressive modern English
-`;
-
-      userPrompt = `
-Write an original piece in the style of ${style}.
-Theme or idea:
-"${text}"
-`;
-
+    if (mode === 'transmute') {
+      systemPrompt = `You are Keter Aether, a magical transmutation engine.
+Transform ONLY the user's input text into the requested ${style} style.
+Keep meaning intact. Return ONLY the transformed text. No explanations. No quotes.`;
+    } else if (mode === 'ghostwriter') {
+      systemPrompt = `You are Keter Aether, the Ghostwriter's Quill.
+Turn the user's input into a creative piece of writing (poem, short story, or lyrical text) in the requested ${style} style.
+Use rich imagery, rhythm, and literary devices.
+Return ONLY the creative text.`;
     } else if (mode === 'critic') {
-      systemPrompt = `
-You are Keter Aether, a precise and insightful literary critic.
-
-RULES:
-- Write in clear modern English
-- Be constructive, not poetic
-- Use readable formatting
-`;
-
-      userPrompt = `
-Critically analyze the following text.
-
-Include:
-- Brief overview
-- Strengths
-- Weaknesses
-- Suggestions for improvement
-
-Text:
-"${text}"
-`;
-
+      systemPrompt = `You are Keter Aether, the Critic's Eye.
+Analyze the user's text and provide constructive critique, suggestions, or improvements.
+Focus on clarity, style, grammar, tone, and creativity.
+Return ONLY the critique or suggestions.`;
     } else {
-      // TRANSMUTATION (DEFAULT)
-      systemPrompt = `
-You are Keter Aether — a refined text transmutation engine.
-
-TASK:
-Rewrite the user's text in the style of ${style}.
-
-STRICT RULES:
-- Preserve the original meaning
-- Use modern, readable English
-- Imitate tone, rhythm, and vocabulary ONLY
-- DO NOT use archaic spellings or symbols (Þ, ð, æ, etc.)
-- Do NOT explain
-- Return ONLY the transformed text
-`;
-
-      userPrompt = `
-Rewrite the following text:
-
-"${text}"
-`;
+      systemPrompt = `You are Keter Aether, a magical text transformer. Transform the user's text appropriately.`;
     }
 
-    /* -----------------------------
-       GROQ API CALL
-    -------------------------------- */
-    const response = await fetch(
-      'https://api.groq.com/openai/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${GROQ_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-oss-120b',
-          messages: [
-            { role: 'system', content: systemPrompt.trim() },
-            { role: 'user', content: userPrompt.trim() },
-          ],
-          temperature: mode === 'critic' ? 0.4 : 0.75,
-          max_tokens: 1024,
-          top_p: 0.95,
-          stream: false,
-        }),
-      }
-    );
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-oss-120b",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: text }
+        ],
+        temperature: 0.75,
+        max_tokens: 1024,
+        top_p: 0.95,
+        stream: false
+      })
+    });
 
     if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      console.error('Groq API error:', err);
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Groq API error:', response.status, errorData);
       return res.status(response.status).json({
         success: false,
-        error: err?.error?.message || 'Groq API error',
+        error: errorData.error?.message || `Groq API error: ${response.status}`
       });
     }
 
     const data = await response.json();
-    let result = data?.choices?.[0]?.message?.content?.trim();
+    let result = data.choices?.[0]?.message?.content?.trim() || '';
 
-    /* -----------------------------
-       SAFETY FALLBACK
-    -------------------------------- */
     if (!result) {
-      result = text;
+      result = text + ' ✨';
     }
 
-    return res.status(200).json({
-      success: true,
-      transmuted: result,
-    });
+    return res.status(200).json({ success: true, transmuted: result });
 
-  } catch (error) {
-    console.error('Transmutation error:', error);
-    return res.status(500).json({
-      success: false,
-      error: error.message || 'Internal server error',
-    });
+  } catch (err) {
+    console.error('Function error:', err);
+    return res.status(500).json({ success: false, error: err.message || 'Internal server error' });
   }
-}
+                        }
