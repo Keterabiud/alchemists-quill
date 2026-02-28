@@ -100,7 +100,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       justify-content: center;
       align-items: center;
     }
@@ -148,7 +148,7 @@
       border-radius: 12px;
       padding: 1.8rem;
       border: 1px solid #444;
-      margin: 2rem 0;
+      margin-top: 2rem;
       min-height: 180px;
     }
 
@@ -172,67 +172,6 @@
       font-size: 1rem;
     }
 
-    /* Feature Cards */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.8rem;
-      margin: 3rem 0;
-    }
-
-    .feature-card {
-      background: rgba(20,20,20,0.92);
-      border: 1px solid rgba(212, 175, 55, 0.35);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      transition: all 0.4s ease;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
-    }
-
-    .feature-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(212, 175, 55, 0.35);
-      border-color: var(--gold);
-    }
-
-    .feature-card h3 {
-      font-size: 1.6rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
-    }
-
-    .feature-card p {
-      color: var(--gray);
-      line-height: 1.5;
-    }
-
-    /* Coming Soon – dramatic */
-    .coming-soon {
-      text-align: center;
-      margin: 6rem 0 4rem;
-      padding: 4rem 1.5rem;
-      background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(40,20,0,0.5));
-      border-radius: 24px;
-      border: 2px solid rgba(212, 175, 55, 0.4);
-      box-shadow: 0 0 80px rgba(212, 175, 55, 0.35);
-      animation: dramaticPulse 6s infinite alternate;
-    }
-
-    @keyframes dramaticPulse {
-      0% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.25); transform: scale(1); }
-      100% { box-shadow: 0 0 100px rgba(212, 175, 55, 0.55); transform: scale(1.01); }
-    }
-
-    .coming-soon h2 {
-      font-size: 3.2rem;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-      text-shadow: 0 0 30px var(--gold-glow);
-    }
-
     footer {
       text-align: center;
       padding: 3rem 1rem;
@@ -243,10 +182,8 @@
     @media (max-width: 600px) {
       .hero-logo { width: 240px; }
       .tagline { font-size: 1.6rem; }
-      .coming-soon h2 { font-size: 2.6rem; }
       .btn { padding: 1.2rem; font-size: 1.1rem; }
       .controls { flex-direction: column; align-items: stretch; }
-      .features-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -284,12 +221,12 @@
         </select>
 
         <div class="toggle-group">
-          <input type="checkbox" id="emojiSwitch" checked />
+          <input type="checkbox" id="emojiSwitch" />
           <label for="emojiSwitch">Add emojis?</label>
         </div>
 
         <div class="toggle-group">
-          <input type="checkbox" id="typewriterSwitch" checked />
+          <input type="checkbox" id="typewriterSwitch" />
           <label for="typewriterSwitch">Typewriter ASMR?</label>
         </div>
 
@@ -306,32 +243,6 @@
         </div>
       </div>
     </section>
-
-    <!-- The three features -->
-    <section class="features-grid">
-      <div class="feature-card">
-        <h3>Transmutation Engine</h3>
-        <p>Transform any text into different styles, tones, slang, or languages with one click.</p>
-        <button onclick="document.getElementById('modernInput').focus()">Use Now</button>
-      </div>
-
-      <div class="feature-card">
-        <h3>Ghostwriter's Quill</h3>
-        <p>Summon original poetry, stories, or verses from a simple prompt or mood.</p>
-        <button onclick="alert('Ghostwriter coming soon — describe your idea!')">Try Prompt</button>
-      </div>
-
-      <div class="feature-card">
-        <h3>Critic's Eye</h3>
-        <p>Deep literary analysis: rhyme, meter, devices, tone, and improvement suggestions.</p>
-        <button onclick="alert('Critic coming soon — paste text to analyze!')">Analyze Text</button>
-      </div>
-    </section>
-
-    <section class="coming-soon">
-      <h2>Coming Soon</h2>
-      <p>Premium voices • Real-time speech • Voice cloning</p>
-    </section>
   </main>
 
   <footer>
@@ -344,10 +255,25 @@
     const typewriterToggle = document.getElementById('typewriterSwitch');
     const emojiToggle = document.getElementById('emojiSwitch');
 
-    const emojis = ['✨','🔥','🌟','⚡','🪶','👑','💫','🌙','🖤','🌀','🌌','🔮','🗡️','🪐'];
+    // Style-specific emoji sets
+    const emojiSets = {
+      shakespeare: ['🪶', '🏰', '⚔️', '🌹', '📜', '👑'],
+      victorian: ['🕰️', '🖋️', '🪞', '🌸', '🎩', '👗'],
+      poe: ['🪦', '🦇', '🕯️', '📖', '🕸️', '☠️'],
+      romantic: ['❤️', '🌹', '🌅', '💌', '🌙', '💞'],
+      genz: ['🔥', '💀', '😭', '🤯', '🫶', '✨'],
+      sheng: ['🇰🇪', '🔥', '😂', '💪', '🫡', '👊'],
+      'old-english': ['🗡️', '🏰', '📜', '⚔️', '🛡️', '👑'],
+      'emoji-genz': ['🔥', '💀', '🫡', '🤌', '🫶', '😭'],
+      'formal-british': ['☕', '🧐', '📜', '🎩', '🖋️', '🔔'],
+      'sheng-english': ['🔥', '🇰🇪', '😂', '💪', '🫶', '👊'],
+      german: ['🍺', '🦅', '⚡', '🛡️', '📜', '🎻'],
+      kiswahili: ['🌴', '🦁', '🇰🇪', '🌅', '💃', '🪘']
+    };
 
-    function getRandomEmoji() {
-      return emojis[Math.floor(Math.random() * emojis.length)];
+    function getStyleEmoji(style) {
+      const set = emojiSets[style] || emojiSets['genz'];
+      return set[Math.floor(Math.random() * set.length)];
     }
 
     function typeWriter(text, element, speed = 35) {
@@ -356,8 +282,8 @@
       const interval = setInterval(() => {
         if (i < text.length) {
           let char = text.charAt(i);
-          if (emojiToggle.checked && Math.random() < 0.18) {
-            char = getRandomEmoji() + char;
+          if (emojiToggle.checked && (i % 8 === 0 || char === ' ' || char === '.' || char === ',' || char === '!')) {
+            char = getStyleEmoji(document.getElementById('styleSelect').value) + char;
           }
           element.textContent += char;
           i++;
@@ -368,10 +294,14 @@
       }, speed);
     }
 
-    // Fake transmutation (replace with real logic)
+    // Fake transmutation – replace with real backend/AI call later
     function transmute(text) {
       const style = document.getElementById('styleSelect').value;
-      return `${text.toUpperCase()} — transformed into pure ${style} magic!`;
+      // Very simple transformation just for demo
+      if (style === 'shakespeare') return text.replace(/you/g, 'thou').replace(/is/g, 'art').toUpperCase() + ' VERILY!';
+      if (style === 'genz') return text.replace(/good/g, 'fire').replace(/love/g, 'vibes') + ' no cap frfr 🔥';
+      // ... add real logic here
+      return text.toUpperCase() + ' ✨'; // fallback
     }
 
     document.getElementById('transmuteBtn').addEventListener('click', () => {
@@ -383,20 +313,20 @@
       const result = transmute(input);
 
       if (typewriterToggle.checked) {
-        typeWriter(result, outputTextEl);
+        typeWriter(result, document.getElementById('outputText'));
       } else {
-        outputTextEl.textContent = result;
+        document.getElementById('outputText').textContent = result;
       }
     });
 
     function copyText() {
-      navigator.clipboard.writeText(outputTextEl.textContent)
+      navigator.clipboard.writeText(document.getElementById('outputText').textContent)
         .then(() => alert("Copied!"))
         .catch(() => alert("Copy failed"));
     }
 
     function speakText() {
-      const ut = new SpeechSynthesisUtterance(outputTextEl.textContent);
+      const ut = new SpeechSynthesisUtterance(document.getElementById('outputText').textContent);
       speechSynthesis.speak(ut);
     }
 
@@ -404,7 +334,7 @@
       if (navigator.share) {
         navigator.share({
           title: 'Keter Aether Creation',
-          text: outputTextEl.textContent,
+          text: document.getElementById('outputText').textContent,
         });
       } else {
         alert("Share not supported");
