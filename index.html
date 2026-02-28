@@ -1,390 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Keter Aether</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Keter Aether</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-  <style>
-    :root {
-      --gold: #d4af37;
-      --gold-glow: rgba(212, 175, 55, 0.6);
-      --dark: rgba(15, 15, 15, 0.92);
-      --gray: #bbbbbb;
-      --text: #f5f5f5;
-      --shadow: 0 20px 80px rgba(0,0,0,0.95);
-    }
+<style>
+:root {
+  --gold: #d4af37;
+  --gold-glow: rgba(212,175,55,.6);
+  --dark: rgba(15,15,15,.92);
+  --gray: #bbb;
+  --text: #f5f5f5;
+}
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box}
 
-    body {
-      font-family: 'Georgia', serif;
-      background: url('nebula-bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+/* BODY */
+body{
+  font-family:'Georgia',serif;
+  background:url('nebula-bg.jpg') center/cover fixed;
+  color:var(--text);
+  min-height:100vh;
+  padding-top:130px;
+}
 
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 1.5rem;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      text-align: center;
-    }
+/* HEADER */
+header{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:1.4rem;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(12px);
+  text-align:center;
+  z-index:1000;
+}
 
-    .logo {
-      height: 90px;
-      filter: drop-shadow(0 0 15px var(--gold-glow));
-    }
+.logo{
+  height:90px;
+  cursor:pointer;
+  filter:drop-shadow(0 0 15px var(--gold-glow));
+  transition:transform .3s;
+}
+.logo:hover{transform:scale(1.08)}
 
-    .mode-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 110px 1rem 2rem;
-      flex-wrap: wrap;
-    }
+/* MODE BUTTONS */
+.mode-buttons{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin:1rem;
+}
 
-    .mode-btn {
-      padding: 0.9rem 1.6rem;
-      background: linear-gradient(90deg, var(--gold), #e5c158);
-      color: black;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-      transition: all 0.3s ease;
-      min-width: 200px;
-    }
+.mode-btn{
+  min-width:220px;
+  padding:.9rem 1.6rem;
+  font-weight:600;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(90deg,var(--gold),#e5c158);
+  box-shadow:0 8px 25px rgba(212,175,55,.4);
+  transition:.3s;
+}
 
-    .mode-btn.active {
-      transform: scale(1.05);
-      box-shadow: 0 12px 35px rgba(212, 175, 55, 0.7);
-    }
+.mode-btn.active{
+  transform:scale(1.05);
+  box-shadow:0 14px 40px rgba(212,175,55,.75);
+}
 
-    main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
+/* MAIN */
+main{
+  max-width:1000px;
+  margin:auto;
+  padding:0 1.2rem;
+}
 
-    .section {
-      display: none;
-      background: rgba(20,20,20,0.88);
-      border-radius: 16px;
-      padding: 2rem;
-      border: 1px solid #444;
-      margin-bottom: 2rem;
-    }
+/* SECTIONS */
+.section{
+  opacity:0;
+  transform:translateY(20px);
+  pointer-events:none;
+  transition:.4s ease;
+  background:rgba(20,20,20,.88);
+  border:1px solid #444;
+  border-radius:18px;
+  padding:2rem;
+  margin-bottom:2rem;
+}
 
-    .section.active {
-      display: block;
-    }
+.section.active{
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+}
 
-    textarea {
-      width: 100%;
-      min-height: 140px;
-      padding: 1.2rem;
-      background: rgba(26, 26, 26, 0.92);
-      border: 1px solid #444;
-      border-radius: 12px;
-      color: white;
-      font-size: 1.1rem;
-      resize: vertical;
-      margin-bottom: 1.2rem;
-    }
+/* INPUTS */
+textarea,select,button{
+  border-radius:12px;
+  font-size:1rem;
+}
 
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      justify-content: center;
-      align-items: center;
-    }
+textarea{
+  width:100%;
+  min-height:140px;
+  padding:1.2rem;
+  background:rgba(26,26,26,.92);
+  border:1px solid #444;
+  color:white;
+  margin-bottom:1.2rem;
+}
 
-    select, label, button {
-      padding: 0.9rem 1.4rem;
-      background: rgba(40,40,40,0.9);
-      border: 1px solid #555;
-      border-radius: 10px;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+/* CONTROLS */
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:1rem;
+  margin-bottom:1.6rem;
+}
 
-    button {
-      background: linear-gradient(90deg, var(--gold), #e5c158);
-      color: black;
-      border: none;
-      font-weight: 600;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-      transition: all 0.3s ease;
-    }
+.toggle-group{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  color:var(--gray);
+}
 
-    button:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
-    }
+/* BUTTONS */
+button{
+  padding:.9rem 1.6rem;
+  font-weight:600;
+  background:linear-gradient(90deg,var(--gold),#e5c158);
+  border:none;
+  cursor:pointer;
+  transition:.3s;
+}
 
-    .toggle-group {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 1rem;
-      color: var(--gray);
-    }
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 15px 40px rgba(212,175,55,.6);
+}
 
-    .toggle-group input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--gold);
-    }
+/* OUTPUT */
+.output-section{
+  display:none;
+  background:rgba(20,20,20,.92);
+  border:1px solid #444;
+  border-radius:14px;
+  padding:1.8rem;
+  margin-top:1.8rem;
+}
 
-    .output-section {
-      background: rgba(20,20,20,0.9);
-      border-radius: 12px;
-      padding: 1.8rem;
-      border: 1px solid #444;
-      margin-top: 2rem;
-      min-height: 180px;
-      display: none;
-    }
+.output-section.show{display:block}
 
-    .output-text {
-      font-size: 1.18rem;
-      line-height: 1.7;
-      white-space: pre-wrap;
-    }
+.output-text{
+  font-size:1.15rem;
+  line-height:1.7;
+  white-space:pre-wrap;
+}
 
-    .output-actions {
-      margin-top: 1.5rem;
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+.output-actions{
+  display:flex;
+  gap:1rem;
+  justify-content:center;
+  margin-top:1.4rem;
+}
 
-    .output-actions button {
-      padding: 0.8rem 1.6rem;
-    }
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:3rem 1rem;
+  color:var(--gray);
+}
 
-    footer {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--gray);
-      font-size: 0.95rem;
-    }
-
-    @media (max-width: 600px) {
-      .mode-buttons { flex-direction: column; }
-      .mode-btn { width: 100%; }
-      .hero-logo { width: 240px; }
-    }
-  </style>
+/* MOBILE */
+@media(max-width:600px){
+  .mode-btn{width:100%}
+}
+</style>
 </head>
+
 <body>
 
-  <header>
-    <img src="/images/logo-clean.png" alt="Keter Aether" class="logo" onclick="window.open('https://x.com/abiudketerr','_blank')"/>
-  </header>
+<header>
+  <img src="/images/logo-clean.png" class="logo"
+  onclick="window.open('https://x.com/abiudketerr','_blank')">
+</header>
 
-  <div class="mode-buttons">
-    <button class="mode-btn active" onclick="switchMode('transmute')">Transmutation Engine</button>
-    <button class="mode-btn" onclick="switchMode('ghost')">Ghostwriter's Quill</button>
-    <button class="mode-btn" onclick="switchMode('critic')">Critic's Eye</button>
+<div class="mode-buttons">
+  <button class="mode-btn active" data-mode="transmute">Transmutation Engine</button>
+  <button class="mode-btn" data-mode="ghost">Ghostwriter's Quill</button>
+  <button class="mode-btn" data-mode="critic">Critic's Eye</button>
+</div>
+
+<main>
+
+<section id="transmute" class="section active">
+  <textarea id="transmuteInput" placeholder="Type your plea..."></textarea>
+
+  <div class="controls">
+    <select id="styleSelect">
+      <option>Shakespearean</option>
+      <option>Victorian</option>
+      <option>Poe</option>
+      <option>Romantic</option>
+      <option>Gen Z</option>
+      <option>Kiswahili</option>
+    </select>
+
+    <label class="toggle-group">
+      <input type="checkbox" id="typewriterSwitch"> Typewriter
+    </label>
+
+    <button onclick="transmuteText()">Transmute ✨</button>
   </div>
 
-  <main>
-    <!-- Transmutation Engine -->
-    <section id="transmute" class="section active">
-      <textarea id="transmuteInput" placeholder="Type your plea..." rows="6"></textarea>
+  <div id="transmuteOutputSection" class="output-section">
+    <div id="transmuteOutput" class="output-text"></div>
+  </div>
+</section>
 
-      <div class="controls">
-        <select id="styleSelect">
-          <option value="shakespeare">Shakespearean</option>
-          <option value="victorian">Victorian</option>
-          <option value="poe">Poe (Gothic)</option>
-          <option value="romantic">Romantic</option>
-          <option value="genz">Gen Z Slang</option>
-          <option value="sheng">Sheng (Kenyan street)</option>
-          <option value="old-english">Old English</option>
-          <option value="emoji-genz">Emoji-fied Gen Z</option>
-          <option value="formal-british">Formal British</option>
-          <option value="sheng-english">Sheng + English mix</option>
-          <option value="german">German</option>
-          <option value="kiswahili">Kiswahili</option>
-        </select>
+<section id="ghost" class="section">
+  <textarea id="ghostPrompt" placeholder="Describe your idea..."></textarea>
+  <button onclick="generateGhost()">Invoke 🪶</button>
+  <div id="ghostOutputSection" class="output-section">
+    <div id="ghostOutput" class="output-text"></div>
+  </div>
+</section>
 
-        <div class="toggle-group">
-          <input type="checkbox" id="emojiSwitch" />
-          <label for="emojiSwitch">Add emojis?</label>
-        </div>
+<section id="critic" class="section">
+  <textarea id="criticInput" placeholder="Paste text..."></textarea>
+  <button onclick="analyzeText()">Analyze 🔍</button>
+  <div id="criticOutputSection" class="output-section">
+    <div id="criticOutput" class="output-text"></div>
+  </div>
+</section>
 
-        <div class="toggle-group">
-          <input type="checkbox" id="typewriterSwitch" />
-          <label for="typewriterSwitch">Typewriter ASMR?</label>
-        </div>
+</main>
 
-        <button onclick="transmuteText()">Transmute ✨</button>
-      </div>
+<footer>
+  © 2025 Keter Aether — <strong>KETER</strong>
+</footer>
 
-      <div id="transmuteOutputSection" class="output-section">
-        <div id="transmuteOutput" class="output-text"></div>
+<script>
+/* MODE SWITCH */
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    const mode=btn.dataset.mode;
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById(mode).classList.add('active');
+    btn.classList.add('active');
+  }
+});
 
-        <div class="output-actions">
-          <button onclick="copyText('transmuteOutput')">Copy</button>
-          <button onclick="speakText('transmuteOutput')">Speak Aloud</button>
-          <button onclick="shareText('transmuteOutput')">Share</button>
-        </div>
-      </div>
-    </section>
+/* TYPEWRITER */
+function typeWriter(text,el){
+  el.textContent='';
+  let i=0;
+  const t=setInterval(()=>{
+    el.textContent+=text[i++]||'';
+    if(i>=text.length)clearInterval(t);
+  },30);
+}
 
-    <!-- Ghostwriter's Quill -->
-    <section id="ghost" class="section">
-      <textarea id="ghostPrompt" placeholder="Describe your poem, story, mood, or theme..." rows="6"></textarea>
+/* PLACEHOLDERS */
+function transmuteText(){
+  const t=document.getElementById('transmuteInput').value.trim();
+  if(!t)return;
+  const out=document.getElementById('transmuteOutput');
+  const box=document.getElementById('transmuteOutputSection');
+  box.classList.add('show');
+  document.getElementById('typewriterSwitch').checked
+    ? typeWriter(t,out)
+    : out.textContent=t;
+}
 
-      <div class="controls">
-        <div class="toggle-group">
-          <input type="checkbox" id="ghostEmojiSwitch" />
-          <label for="ghostEmojiSwitch">Add emojis?</label>
-        </div>
+function generateGhost(){
+  const t=document.getElementById('ghostPrompt').value;
+  const o=document.getElementById('ghostOutput');
+  document.getElementById('ghostOutputSection').classList.add('show');
+  o.textContent=`A poetic vision of "${t}"`;
+}
 
-        <div class="toggle-group">
-          <input type="checkbox" id="ghostTypewriterSwitch" />
-          <label for="ghostTypewriterSwitch">Typewriter ASMR?</label>
-        </div>
+function analyzeText(){
+  const t=document.getElementById('criticInput').value;
+  const o=document.getElementById('criticOutput');
+  document.getElementById('criticOutputSection').classList.add('show');
+  o.textContent=`Analysis:\n${t}`;
+}
+</script>
 
-        <button onclick="generateGhost()">Invoke Quill 🪶</button>
-      </div>
-
-      <div id="ghostOutputSection" class="output-section">
-        <div id="ghostOutput" class="output-text"></div>
-
-        <div class="output-actions">
-          <button onclick="copyText('ghostOutput')">Copy</button>
-          <button onclick="speakText('ghostOutput')">Speak Aloud</button>
-          <button onclick="shareText('ghostOutput')">Share</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Critic's Eye -->
-    <section id="critic" class="section">
-      <p style="margin-bottom:1rem; color:var(--gray);">Paste text or use last output</p>
-      <textarea id="criticInput" placeholder="Paste text to analyze..." rows="8"></textarea>
-
-      <button onclick="analyzeText()">Analyze 🔍</button>
-
-      <div id="criticOutputSection" class="output-section">
-        <div id="criticOutput" class="output-text"></div>
-
-        <div class="output-actions">
-          <button onclick="copyText('criticOutput')">Copy</button>
-          <button onclick="speakText('criticOutput')">Speak Aloud</button>
-          <button onclick="shareText('criticOutput')">Share</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
-    <small>"We are such stuff as dreams are made on."</small>
-  </footer>
-
-  <script>
-    // Switch modes
-    function switchMode(mode) {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(mode).style.display = 'block';
-      event.target.classList.add('active');
-    }
-
-    // Typewriter
-    function typeWriter(text, element) {
-      element.textContent = '';
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < text.length) {
-          element.textContent += text.charAt(i);
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 35);
-    }
-
-    // Transmute
-    function transmuteText() {
-      const input = document.getElementById('transmuteInput').value.trim();
-      if (!input) return alert("Type something...");
-      const output = document.getElementById('transmuteOutput');
-      const section = document.getElementById('transmuteOutputSection');
-      section.style.display = 'block';
-      output.textContent = input; // pure text – no extra words
-
-      if (document.getElementById('typewriterSwitch').checked) {
-        typeWriter(input, output);
-      }
-    }
-
-    // Ghostwriter (placeholder – replace with Groq call)
-    function generateGhost() {
-      const prompt = document.getElementById('ghostPrompt').value.trim();
-      if (!prompt) return alert("Describe something...");
-      const output = document.getElementById('ghostOutput');
-      const section = document.getElementById('ghostOutputSection');
-      section.style.display = 'block';
-      output.textContent = `A poetic response to "${prompt}"...`; // pure output
-
-      if (document.getElementById('ghostTypewriterSwitch').checked) {
-        typeWriter(output.textContent, output);
-      }
-    }
-
-    // Critic (placeholder – replace with Groq)
-    function analyzeText() {
-      let text = document.getElementById('criticInput').value.trim();
-      if (!text) text = document.getElementById('transmuteOutput').textContent || document.getElementById('ghostOutput').textContent || "";
-      if (!text) return alert("Paste or generate text first...");
-      const output = document.getElementById('criticOutput');
-      const section = document.getElementById('criticOutputSection');
-      section.style.display = 'block';
-      output.textContent = `Analysis of: ${text}`; // pure analysis
-
-      // Add typewriter if you want
-    }
-
-    // Helpers
-    function copyText(id) {
-      navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => alert("Copied!"));
-    }
-
-    function speakText(id) {
-      const ut = new SpeechSynthesisUtterance(document.getElementById(id).textContent);
-      speechSynthesis.speak(ut);
-    }
-
-    function shareText(id) {
-      const text = document.getElementById(id).textContent;
-      if (navigator.share) navigator.share({ title: 'Keter Aether', text });
-      else alert("Share not supported");
-    }
-  </script>
 </body>
-  </html>
+</html>
