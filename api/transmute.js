@@ -1,11 +1,10 @@
-// api/transmute.js - Vercel API route (production-ready)
+// /api/transmute.js
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Method not allowed - use POST' });
+    return res.status(405).json({ success: false, error: 'Method not allowed – use POST' });
   }
 
   try {
-    // Parse body
     const { text, style, mode, modelChoice } = req.body;
 
     // Validate input
@@ -41,11 +40,16 @@ export default async function handler(req, res) {
     // ------------------------
     // CALL GROQ API
     // ------------------------
+    const GROQ_API_KEY = process.env.GROQ_API_KEY;
+    if (!GROQ_API_KEY) {
+      return res.status(500).json({ success: false, error: 'GROQ_API_KEY is not set.' });
+    }
+
     const groqResponse = await fetch(`https://api.groq.ai/v1/models/${selectedModel}/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+        'Authorization': `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
         model: selectedModel,
@@ -62,31 +66,19 @@ export default async function handler(req, res) {
     if (!groqResponse.ok) {
       const errorText = await groqResponse.text().catch(() => 'Unknown Groq error');
       console.error('Groq API error:', errorText);
-      return res.status(groqResponse.status).json({
-        success: false,
-        error: errorText
-      });
+      return res.status(groqResponse.status).json({ success: false, error: errorText });
     }
 
     const data = await groqResponse.json();
-
-    // Extract the message content
     let result = data.choices?.[0]?.message?.content?.trim() || 'The spirits are silent...';
 
-    // Remove any code fences (``` or ```lang)
+    // Remove any markdown/code fences
     result = result.replace(/^```[\w]*\n?/, '').replace(/```$/, '').trim();
 
-    // Return success
-    return res.status(200).json({
-      success: true,
-      transmuted: result
-    });
+    return res.status(200).json({ success: true, transmuted: result });
 
   } catch (err) {
     console.error('Function error:', err);
-    return res.status(500).json({
-      success: false,
-      error: err.message || 'Internal server error'
-    });
+    return res.status(500).json({ success: false, error: err.message || 'Internal server error' });
   }
 }
