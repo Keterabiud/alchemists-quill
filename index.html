@@ -9,10 +9,9 @@
 
   <style>
     :root {
-      --bg: #000000;
       --gold: #d4af37;
       --gold-glow: rgba(212, 175, 55, 0.6);
-      --dark-card: rgba(15, 15, 15, 0.88);
+      --dark: rgba(15, 15, 15, 0.92);
       --gray: #bbbbbb;
       --text: #f5f5f5;
       --shadow: 0 20px 80px rgba(0,0,0,0.95);
@@ -26,7 +25,7 @@
 
     body {
       font-family: 'Georgia', serif;
-      background: url('nebula-bg.jpg') no-repeat center center fixed;  /* ← your cosmic background */
+      background: url('nebula-bg.jpg') no-repeat center center fixed;
       background-size: cover;
       color: var(--text);
       min-height: 100vh;
@@ -42,29 +41,22 @@
       backdrop-filter: blur(12px);
       z-index: 1000;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
     }
 
+    .logo-container {
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .logo-container:hover {
+      transform: scale(1.08);
+    }
+
     .logo-img {
-      height: 55px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a, .nav-links button {
-      color: var(--gray);
-      text-decoration: none;
-      font-size: 1.1rem;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover, .nav-links button:hover {
-      color: var(--gold);
+      height: 60px;
+      filter: drop-shadow(0 0 10px var(--gold-glow));
     }
 
     main {
@@ -76,26 +68,26 @@
 
     .hero {
       text-align: center;
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
     }
 
     .hero-logo {
-      width: 280px;
+      width: 260px;
       max-width: 70%;
       margin-bottom: 1.5rem;
     }
 
     .tagline {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
       margin-bottom: 1rem;
-      color: var(--text);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
     }
 
     textarea {
       width: 100%;
       min-height: 140px;
       padding: 1.2rem;
-      background: rgba(26, 26, 26, 0.9);
+      background: rgba(26, 26, 26, 0.92);
       border: 1px solid #444;
       border-radius: 12px;
       color: white;
@@ -108,12 +100,13 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       justify-content: center;
+      align-items: center;
     }
 
     select, label, button {
-      padding: 0.9rem 1.3rem;
+      padding: 0.9rem 1.4rem;
       background: rgba(40,40,40,0.9);
       border: 1px solid #555;
       border-radius: 10px;
@@ -127,13 +120,13 @@
       color: black;
       border: none;
       font-weight: 600;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.35);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
       transition: all 0.3s ease;
     }
 
     button:hover {
       transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.55);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
     }
 
     .toggle-group {
@@ -151,21 +144,19 @@
     }
 
     #outputSection {
-      background: rgba(20,20,20,0.85);
+      background: rgba(20,20,20,0.9);
       border-radius: 12px;
       padding: 1.8rem;
       border: 1px solid #444;
-      margin-top: 2rem;
+      margin: 2rem 0;
       min-height: 180px;
-      position: relative;
     }
 
     #outputText {
-      font-size: 1.15rem;
-      line-height: 1.6;
+      font-size: 1.18rem;
+      line-height: 1.7;
       white-space: pre-wrap;
       word-wrap: break-word;
-      min-height: 100px;
     }
 
     .output-actions {
@@ -173,6 +164,7 @@
       display: flex;
       gap: 1rem;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .output-actions button {
@@ -180,54 +172,65 @@
       font-size: 1rem;
     }
 
+    /* Feature Cards */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.8rem;
+      margin: 3rem 0;
+    }
+
+    .feature-card {
+      background: rgba(20,20,20,0.92);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(212, 175, 55, 0.35);
+      border-color: var(--gold);
+    }
+
+    .feature-card h3 {
+      font-size: 1.6rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+    }
+
+    .feature-card p {
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
     /* Coming Soon – dramatic */
     .coming-soon {
       text-align: center;
-      margin: 5rem 0;
-      padding: 3rem 1.5rem;
-      background: linear-gradient(135deg, rgba(20,20,20,0.9), rgba(40,20,0,0.4));
-      border-radius: 16px;
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      box-shadow: 0 0 60px rgba(212, 175, 55, 0.25);
-      animation: pulse 8s infinite alternate;
+      margin: 6rem 0 4rem;
+      padding: 4rem 1.5rem;
+      background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(40,20,0,0.5));
+      border-radius: 24px;
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 0 80px rgba(212, 175, 55, 0.35);
+      animation: dramaticPulse 6s infinite alternate;
     }
 
-    @keyframes pulse {
-      0% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.2); }
-      100% { box-shadow: 0 0 80px rgba(212, 175, 55, 0.45); }
+    @keyframes dramaticPulse {
+      0% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.25); transform: scale(1); }
+      100% { box-shadow: 0 0 100px rgba(212, 175, 55, 0.55); transform: scale(1.01); }
     }
 
     .coming-soon h2 {
-      font-size: 2.8rem;
+      font-size: 3.2rem;
       color: var(--gold);
-      margin-bottom: 1rem;
-      text-shadow: 0 0 20px var(--gold-glow);
-    }
-
-    .coming-soon p {
-      font-size: 1.3rem;
-      color: var(--gray);
-      margin: 0.8rem 0;
-    }
-
-    .x-link {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-top: 1.2rem;
-      font-size: 1.1rem;
-    }
-
-    .x-link:hover {
-      color: var(--gold);
-    }
-
-    .x-icon {
-      height: 1.4rem;
-      filter: brightness(1.2);
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 30px var(--gold-glow);
     }
 
     footer {
@@ -238,20 +241,27 @@
     }
 
     @media (max-width: 600px) {
-      h1 { font-size: 2.2rem; }
-      .subtitle { font-size: 1.05rem; }
+      .hero-logo { width: 240px; }
+      .tagline { font-size: 1.6rem; }
+      .coming-soon h2 { font-size: 2.6rem; }
       .btn { padding: 1.2rem; font-size: 1.1rem; }
       .controls { flex-direction: column; align-items: stretch; }
+      .features-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
+  <header>
+    <div class="logo-container" onclick="window.open('https://x.com/abiudketerr', '_blank')">
+      <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
+    </div>
+  </header>
+
   <main>
     <section class="hero">
       <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
       <p class="tagline">Turn everyday words into something fun & magical ✨</p>
-      <blockquote id="rotatingQuote" class="quote"></blockquote>
     </section>
 
     <section class="input-section">
@@ -286,8 +296,7 @@
         <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
-      <div id="outputSection" class="output-section" style="display:none;">
-        <div id="styleLabel" class="output-header"></div>
+      <div id="outputSection" style="display:none;">
         <div id="outputText" class="output-text"></div>
 
         <div class="output-actions">
@@ -298,107 +307,107 @@
       </div>
     </section>
 
+    <!-- The three features -->
+    <section class="features-grid">
+      <div class="feature-card">
+        <h3>Transmutation Engine</h3>
+        <p>Transform any text into different styles, tones, slang, or languages with one click.</p>
+        <button onclick="document.getElementById('modernInput').focus()">Use Now</button>
+      </div>
+
+      <div class="feature-card">
+        <h3>Ghostwriter's Quill</h3>
+        <p>Summon original poetry, stories, or verses from a simple prompt or mood.</p>
+        <button onclick="alert('Ghostwriter coming soon — describe your idea!')">Try Prompt</button>
+      </div>
+
+      <div class="feature-card">
+        <h3>Critic's Eye</h3>
+        <p>Deep literary analysis: rhyme, meter, devices, tone, and improvement suggestions.</p>
+        <button onclick="alert('Critic coming soon — paste text to analyze!')">Analyze Text</button>
+      </div>
+    </section>
+
     <section class="coming-soon">
       <h2>Coming Soon</h2>
       <p>Premium voices • Real-time speech • Voice cloning</p>
-      <p>Follow on 
-        <a href="https://x.com/abiudketerr" target="_blank" class="x-link">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X" class="x-icon"/>
-          @abiudketerr
-        </a>
-      </p>
     </section>
   </main>
 
-  <footer class="footer">
+  <footer>
     <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
     <small>"We are such stuff as dreams are made on."</small>
   </footer>
 
   <script>
-    // Typewriter + emoji generation logic
-    const outputText = document.getElementById('outputText');
-    const typewriterSwitch = document.getElementById('typewriterSwitch');
-    const emojiSwitch = document.getElementById('emojiSwitch');
+    const outputTextEl = document.getElementById('outputText');
+    const typewriterToggle = document.getElementById('typewriterSwitch');
+    const emojiToggle = document.getElementById('emojiSwitch');
+
+    const emojis = ['✨','🔥','🌟','⚡','🪶','👑','💫','🌙','🖤','🌀','🌌','🔮','🗡️','🪐'];
+
+    function getRandomEmoji() {
+      return emojis[Math.floor(Math.random() * emojis.length)];
+    }
 
     function typeWriter(text, element, speed = 35) {
       let i = 0;
       element.textContent = '';
       const interval = setInterval(() => {
         if (i < text.length) {
-          element.textContent += text.charAt(i);
+          let char = text.charAt(i);
+          if (emojiToggle.checked && Math.random() < 0.18) {
+            char = getRandomEmoji() + char;
+          }
+          element.textContent += char;
           i++;
-          element.scrollTop = element.scrollHeight; // auto-scroll
+          element.scrollTop = element.scrollHeight;
         } else {
           clearInterval(interval);
         }
       }, speed);
     }
 
-    // Simple emoji pool for dynamic insertion
-    const emojiPool = ['✨', '🔥', '🌟', '⚡', '🪶', '👑', '💫', '🌙', '🖤', '🌀'];
-
-    function addRandomEmojis(text) {
-      if (!emojiSwitch.checked) return text;
-      const words = text.split(' ');
-      return words.map(word => {
-        if (Math.random() < 0.15) { // \~15% chance per word
-          const emoji = emojiPool[Math.floor(Math.random() * emojiPool.length)];
-          return Math.random() < 0.5 ? word + emoji : emoji + word;
-        }
-        return word;
-      }).join(' ');
-    }
-
-    // Simulate AI output (replace with your real transmutation logic)
-    function generateTransmutedText() {
-      const input = document.getElementById('modernInput').value.trim();
-      if (!input) return "Please type something first...";
-
+    // Fake transmutation (replace with real logic)
+    function transmute(text) {
       const style = document.getElementById('styleSelect').value;
-      let result = `This is a dramatic ${style} version of your text: ${input.toUpperCase()}!`;
-
-      // Add emojis during generation
-      result = addRandomEmojis(result);
-
-      return result;
+      return `${text.toUpperCase()} — transformed into pure ${style} magic!`;
     }
 
     document.getElementById('transmuteBtn').addEventListener('click', () => {
-      const outputSection = document.getElementById('outputSection');
-      outputSection.style.display = 'block';
+      const input = document.getElementById('modernInput').value.trim();
+      if (!input) return alert("Type something first...");
 
-      const text = generateTransmutedText();
+      document.getElementById('outputSection').style.display = 'block';
 
-      if (typewriterSwitch.checked) {
-        typeWriter(text, outputText, 30);
+      const result = transmute(input);
+
+      if (typewriterToggle.checked) {
+        typeWriter(result, outputTextEl);
       } else {
-        outputText.textContent = text;
+        outputTextEl.textContent = result;
       }
     });
 
-    // Copy function
     function copyText() {
-      navigator.clipboard.writeText(outputText.textContent)
-        .then(() => alert("Copied to clipboard!"))
+      navigator.clipboard.writeText(outputTextEl.textContent)
+        .then(() => alert("Copied!"))
         .catch(() => alert("Copy failed"));
     }
 
-    // Speak (basic)
     function speakText() {
-      const utterance = new SpeechSynthesisUtterance(outputText.textContent);
-      speechSynthesis.speak(utterance);
+      const ut = new SpeechSynthesisUtterance(outputTextEl.textContent);
+      speechSynthesis.speak(ut);
     }
 
-    // Share (basic web share API)
     function shareText() {
       if (navigator.share) {
         navigator.share({
-          title: 'Keter Aether Transmutation',
-          text: outputText.textContent,
-        }).catch(err => console.log("Share failed", err));
+          title: 'Keter Aether Creation',
+          text: outputTextEl.textContent,
+        });
       } else {
-        alert("Share not supported on this browser");
+        alert("Share not supported");
       }
     }
   </script>
