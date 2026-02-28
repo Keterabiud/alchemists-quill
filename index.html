@@ -4,243 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Keter Aether</title>
-
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-  <style>
-    :root {
-      --bg: #000000;
-      --gold: #d4af37;
-      --dark-card: #0f0f0f;
-      --gray: #aaaaaa;
-      --text: #f5f5f5;
-      --shadow: 0 20px 80px rgba(0,0,0,0.9);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Georgia', serif;
-      background: url('nebula-bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      padding: 1.5rem 2rem;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .logo-img {
-      height: 80px;
-      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
-    }
-
-    main {
-      flex: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .hero-logo {
-      width: 300px;
-      max-width: 80%;
-      margin-bottom: 1.5rem;
-    }
-
-    .tagline {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-      color: var(--gold);
-      text-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 160px;
-      padding: 1.2rem;
-      background: rgba(26, 26, 26, 0.9);
-      border: 1px solid #444;
-      border-radius: 12px;
-      color: white;
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      justify-content: center;
-    }
-
-    select, .toggle-group, button {
-      padding: 0.9rem 1.4rem;
-      background: rgba(40,40,40,0.9);
-      border: 1px solid #555;
-      border-radius: 10px;
-      color: white;
-      font-size: 1rem;
-    }
-
-    button {
-      background: linear-gradient(90deg, var(--gold), #e5c158);
-      color: black;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-      transition: all 0.3s;
-    }
-
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
-    }
-
-    .toggle-group {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
-    input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--gold);
-    }
-
-    #outputSection {
-      background: rgba(20,20,20,0.9);
-      border-radius: 12px;
-      padding: 1.8rem;
-      border: 1px solid #444;
-      margin-top: 2rem;
-      min-height: 200px;
-    }
-
-    #outputText {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
-
-    .output-actions {
-      margin-top: 1.5rem;
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .output-actions button {
-      padding: 0.8rem 1.6rem;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin: 4rem 0;
-    }
-
-    .feature {
-      background: rgba(20,20,20,0.9);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      transition: all 0.4s;
-    }
-
-    .feature:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(212, 175, 55, 0.35);
-    }
-
-    .feature h3 {
-      font-size: 1.6rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-
-    .feature p {
-      color: var(--gray);
-      line-height: 1.6;
-    }
-
-    .coming-soon {
-      text-align: center;
-      margin: 5rem 0;
-      padding: 3rem;
-      background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(40,20,0,0.5));
-      border-radius: 20px;
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      box-shadow: 0 0 70px rgba(212, 175, 55, 0.3);
-      animation: pulse 6s infinite alternate;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.25); }
-      100% { box-shadow: 0 0 90px rgba(212, 175, 55, 0.5); }
-    }
-
-    .coming-soon h2 {
-      font-size: 2.8rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--gray);
-      font-size: 0.95rem;
-    }
-
-    @media (max-width: 600px) {
-      .tagline { font-size: 1.6rem; }
-      .coming-soon h2 { font-size: 2.4rem; }
-      .features { grid-template-columns: 1fr; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-  <header>
-    <div class="logo-container" onclick="window.open('https://x.com/abiudketerr', '_blank')">
-      <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
-    </div>
+  <header class="header">
+    <nav class="navbar">
+      <div class="logo">
+        <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">API</a></li>
+        <li><button class="btn-enter">ENTER</button></li>
+      </ul>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
   </header>
 
-  <main>
+  <main class="main-content">
     <section class="hero">
       <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
       <p class="tagline">Turn everyday words into something fun & magical ✨</p>
+      <blockquote id="rotatingQuote" class="quote"></blockquote>
     </section>
 
     <section class="input-section">
-      <textarea id="modernInput" placeholder="Type your plea..." rows="6"></textarea>
+      <textarea
+        id="modernInput"
+        placeholder="Type your plea..."
+        rows="5"
+      ></textarea>
 
       <div class="controls">
         <select id="styleSelect">
@@ -258,20 +60,21 @@
           <option value="kiswahili">Kiswahili</option>
         </select>
 
-        <div class="toggle-group">
+        <label class="emoji-toggle">
+          <span>Add emojis?</span>
           <input type="checkbox" id="emojiSwitch" checked />
-          <label for="emojiSwitch">Add emojis?</label>
-        </div>
+        </label>
 
-        <div class="toggle-group">
-          <input type="checkbox" id="typewriterSwitch" checked />
-          <label for="typewriterSwitch">Typewriter ASMR?</label>
-        </div>
+        <label class="typewriter-toggle">
+          <span>Typewriter ASMR?</span>
+          <input type="checkbox" id="typewriterSwitch" />
+        </label>
 
         <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
-      <div id="outputSection" style="display:none;">
+      <div id="outputSection" class="output-section" style="display:none;">
+        <div id="styleLabel" class="output-header"></div>
         <div id="outputText" class="output-text"></div>
 
         <div class="output-actions">
@@ -282,7 +85,7 @@
       </div>
     </section>
 
-    <section class="features">
+    <section class="features" id="features">
       <div class="feature">
         <h3>Transmutation Engine</h3>
         <p>Change how people talk — modern to old, slang to formal, English to Sheng or German...</p>
@@ -300,89 +103,19 @@
     <section class="coming-soon">
       <h2>Coming Soon</h2>
       <p>Premium voices • Real-time speech • Voice cloning</p>
-      <p>Follow on X: 
-        <a href="https://x.com/abiudketerr" target="_blank">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X" style="height:1.2em; vertical-align:middle;"/>
-          @abiudketerr
-        </a>
-      </p>
+      <p>Follow <a href="https://x.com/abiudketerr" target="_blank">@abiudketerr</a></p>
     </section>
   </main>
 
-  <footer>
+  <footer class="footer">
     <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
     <small>"We are such stuff as dreams are made on."</small>
   </footer>
 
-  <script>
-    // Typewriter + emoji logic
-    const outputText = document.getElementById('outputText');
-    const typewriterSwitch = document.getElementById('typewriterSwitch');
-    const emojiSwitch = document.getElementById('emojiSwitch');
+  <audio id="typewriterClick" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-old-typewriter-key-press-1369.mp3" type="audio/mpeg">
+  </audio>
 
-    function typeWriter(text, element, speed = 40) {
-      let i = 0;
-      element.textContent = '';
-      const interval = setInterval(() => {
-        if (i < text.length) {
-          element.textContent += text.charAt(i);
-          i++;
-          element.scrollTop = element.scrollHeight;
-        } else {
-          clearInterval(interval);
-        }
-      }, speed);
-    }
-
-    // Simple fake transmutation (replace with real logic when ready)
-    function generateTransmutedText() {
-      const input = document.getElementById('modernInput').value.trim();
-      if (!input) return "Please type something first...";
-
-      const style = document.getElementById('styleSelect').value;
-      let result = `This is a dramatic ${style} version of your text: ${input.toUpperCase()}!`;
-
-      // Basic emoji addition if toggled
-      if (emojiSwitch.checked) {
-        result = result.replace(/!/g, '! ✨').replace(/\?/g, '? 🔥');
-      }
-
-      return result;
-    }
-
-    document.getElementById('transmuteBtn').addEventListener('click', () => {
-      const result = generateTransmutedText();
-      document.getElementById('outputSection').style.display = 'block';
-
-      if (typewriterSwitch.checked) {
-        typeWriter(result, outputText, 35);
-      } else {
-        outputText.textContent = result;
-      }
-    });
-
-    // Copy / Speak / Share
-    function copyText() {
-      navigator.clipboard.writeText(outputText.textContent)
-        .then(() => alert("Copied to clipboard!"))
-        .catch(() => alert("Copy failed"));
-    }
-
-    function speakText() {
-      const utterance = new SpeechSynthesisUtterance(outputText.textContent);
-      speechSynthesis.speak(utterance);
-    }
-
-    function shareText() {
-      if (navigator.share) {
-        navigator.share({
-          title: 'Keter Aether Transmutation',
-          text: outputText.textContent,
-        }).catch(err => console.log("Share failed", err));
-      } else {
-        alert("Share not supported on this browser");
-      }
-    }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
