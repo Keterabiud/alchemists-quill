@@ -63,33 +63,33 @@
       display: flex;
       justify-content: center;
       gap: 1.2rem;
-      margin: 100px 1rem 2rem;
+      margin: 90px 1rem 2rem;
       flex-wrap: wrap;
     }
 
     .mode-btn {
-      padding: 1rem 1.8rem;
+      padding: 0.9rem 1.6rem;
       background: linear-gradient(90deg, var(--gold), #e5c158);
       color: black;
       border: none;
       border-radius: 12px;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
       transition: all 0.3s ease;
-      min-width: 220px;
+      min-width: 200px;
+      text-align: center;
     }
 
     .mode-btn.active {
-      transform: scale(1.08);
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.7);
-      background: linear-gradient(90deg, #e5c158, var(--gold));
+      transform: scale(1.05);
+      box-shadow: 0 12px 35px rgba(212, 175, 55, 0.7);
     }
 
-    .mode-btn:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
+    .mode-btn:hover:not(.active) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(212, 175, 55, 0.55);
     }
 
     main {
@@ -100,7 +100,7 @@
 
     .section {
       display: none;
-      background: rgba(20,20,20,0.85);
+      background: rgba(20,20,20,0.88);
       border-radius: 16px;
       padding: 2rem;
       border: 1px solid #444;
@@ -111,7 +111,7 @@
       display: block;
     }
 
-    textarea, #ghostPrompt, #criticInput {
+    textarea {
       width: 100%;
       min-height: 140px;
       padding: 1.2rem;
@@ -128,7 +128,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
       justify-content: center;
       align-items: center;
     }
@@ -141,6 +141,20 @@
       color: white;
       font-size: 1rem;
       cursor: pointer;
+    }
+
+    button {
+      background: linear-gradient(90deg, var(--gold), #e5c158);
+      color: black;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
     }
 
     .toggle-group {
@@ -186,6 +200,61 @@
       font-size: 1rem;
     }
 
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .feature {
+      background: rgba(20,20,20,0.9);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s;
+    }
+
+    .feature:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(212, 175, 55, 0.35);
+    }
+
+    .feature h3 {
+      font-size: 1.6rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .feature p {
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .coming-soon {
+      text-align: center;
+      margin: 6rem 0 4rem;
+      padding: 4rem 1.5rem;
+      background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(40,20,0,0.5));
+      border-radius: 24px;
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 0 80px rgba(212, 175, 55, 0.35);
+      animation: dramaticPulse 6s infinite alternate;
+    }
+
+    @keyframes dramaticPulse {
+      0% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.25); transform: scale(1); }
+      100% { box-shadow: 0 0 100px rgba(212, 175, 55, 0.55); transform: scale(1.01); }
+    }
+
+    .coming-soon h2 {
+      font-size: 3.2rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 30px var(--gold-glow);
+    }
+
     footer {
       text-align: center;
       padding: 3rem 1rem;
@@ -198,6 +267,7 @@
       .mode-btn { width: 100%; }
       .hero-logo { width: 240px; }
       .tagline { font-size: 1.6rem; }
+      .coming-soon h2 { font-size: 2.6rem; }
     }
   </style>
 </head>
@@ -253,15 +323,15 @@
         <div id="transmuteOutput" class="output-text"></div>
         <div class="output-actions">
           <button onclick="copyText('transmuteOutput')">Copy</button>
-          <button onclick="speakText('transmuteOutput')">Speak</button>
+          <button onclick="speakText('transmuteOutput')">Speak Aloud</button>
           <button onclick="shareText('transmuteOutput')">Share</button>
         </div>
       </div>
     </section>
 
-    <!-- Ghostwriter's Quill -->
+    <!-- Ghostwriter -->
     <section id="ghost" class="section">
-      <textarea id="ghostPrompt" placeholder="Describe your poem, story idea, mood, or theme..." rows="6"></textarea>
+      <textarea id="ghostPrompt" placeholder="Describe your poem, story, mood, or theme..." rows="6"></textarea>
 
       <div class="controls">
         <div class="toggle-group">
@@ -281,7 +351,7 @@
         <div id="ghostOutput" class="output-text"></div>
         <div class="output-actions">
           <button onclick="copyText('ghostOutput')">Copy</button>
-          <button onclick="speakText('ghostOutput')">Speak</button>
+          <button onclick="speakText('ghostOutput')">Speak Aloud</button>
           <button onclick="shareText('ghostOutput')">Share</button>
         </div>
       </div>
@@ -298,7 +368,7 @@
         <div id="criticOutput" class="output-text"></div>
         <div class="output-actions">
           <button onclick="copyText('criticOutput')">Copy</button>
-          <button onclick="speakText('criticOutput')">Speak</button>
+          <button onclick="speakText('criticOutput')">Speak Aloud</button>
           <button onclick="shareText('criticOutput')">Share</button>
         </div>
       </div>
@@ -319,7 +389,7 @@
       document.querySelector(`button[onclick="switchMode('${mode}')"]`).classList.add('active');
     }
 
-    // Typewriter function
+    // Typewriter
     function typeWriter(text, element, speed = 35) {
       let i = 0;
       element.textContent = '';
@@ -334,25 +404,6 @@
       }, speed);
     }
 
-    // Style-aware emojis
-    const emojiSets = {
-      shakespeare: ['🪶', '🏰', '⚔️', '🌹', '📜', '👑'],
-      victorian: ['🕰️', '🖋️', '🪞', '🌸', '🎩', '👗'],
-      poe: ['🪦', '🦇', '🕯️', '📖', '🕸️', '☠️'],
-      romantic: ['❤️', '🌹', '🌅', '💌', '🌙', '💞'],
-      genz: ['🔥', '💀', '😭', '🤯', '🫶', '✨'],
-      sheng: ['🇰🇪', '🔥', '😂', '💪', '🫡', '👊'],
-      'old-english': ['🗡️', '🏰', '📜', '⚔️', '🛡️', '👑'],
-      'formal-british': ['☕', '🧐', '📜', '🎩', '🖋️', '🔔'],
-      german: ['🍺', '🦅', '⚡', '🛡️', '📜', '🎻'],
-      kiswahili: ['🌴', '🦁', '🇰🇪', '🌅', '💃', '🪘']
-    };
-
-    function getStyleEmoji(style) {
-      const set = emojiSets[style] || emojiSets['genz'];
-      return set[Math.floor(Math.random() * set.length)];
-    }
-
     // Transmutation Engine
     function transmuteText() {
       const input = document.getElementById('transmuteInput').value.trim();
@@ -363,13 +414,9 @@
       outputSection.style.display = 'block';
       outputText.textContent = "Transmuting...";
 
+      // Replace with real Groq call later
       const style = document.getElementById('styleSelect').value;
-      // Fake transmutation – replace with real API call
-      let result = input.toUpperCase() + ` — in ${style} style!`;
-
-      if (document.getElementById('emojiSwitch').checked) {
-        result += ' ' + getStyleEmoji(style);
-      }
+      const result = input.toUpperCase(); // pure output – no prefix
 
       if (document.getElementById('typewriterSwitch').checked) {
         typeWriter(result, outputText);
@@ -378,18 +425,18 @@
       }
     }
 
-    // Ghostwriter's Quill
+    // Ghostwriter
     function generateGhost() {
       const prompt = document.getElementById('ghostPrompt').value.trim();
-      if (!prompt) return alert("Give me an idea first...");
+      if (!prompt) return alert("Describe something first...");
 
       const outputSection = document.getElementById('ghostOutputSection');
       const outputText = document.getElementById('ghostOutput');
       outputSection.style.display = 'block';
       outputText.textContent = "Summoning...";
 
-      // Fake generation – replace with real API
-      const result = `In twilight's embrace, where shadows dance,\n${prompt} whispers through the night... 🪶`;
+      // Fake creative generation – replace with Groq
+      const result = `From the void: ${prompt}...\n\nShadows whisper, stars align,\nA tale begins in moonlit rhyme...`;
 
       if (document.getElementById('ghostTypewriterSwitch').checked) {
         typeWriter(result, outputText);
@@ -402,12 +449,10 @@
     function analyzeText() {
       let text = document.getElementById('criticInput').value.trim();
 
-      // Use last output if input empty
       if (!text) {
         text = document.getElementById('transmuteOutput').textContent ||
-               document.getElementById('ghostOutput').textContent ||
-               "";
-        if (!text) return alert("Generate or paste some text first!");
+               document.getElementById('ghostOutput').textContent || "";
+        if (!text) return alert("Generate or paste text first!");
       }
 
       const outputSection = document.getElementById('criticOutputSection');
@@ -415,13 +460,13 @@
       outputSection.style.display = 'block';
       outputText.textContent = "Analyzing...";
 
-      // Fake analysis – replace with real API
-      const result = `Critic's Eye:\n\nTone: Mystical & dramatic\nStructure: Poetic, free verse\nDevices: Metaphor, imagery, alliteration\nSuggestion: Add more sensory details for deeper immersion.`;
+      // Fake analysis – replace with Groq
+      const result = `Critic's Eye:\n\n- Tone: Dramatic & mystical\n- Structure: Free verse\n- Devices: Metaphor, imagery\n- Suggestion: Add sensory details for immersion.`;
 
       outputText.textContent = result;
     }
 
-    // Shared helpers
+    // Helpers
     function copyText(id) {
       const text = document.getElementById(id).textContent;
       navigator.clipboard.writeText(text).then(() => alert("Copied!"));
@@ -443,4 +488,4 @@
     }
   </script>
 </body>
-</html>
+            </html>
