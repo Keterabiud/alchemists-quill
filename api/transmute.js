@@ -1,11 +1,11 @@
-// /api/transmute.js
+// /api/transmute.js - Groq OSS 6B model (Fast)
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed – use POST' });
   }
 
   try {
-    const { text, style, mode, modelChoice } = req.body;
+    const { text, style, mode } = req.body;
 
     // Validate input
     if (!text || typeof text !== 'string' || text.trim() === '') {
@@ -13,14 +13,9 @@ export default async function handler(req, res) {
     }
 
     // ------------------------
-    // MODEL SELECTION
+    // Select model (hardcoded to 6B)
     // ------------------------
-    const MODEL_MAP = {
-      fast: 'gpt-oss-6b',
-      balanced: 'gpt-oss-13b',
-      premium: 'gpt-oss-120b'
-    };
-    const selectedModel = MODEL_MAP[modelChoice] || MODEL_MAP.balanced;
+    const selectedModel = 'gpt-oss-6b';
 
     // ------------------------
     // SYSTEM PROMPT BASED ON MODE
@@ -38,7 +33,7 @@ export default async function handler(req, res) {
     }
 
     // ------------------------
-    // CALL GROQ API
+    // Call Groq API
     // ------------------------
     const GROQ_API_KEY = process.env.GROQ_API_KEY;
     if (!GROQ_API_KEY) {
