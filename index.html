@@ -1,83 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Keter Aether</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keter Aether</title>
 
-  <link rel="stylesheet" href="styles.css" />
+<!-- FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Styles -->
+<link rel="stylesheet" href="styles.css">
+
 </head>
-
 <body>
 
-<header class="header">
-  <div class="navbar">
-    <img src="/images/logo-clean.png" class="logo-img" alt="Keter Aether"/>
-  </div>
+<header>
+  <img src="/images/logo-clean.png" alt="Keter Aether" class="logo" onclick="window.open('https://x.com/abiudketerr','_blank')">
 </header>
 
-<section class="hero">
-  <img src="/images/logo-clean.png" class="hero-logo" alt="Keter Aether"/>
-  <h1 class="tagline">Alchemy of Language</h1>
-  <p class="quote">“Give me your words — I shall transfigure them.”</p>
-</section>
+<!-- Mode Pills -->
+<div class="mode-pills" id="modePills">
+  <button class="pill active" data-mode="transmute">Transmutation Engine</button>
+  <button class="pill" data-mode="ghostwriter">Ghostwriter's Quill</button>
+  <button class="pill" data-mode="critic">Critic's Eye</button>
+</div>
 
-<section class="input-section">
-
-  <!-- MODE PILLS -->
-  <div class="mode-pills">
-    <button class="pill active" data-mode="transmute">Transmutation</button>
-    <button class="pill" data-mode="ghostwriter">Ghostwriter</button>
-    <button class="pill" data-mode="critic">Critic</button>
-  </div>
-
-  <textarea id="mainInput" placeholder="Utter the forbidden phrase..."></textarea>
+<!-- Input Section -->
+<div class="input-section">
+  <textarea id="modernInput" placeholder="Type your plea..."></textarea>
 
   <div class="controls">
     <select id="styleSelect">
-      <optgroup label="Classical">
-        <option value="Shakespearean">Shakespearean</option>
-        <option value="Victorian">Victorian</option>
-        <option value="Old English">Old English</option>
-        <option value="Romantic">Romantic</option>
-        <option value="Poe Gothic">Edgar Allan Poe (Gothic)</option>
-      </optgroup>
-
-      <optgroup label="Modern">
-        <option value="Formal British">Formal British</option>
-        <option value="Gen Z Slang">Gen Z Slang</option>
-      </optgroup>
-
-      <optgroup label="Languages">
-        <option value="Kiswahili">Kiswahili</option>
-        <option value="Sheng">Sheng (Kenyan Street)</option>
-      </optgroup>
+      <option value="shakespeare">Shakespearean</option>
+      <option value="victorian">Victorian</option>
+      <option value="old-english">Old English</option>
+      <option value="poe">Poe (Gothic)</option>
+      <option value="romantic">Romantic</option>
+      <option value="genz">Gen Z Slang</option>
+      <option value="emoji-genz">Emoji-fied Gen Z</option>
+      <option value="sheng">Sheng (Kenyan street)</option>
+      <option value="formal-british">Formal British</option>
+      <option value="kiswahili">Kiswahili</option>
     </select>
 
     <label class="typewriter-toggle">
-      <input type="checkbox" id="typewriterSwitch" checked />
-      Typewriter ASMR
+      <input type="checkbox" id="typewriterSwitch"> Typewriter ASMR
+    </label>
+
+    <label class="emoji-toggle">
+      <input type="checkbox" id="emojiSwitch" checked> Add Emojis
     </label>
   </div>
 
-  <button id="transmuteBtn">Begin the Alchemy ✨</button>
+  <button id="transmuteBtn">Transmute ✨</button>
 
-  <div class="output-section" id="outputSection">
-    <div class="output-text" id="outputText"></div>
+</div>
 
-    <div class="output-actions">
-      <button onclick="copyText()">Copy</button>
-      <button onclick="speakText()">Speak</button>
-      <button onclick="shareText()">Share</button>
-    </div>
+<!-- Output Section -->
+<div id="outputSection" class="output-section">
+  <div id="outputText" class="output-text"></div>
+
+  <div class="output-actions">
+    <button onclick="copyText()"><i class="fa-regular fa-copy"></i> Copy</button>
+    <button onclick="speakText()"><i class="fa-regular fa-comment"></i> Speak</button>
+    <button onclick="shareText()"><i class="fa-solid fa-share"></i> Share</button>
   </div>
+</div>
 
-</section>
-
-<footer class="footer">
-  Conjured by <strong>KETER</strong>
+<!-- Footer -->
+<footer>
+  © 2025 Keter Aether — <strong>KETER</strong>
 </footer>
 
+<!-- Typewriter click sound -->
+<audio id="typewriterClick" src="/sounds/typewriter-click.mp3" preload="auto"></audio>
+
+<!-- Scripts -->
 <script src="app.js"></script>
+
 </body>
 </html>
