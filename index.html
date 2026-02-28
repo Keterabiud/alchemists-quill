@@ -9,7 +9,6 @@
 
   <style>
     :root {
-      --bg: #0b0b0c;
       --gold: #d4af37;
       --gold-glow: rgba(212, 175, 55, 0.6);
       --dark: rgba(15, 15, 15, 0.92);
@@ -60,31 +59,59 @@
       filter: drop-shadow(0 0 10px var(--gold-glow));
     }
 
+    .mode-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      margin: 100px 1rem 2rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      padding: 1rem 1.8rem;
+      background: linear-gradient(90deg, var(--gold), #e5c158);
+      color: black;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+      transition: all 0.3s ease;
+      min-width: 220px;
+    }
+
+    .mode-btn.active {
+      transform: scale(1.08);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.7);
+      background: linear-gradient(90deg, #e5c158, var(--gold));
+    }
+
+    .mode-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
+    }
+
     main {
-      padding-top: 100px;
       max-width: 1100px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
 
-    .hero {
-      text-align: center;
-      margin-bottom: 3rem;
+    .section {
+      display: none;
+      background: rgba(20,20,20,0.85);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid #444;
+      margin-bottom: 2rem;
     }
 
-    .hero-logo {
-      width: 260px;
-      max-width: 70%;
-      margin-bottom: 1.5rem;
+    .section.active {
+      display: block;
     }
 
-    .tagline {
-      font-size: 1.9rem;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    }
-
-    textarea {
+    textarea, #ghostPrompt, #criticInput {
       width: 100%;
       min-height: 140px;
       padding: 1.2rem;
@@ -116,20 +143,6 @@
       cursor: pointer;
     }
 
-    button {
-      background: linear-gradient(90deg, var(--gold), #e5c158);
-      color: black;
-      border: none;
-      font-weight: 600;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
-    }
-
     .toggle-group {
       display: flex;
       align-items: center;
@@ -144,17 +157,16 @@
       accent-color: var(--gold);
     }
 
-    #outputSection {
+    .output-section {
       background: rgba(20,20,20,0.9);
       border-radius: 12px;
       padding: 1.8rem;
       border: 1px solid #444;
       margin-top: 2rem;
       min-height: 180px;
-      display: none;
     }
 
-    #outputText {
+    .output-text {
       font-size: 1.18rem;
       line-height: 1.7;
       white-space: pre-wrap;
@@ -174,61 +186,6 @@
       font-size: 1rem;
     }
 
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin: 4rem 0;
-    }
-
-    .feature {
-      background: rgba(20,20,20,0.9);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      transition: all 0.4s;
-    }
-
-    .feature:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(212, 175, 55, 0.35);
-    }
-
-    .feature h3 {
-      font-size: 1.6rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-
-    .feature p {
-      color: var(--gray);
-      line-height: 1.6;
-    }
-
-    .coming-soon {
-      text-align: center;
-      margin: 6rem 0 4rem;
-      padding: 4rem 1.5rem;
-      background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(40,20,0,0.5));
-      border-radius: 24px;
-      border: 2px solid rgba(212, 175, 55, 0.4);
-      box-shadow: 0 0 80px rgba(212, 175, 55, 0.35);
-      animation: dramaticPulse 6s infinite alternate;
-    }
-
-    @keyframes dramaticPulse {
-      0% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.25); transform: scale(1); }
-      100% { box-shadow: 0 0 100px rgba(212, 175, 55, 0.55); transform: scale(1.01); }
-    }
-
-    .coming-soon h2 {
-      font-size: 3.2rem;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-      text-shadow: 0 0 30px var(--gold-glow);
-    }
-
     footer {
       text-align: center;
       padding: 3rem 1rem;
@@ -237,12 +194,10 @@
     }
 
     @media (max-width: 600px) {
+      .mode-buttons { flex-direction: column; }
+      .mode-btn { width: 100%; }
       .hero-logo { width: 240px; }
       .tagline { font-size: 1.6rem; }
-      .coming-soon h2 { font-size: 2.6rem; }
-      .btn { padding: 1.2rem; font-size: 1.1rem; }
-      .controls { flex-direction: column; align-items: stretch; }
-      .features { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -254,14 +209,16 @@
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
-      <p class="tagline">Turn everyday words into something fun & magical ✨</p>
-    </section>
+  <div class="mode-buttons">
+    <button class="mode-btn active" onclick="switchMode('transmute')">Transmutation Engine</button>
+    <button class="mode-btn" onclick="switchMode('ghost')">Ghostwriter's Quill</button>
+    <button class="mode-btn" onclick="switchMode('critic')">Critic's Eye</button>
+  </div>
 
-    <section class="input-section">
-      <textarea id="modernInput" placeholder="Type your plea..." rows="6"></textarea>
+  <main>
+    <!-- Transmutation Engine -->
+    <section id="transmute" class="section active">
+      <textarea id="transmuteInput" placeholder="Type your plea..." rows="6"></textarea>
 
       <div class="controls">
         <select id="styleSelect">
@@ -289,38 +246,62 @@
           <label for="typewriterSwitch">Typewriter ASMR?</label>
         </div>
 
-        <button id="transmuteBtn">Let's Go! 🚀</button>
+        <button onclick="transmuteText()">Transmute ✨</button>
       </div>
 
-      <div id="outputSection" style="display:none;">
-        <div id="outputText" class="output-text"></div>
-
+      <div id="transmuteOutputSection" class="output-section" style="display:none;">
+        <div id="transmuteOutput" class="output-text"></div>
         <div class="output-actions">
-          <button onclick="copyText()">Copy</button>
-          <button onclick="speakText()">Speak Aloud</button>
-          <button onclick="shareText()">Share</button>
+          <button onclick="copyText('transmuteOutput')">Copy</button>
+          <button onclick="speakText('transmuteOutput')">Speak</button>
+          <button onclick="shareText('transmuteOutput')">Share</button>
         </div>
       </div>
     </section>
 
-    <section class="features">
-      <div class="feature">
-        <h3>Transmutation Engine</h3>
-        <p>Change how people talk — modern to old, slang to formal, English to Sheng or German...</p>
+    <!-- Ghostwriter's Quill -->
+    <section id="ghost" class="section">
+      <textarea id="ghostPrompt" placeholder="Describe your poem, story idea, mood, or theme..." rows="6"></textarea>
+
+      <div class="controls">
+        <div class="toggle-group">
+          <input type="checkbox" id="ghostEmojiSwitch" />
+          <label for="ghostEmojiSwitch">Add emojis?</label>
+        </div>
+
+        <div class="toggle-group">
+          <input type="checkbox" id="ghostTypewriterSwitch" />
+          <label for="ghostTypewriterSwitch">Typewriter ASMR?</label>
+        </div>
+
+        <button onclick="generateGhost()">Invoke Quill 🪶</button>
       </div>
-      <div class="feature">
-        <h3>Ghostwriter's Quill</h3>
-        <p>Summon original verses from a simple prompt.</p>
-      </div>
-      <div class="feature">
-        <h3>Critic's Eye</h3>
-        <p>Break down meter, rhyme & literary devices.</p>
+
+      <div id="ghostOutputSection" class="output-section" style="display:none;">
+        <div id="ghostOutput" class="output-text"></div>
+        <div class="output-actions">
+          <button onclick="copyText('ghostOutput')">Copy</button>
+          <button onclick="speakText('ghostOutput')">Speak</button>
+          <button onclick="shareText('ghostOutput')">Share</button>
+        </div>
       </div>
     </section>
 
-    <section class="coming-soon">
-      <h2>Coming Soon</h2>
-      <p>Premium voices • Real-time speech • Voice cloning</p>
+    <!-- Critic's Eye -->
+    <section id="critic" class="section">
+      <p style="margin-bottom:1rem; color:var(--gray);">Paste text or use last output</p>
+      <textarea id="criticInput" placeholder="Paste text to analyze..." rows="8"></textarea>
+
+      <button onclick="analyzeText()">Analyze 🔍</button>
+
+      <div id="criticOutputSection" class="output-section" style="display:none; margin-top:2rem;">
+        <div id="criticOutput" class="output-text"></div>
+        <div class="output-actions">
+          <button onclick="copyText('criticOutput')">Copy</button>
+          <button onclick="speakText('criticOutput')">Speak</button>
+          <button onclick="shareText('criticOutput')">Share</button>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -330,9 +311,30 @@
   </footer>
 
   <script>
-    const outputTextEl = document.getElementById('outputText');
+    // Mode switching
+    function switchMode(mode) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(mode).classList.add('active');
+      document.querySelector(`button[onclick="switchMode('${mode}')"]`).classList.add('active');
+    }
 
-    // Style-specific emoji sets (intelligent placement)
+    // Typewriter function
+    function typeWriter(text, element, speed = 35) {
+      let i = 0;
+      element.textContent = '';
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          element.scrollTop = element.scrollHeight;
+        } else {
+          clearInterval(interval);
+        }
+      }, speed);
+    }
+
+    // Style-aware emojis
     const emojiSets = {
       shakespeare: ['🪶', '🏰', '⚔️', '🌹', '📜', '👑'],
       victorian: ['🕰️', '🖋️', '🪞', '🌸', '🎩', '👗'],
@@ -341,9 +343,7 @@
       genz: ['🔥', '💀', '😭', '🤯', '🫶', '✨'],
       sheng: ['🇰🇪', '🔥', '😂', '💪', '🫡', '👊'],
       'old-english': ['🗡️', '🏰', '📜', '⚔️', '🛡️', '👑'],
-      'emoji-genz': ['🔥', '💀', '🫡', '🤌', '🫶', '😭'],
       'formal-british': ['☕', '🧐', '📜', '🎩', '🖋️', '🔔'],
-      'sheng-english': ['🔥', '🇰🇪', '😂', '💪', '🫶', '👊'],
       german: ['🍺', '🦅', '⚡', '🛡️', '📜', '🎻'],
       kiswahili: ['🌴', '🦁', '🇰🇪', '🌅', '💃', '🪘']
     };
@@ -353,88 +353,94 @@
       return set[Math.floor(Math.random() * set.length)];
     }
 
-    function typeWriter(text, element, speed = 35) {
-      let i = 0;
-      element.textContent = '';
-      const interval = setInterval(() => {
-        if (i < text.length) {
-          let char = text.charAt(i);
-          // Intelligent emoji placement: after punctuation or every \~10 chars
-          if (document.getElementById('emojiSwitch').checked && (char === '.' || char === '!' || char === '?' || char === ',' || i % 10 === 0)) {
-            char += getStyleEmoji(document.getElementById('styleSelect').value);
-          }
-          element.textContent += char;
-          i++;
-          element.scrollTop = element.scrollHeight;
-        } else {
-          clearInterval(interval);
-        }
-      }, speed);
-    }
-
-    document.getElementById('transmuteBtn').addEventListener('click', async () => {
-      const input = document.getElementById('modernInput').value.trim();
+    // Transmutation Engine
+    function transmuteText() {
+      const input = document.getElementById('transmuteInput').value.trim();
       if (!input) return alert("Type something first...");
 
-      const outputSection = document.getElementById('outputSection');
-      const outputText = document.getElementById('outputText');
+      const outputSection = document.getElementById('transmuteOutputSection');
+      const outputText = document.getElementById('transmuteOutput');
       outputSection.style.display = 'block';
       outputText.textContent = "Transmuting...";
 
-      try {
-        const response = await fetch('/api/transmute', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            text: input,
-            style: document.getElementById('styleSelect').value
-          })
-        });
+      const style = document.getElementById('styleSelect').value;
+      // Fake transmutation – replace with real API call
+      let result = input.toUpperCase() + ` — in ${style} style!`;
 
-        const data = await response.json();
-
-        if (!data.success) {
-          outputText.textContent = "Error: " + (data.error || 'Unknown error');
-          console.error(data);
-          return;
-        }
-
-        const result = data.transmuted;
-
-        if (document.getElementById('typewriterSwitch').checked) {
-          typeWriter(result, outputText);
-        } else {
-          outputText.textContent = result;
-        }
-      } catch (err) {
-        outputText.textContent = "Network error: " + err.message;
-        console.error(err);
+      if (document.getElementById('emojiSwitch').checked) {
+        result += ' ' + getStyleEmoji(style);
       }
-    });
 
-    function copyText() {
-      navigator.clipboard.writeText(document.getElementById('outputText').textContent)
-        .then(() => alert("Copied!"))
-        .catch(() => alert("Copy failed"));
+      if (document.getElementById('typewriterSwitch').checked) {
+        typeWriter(result, outputText);
+      } else {
+        outputText.textContent = result;
+      }
     }
 
-    function speakText() {
-      const ut = new SpeechSynthesisUtterance(document.getElementById('outputText').textContent);
+    // Ghostwriter's Quill
+    function generateGhost() {
+      const prompt = document.getElementById('ghostPrompt').value.trim();
+      if (!prompt) return alert("Give me an idea first...");
+
+      const outputSection = document.getElementById('ghostOutputSection');
+      const outputText = document.getElementById('ghostOutput');
+      outputSection.style.display = 'block';
+      outputText.textContent = "Summoning...";
+
+      // Fake generation – replace with real API
+      const result = `In twilight's embrace, where shadows dance,\n${prompt} whispers through the night... 🪶`;
+
+      if (document.getElementById('ghostTypewriterSwitch').checked) {
+        typeWriter(result, outputText);
+      } else {
+        outputText.textContent = result;
+      }
+    }
+
+    // Critic's Eye
+    function analyzeText() {
+      let text = document.getElementById('criticInput').value.trim();
+
+      // Use last output if input empty
+      if (!text) {
+        text = document.getElementById('transmuteOutput').textContent ||
+               document.getElementById('ghostOutput').textContent ||
+               "";
+        if (!text) return alert("Generate or paste some text first!");
+      }
+
+      const outputSection = document.getElementById('criticOutputSection');
+      const outputText = document.getElementById('criticOutput');
+      outputSection.style.display = 'block';
+      outputText.textContent = "Analyzing...";
+
+      // Fake analysis – replace with real API
+      const result = `Critic's Eye:\n\nTone: Mystical & dramatic\nStructure: Poetic, free verse\nDevices: Metaphor, imagery, alliteration\nSuggestion: Add more sensory details for deeper immersion.`;
+
+      outputText.textContent = result;
+    }
+
+    // Shared helpers
+    function copyText(id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => alert("Copied!"));
+    }
+
+    function speakText(id) {
+      const text = document.getElementById(id).textContent;
+      const ut = new SpeechSynthesisUtterance(text);
       speechSynthesis.speak(ut);
     }
 
-    function shareText() {
+    function shareText(id) {
+      const text = document.getElementById(id).textContent;
       if (navigator.share) {
-        navigator.share({
-          title: 'Keter Aether Creation',
-          text: document.getElementById('outputText').textContent,
-        });
+        navigator.share({ title: 'Keter Aether', text });
       } else {
         alert("Share not supported");
       }
     }
   </script>
 </body>
-            </html>
+</html>
