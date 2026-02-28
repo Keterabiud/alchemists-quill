@@ -5,22 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Keter Aether</title>
 
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 
   <style>
     :root {
       --bg: #000000;
       --gold: #d4af37;
-      --gold-dark: #b8972e;
-      --dark-card: #0f0f0f;
-      --gray: #aaaaaa;
+      --gold-glow: rgba(212, 175, 55, 0.6);
+      --dark-card: rgba(15, 15, 15, 0.88);
+      --gray: #bbbbbb;
       --text: #f5f5f5;
-      --shadow: 0 20px 80px rgba(0,0,0,0.9);
+      --shadow: 0 20px 80px rgba(0,0,0,0.95);
     }
 
     * {
@@ -31,388 +26,381 @@
 
     body {
       font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
+      background: url('nebula-bg.jpg') no-repeat center center fixed;  /* ← your cosmic background */
+      background-size: cover;
       color: var(--text);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    #login-gate {
+    header {
+      position: fixed;
+      top: 0;
       width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-    }
-
-    .login-box {
-      text-align: center;
-      width: 100%;
-      max-width: 420px;
-      padding: 2.8rem 2rem;
-      background: rgba(15, 15, 15, 0.97);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(212, 175, 55, 0.25);
+      padding: 1.2rem 2rem;
+      background: rgba(0,0,0,0.65);
       backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .logo {
-      width: 100px;
-      margin-bottom: 2rem;
+    .logo-img {
+      height: 55px;
     }
 
-    h1 {
-      font-size: 2.6rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-      line-height: 1.1;
-      text-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
     }
 
-    .subtitle {
-      font-size: 1.15rem;
+    .nav-links a, .nav-links button {
       color: var(--gray);
-      margin-bottom: 2.2rem;
-      line-height: 1.5;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s;
     }
 
-    .auth-form {
-      margin-top: 1.8rem;
+    .nav-links a:hover, .nav-links button:hover {
+      color: var(--gold);
     }
 
-    .input-group {
-      position: relative;
+    main {
+      padding-top: 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero-logo {
+      width: 280px;
+      max-width: 70%;
       margin-bottom: 1.5rem;
     }
 
-    .input-icon {
-      position: absolute;
-      left: 1.2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray);
-      font-size: 1.4rem;
+    .tagline {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--text);
     }
 
-    input {
+    textarea {
       width: 100%;
-      padding: 1.3rem 1rem 1.3rem 3.8rem;
-      background: #1a1a1a;
-      border: 1px solid #333;
+      min-height: 140px;
+      padding: 1.2rem;
+      background: rgba(26, 26, 26, 0.9);
+      border: 1px solid #444;
       border-radius: 12px;
       color: white;
       font-size: 1.1rem;
-      transition: all 0.3s ease;
+      resize: vertical;
+      margin-bottom: 1.2rem;
     }
 
-    input:focus {
-      outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      justify-content: center;
     }
 
-    .btn {
-      width: 100%;
-      padding: 1.4rem;
+    select, label, button {
+      padding: 0.9rem 1.3rem;
+      background: rgba(40,40,40,0.9);
+      border: 1px solid #555;
+      border-radius: 10px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button {
       background: linear-gradient(90deg, var(--gold), #e5c158);
       color: black;
       border: none;
-      border-radius: 12px;
-      font-size: 1.2rem;
       font-weight: 600;
-      cursor: pointer;
-      margin: 1rem 0;
-      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.45);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.35);
       transition: all 0.3s ease;
-      touch-action: manipulation;
     }
 
-    .btn:active {
-      transform: scale(0.98);
+    button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.55);
     }
 
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 50px rgba(212, 175, 55, 0.6);
-    }
-
-    .btn.secondary {
-      background: transparent;
-      border: 2px solid var(--gold);
-      color: var(--gold);
-    }
-
-    .btn.google {
-      background: #4285F4;
-      color: white;
-    }
-
-    .create-account {
-      margin-top: 1.8rem;
-      font-size: 1.05rem;
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1rem;
       color: var(--gray);
     }
 
-    .create-account a {
+    .toggle-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--gold);
+    }
+
+    #outputSection {
+      background: rgba(20,20,20,0.85);
+      border-radius: 12px;
+      padding: 1.8rem;
+      border: 1px solid #444;
+      margin-top: 2rem;
+      min-height: 180px;
+      position: relative;
+    }
+
+    #outputText {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 100px;
+    }
+
+    .output-actions {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .output-actions button {
+      padding: 0.8rem 1.6rem;
+      font-size: 1rem;
+    }
+
+    /* Coming Soon – dramatic */
+    .coming-soon {
+      text-align: center;
+      margin: 5rem 0;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(135deg, rgba(20,20,20,0.9), rgba(40,20,0,0.4));
+      border-radius: 16px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 0 60px rgba(212, 175, 55, 0.25);
+      animation: pulse 8s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.2); }
+      100% { box-shadow: 0 0 80px rgba(212, 175, 55, 0.45); }
+    }
+
+    .coming-soon h2 {
+      font-size: 2.8rem;
       color: var(--gold);
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px var(--gold-glow);
+    }
+
+    .coming-soon p {
+      font-size: 1.3rem;
+      color: var(--gray);
+      margin: 0.8rem 0;
+    }
+
+    .x-link {
+      color: white;
       text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+      font-size: 1.1rem;
     }
 
-    #main-site {
-      display: none;
+    .x-link:hover {
+      color: var(--gold);
     }
 
-    @media (max-width: 480px) {
-      .login-box {
-        padding: 2.2rem 1.5rem;
-      }
+    .x-icon {
+      height: 1.4rem;
+      filter: brightness(1.2);
+    }
 
-      h1 {
-        font-size: 2.3rem;
-      }
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
 
-      .subtitle {
-        font-size: 1.05rem;
-      }
-
-      .btn {
-        padding: 1.3rem;
-        font-size: 1.15rem;
-      }
-
-      input {
-        font-size: 1.05rem;
-        padding: 1.2rem 1rem 1.2rem 3.6rem;
-      }
+    @media (max-width: 600px) {
+      h1 { font-size: 2.2rem; }
+      .subtitle { font-size: 1.05rem; }
+      .btn { padding: 1.2rem; font-size: 1.1rem; }
+      .controls { flex-direction: column; align-items: stretch; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Login Gate -->
-  <div id="login-gate">
-    <div class="login-box">
-      <img src="/images/logo-clean.png" alt="Keter Aether" class="logo"/>
-      <h1>Welcome to Keter Aether</h1>
-      <p class="subtitle">Sign in or create an account to access the transmutation engine</p>
+  <main>
+    <section class="hero">
+      <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
+      <p class="tagline">Turn everyday words into something fun & magical ✨</p>
+      <blockquote id="rotatingQuote" class="quote"></blockquote>
+    </section>
 
-      <div class="auth-form">
-        <div class="input-group">
-          <i class="fas fa-envelope input-icon"></i>
-          <input type="email" id="email" placeholder="Enter your email" required />
+    <section class="input-section">
+      <textarea id="modernInput" placeholder="Type your plea..." rows="6"></textarea>
+
+      <div class="controls">
+        <select id="styleSelect">
+          <option value="shakespeare">Shakespearean</option>
+          <option value="victorian">Victorian</option>
+          <option value="poe">Poe (Gothic)</option>
+          <option value="romantic">Romantic</option>
+          <option value="genz">Gen Z Slang</option>
+          <option value="sheng">Sheng (Kenyan street)</option>
+          <option value="old-english">Old English</option>
+          <option value="emoji-genz">Emoji-fied Gen Z</option>
+          <option value="formal-british">Formal British</option>
+          <option value="sheng-english">Sheng + English mix</option>
+          <option value="german">German</option>
+          <option value="kiswahili">Kiswahili</option>
+        </select>
+
+        <div class="toggle-group">
+          <input type="checkbox" id="emojiSwitch" checked />
+          <label for="emojiSwitch">Add emojis?</label>
         </div>
 
-        <div class="input-group">
-          <i class="fas fa-lock input-icon"></i>
-          <input type="password" id="password" placeholder="Enter your password" required />
+        <div class="toggle-group">
+          <input type="checkbox" id="typewriterSwitch" checked />
+          <label for="typewriterSwitch">Typewriter ASMR?</label>
         </div>
 
-        <button onclick="signIn()">Sign In</button>
-        <button onclick="signUp()">Create Account</button>
-        <button onclick="googleSignIn()">Continue with Google</button>
+        <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
-      <div class="create-account">
-        Don't have an account? <a href="#" onclick="signUp()">Create one</a>
+      <div id="outputSection" class="output-section" style="display:none;">
+        <div id="styleLabel" class="output-header"></div>
+        <div id="outputText" class="output-text"></div>
+
+        <div class="output-actions">
+          <button onclick="copyText()">Copy</button>
+          <button onclick="speakText()">Speak Aloud</button>
+          <button onclick="shareText()">Share</button>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Main site – hidden until signed in -->
-  <div id="main-site">
-    <header class="header">
-      <nav class="navbar">
-        <div class="logo">
-          <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
-        </div>
+    <section class="coming-soon">
+      <h2>Coming Soon</h2>
+      <p>Premium voices • Real-time speech • Voice cloning</p>
+      <p>Follow on 
+        <a href="https://x.com/abiudketerr" target="_blank" class="x-link">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X" class="x-icon"/>
+          @abiudketerr
+        </a>
+      </p>
+    </section>
+  </main>
 
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#">Pricing</a></li>
-          <li><a href="#">API</a></li>
-          <li><button class="btn-enter">ENTER</button></li>
-        </ul>
+  <footer class="footer">
+    <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
+    <small>"We are such stuff as dreams are made on."</small>
+  </footer>
 
-        <div id="user-profile" style="margin-left: auto;">
-          <!-- Optional: show logged-in user info here later -->
-        </div>
-
-        <div class="hamburger" id="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </nav>
-    </header>
-
-    <main class="main-content">
-      <section class="hero">
-        <img src="/images/logo-smoky.png" alt="Keter Aether" class="hero-logo"/>
-        <p class="tagline">Turn everyday words into something fun & magical ✨</p>
-        <blockquote id="rotatingQuote" class="quote"></blockquote>
-      </section>
-
-      <section class="input-section">
-        <textarea id="modernInput" placeholder="Type your plea..." rows="5"></textarea>
-
-        <div class="controls">
-          <select id="styleSelect">
-            <option value="shakespeare">Shakespearean</option>
-            <option value="victorian">Victorian</option>
-            <option value="poe">Poe (Gothic)</option>
-            <option value="romantic">Romantic</option>
-            <option value="genz">Gen Z Slang</option>
-            <option value="sheng">Sheng (Kenyan street)</option>
-            <option value="old-english">Old English</option>
-            <option value="emoji-genz">Emoji-fied Gen Z</option>
-            <option value="formal-british">Formal British</option>
-            <option value="sheng-english">Sheng + English mix</option>
-            <option value="german">German</option>
-            <option value="kiswahili">Kiswahili</option>
-          </select>
-
-          <label class="emoji-toggle">
-            <span>Add emojis?</span>
-            <input type="checkbox" id="emojiSwitch" checked />
-          </label>
-
-          <label class="typewriter-toggle">
-            <span>Typewriter ASMR?</span>
-            <input type="checkbox" id="typewriterSwitch" />
-          </label>
-
-          <button id="transmuteBtn">Let's Go! 🚀</button>
-        </div>
-
-        <div id="outputSection" class="output-section" style="display:none;">
-          <div id="styleLabel" class="output-header"></div>
-          <div id="outputText" class="output-text"></div>
-
-          <div class="output-actions">
-            <button onclick="copyText()">Copy</button>
-            <button onclick="speakText()">Speak Aloud</button>
-            <button onclick="shareText()">Share</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="features" id="features">
-        <div class="feature">
-          <h3>Transmutation Engine</h3>
-          <p>Change how people talk — modern to old, slang to formal, English to Sheng or German...</p>
-        </div>
-        <div class="feature">
-          <h3>Ghostwriter's Quill</h3>
-          <p>Summon original verses from a simple prompt.</p>
-        </div>
-        <div class="feature">
-          <h3>Critic's Eye</h3>
-          <p>Break down meter, rhyme & literary devices.</p>
-        </div>
-      </section>
-
-      <section class="coming-soon">
-        <h2>Coming Soon</h2>
-        <p>Premium voices • Real-time speech • Voice cloning</p>
-        <p>Follow on X: 
-          <a href="https://x.com/abiudketerr" target="_blank" class="x-link">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X" class="x-icon"/>
-            @abiudketerr
-          </a>
-        </p>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <p>© 2025 Keter Aether — from the creators <strong>KETER</strong></p>
-      <small>"We are such stuff as dreams are made on."</small>
-    </footer>
-  </div>
-
-  <script src="app.js"></script>
-
-  <!-- Firebase Auth logic – using Vercel env vars -->
   <script>
-    // Config from Vercel environment variables
-    const firebaseConfig = {
-      apiKey: process.env.FIREBASE_API_KEY,
-      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-      appId: process.env.FIREBASE_APP_ID,
-      measurementId: process.env.FIREBASE_MEASUREMENT_ID
-    };
+    // Typewriter + emoji generation logic
+    const outputText = document.getElementById('outputText');
+    const typewriterSwitch = document.getElementById('typewriterSwitch');
+    const emojiSwitch = document.getElementById('emojiSwitch');
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // Debug: show if Firebase loaded
-    console.log("Firebase initialized:", !!auth);
-
-    // Sign In
-    function signIn() {
-      console.log("Sign In button clicked");
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      if (!email || !password) {
-        alert("Please enter email and password");
-        return;
-      }
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("Signed in successfully!");
-          document.getElementById('login-gate').style.display = 'none';
-          document.getElementById('main-site').style.display = 'block';
-        })
-        .catch(error => alert("Sign in failed: " + error.message));
+    function typeWriter(text, element, speed = 35) {
+      let i = 0;
+      element.textContent = '';
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          element.scrollTop = element.scrollHeight; // auto-scroll
+        } else {
+          clearInterval(interval);
+        }
+      }, speed);
     }
 
-    // Create Account
-    function signUp() {
-      console.log("Create Account button clicked");
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      if (!email || !password) {
-        alert("Please enter email and password");
-        return;
-      }
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("Account created! Check your email for verification if required.");
-          document.getElementById('login-gate').style.display = 'none';
-          document.getElementById('main-site').style.display = 'block';
-        })
-        .catch(error => alert("Sign up failed: " + error.message));
+    // Simple emoji pool for dynamic insertion
+    const emojiPool = ['✨', '🔥', '🌟', '⚡', '🪶', '👑', '💫', '🌙', '🖤', '🌀'];
+
+    function addRandomEmojis(text) {
+      if (!emojiSwitch.checked) return text;
+      const words = text.split(' ');
+      return words.map(word => {
+        if (Math.random() < 0.15) { // \~15% chance per word
+          const emoji = emojiPool[Math.floor(Math.random() * emojiPool.length)];
+          return Math.random() < 0.5 ? word + emoji : emoji + word;
+        }
+        return word;
+      }).join(' ');
     }
 
-    // Google Sign In
-    function googleSignIn() {
-      console.log("Google button clicked");
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(() => {
-          alert("Signed in with Google!");
-          document.getElementById('login-gate').style.display = 'none';
-          document.getElementById('main-site').style.display = 'block';
-        })
-        .catch(error => alert("Google sign-in error: " + error.message));
+    // Simulate AI output (replace with your real transmutation logic)
+    function generateTransmutedText() {
+      const input = document.getElementById('modernInput').value.trim();
+      if (!input) return "Please type something first...";
+
+      const style = document.getElementById('styleSelect').value;
+      let result = `This is a dramatic ${style} version of your text: ${input.toUpperCase()}!`;
+
+      // Add emojis during generation
+      result = addRandomEmojis(result);
+
+      return result;
     }
 
-    // Auto-login if already signed in
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById('login-gate').style.display = 'none';
-        document.getElementById('main-site').style.display = 'block';
+    document.getElementById('transmuteBtn').addEventListener('click', () => {
+      const outputSection = document.getElementById('outputSection');
+      outputSection.style.display = 'block';
+
+      const text = generateTransmutedText();
+
+      if (typewriterSwitch.checked) {
+        typeWriter(text, outputText, 30);
+      } else {
+        outputText.textContent = text;
       }
     });
+
+    // Copy function
+    function copyText() {
+      navigator.clipboard.writeText(outputText.textContent)
+        .then(() => alert("Copied to clipboard!"))
+        .catch(() => alert("Copy failed"));
+    }
+
+    // Speak (basic)
+    function speakText() {
+      const utterance = new SpeechSynthesisUtterance(outputText.textContent);
+      speechSynthesis.speak(utterance);
+    }
+
+    // Share (basic web share API)
+    function shareText() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Keter Aether Transmutation',
+          text: outputText.textContent,
+        }).catch(err => console.log("Share failed", err));
+      } else {
+        alert("Share not supported on this browser");
+      }
+    }
   </script>
 </body>
-              </html>
+</html>
