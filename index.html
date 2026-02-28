@@ -150,6 +150,7 @@
       border: 1px solid #444;
       margin-top: 2rem;
       min-height: 180px;
+      display: none;
     }
 
     #outputText {
@@ -233,7 +234,7 @@
         <button id="transmuteBtn">Let's Go! 🚀</button>
       </div>
 
-      <div id="outputSection" style="display:none;">
+      <div id="outputSection">
         <div id="outputText" class="output-text"></div>
 
         <div class="output-actions">
@@ -255,7 +256,7 @@
     const typewriterToggle = document.getElementById('typewriterSwitch');
     const emojiToggle = document.getElementById('emojiSwitch');
 
-    // Style-specific emoji sets
+    // Style-specific emoji sets (placed intelligently, not randomly)
     const emojiSets = {
       shakespeare: ['🪶', '🏰', '⚔️', '🌹', '📜', '👑'],
       victorian: ['🕰️', '🖋️', '🪞', '🌸', '🎩', '👗'],
@@ -282,8 +283,9 @@
       const interval = setInterval(() => {
         if (i < text.length) {
           let char = text.charAt(i);
-          if (emojiToggle.checked && (i % 8 === 0 || char === ' ' || char === '.' || char === ',' || char === '!')) {
-            char = getStyleEmoji(document.getElementById('styleSelect').value) + char;
+          // Intelligent emoji placement: after punctuation or every \~10 chars
+          if (emojiToggle.checked && (char === '.' || char === '!' || char === '?' || char === ',' || i % 10 === 0)) {
+            char += getStyleEmoji(document.getElementById('styleSelect').value);
           }
           element.textContent += char;
           i++;
@@ -294,14 +296,15 @@
       }, speed);
     }
 
-    // Fake transmutation – replace with real backend/AI call later
+    // Simple transmutation logic (replace with real AI later)
     function transmute(text) {
       const style = document.getElementById('styleSelect').value;
-      // Very simple transformation just for demo
-      if (style === 'shakespeare') return text.replace(/you/g, 'thou').replace(/is/g, 'art').toUpperCase() + ' VERILY!';
-      if (style === 'genz') return text.replace(/good/g, 'fire').replace(/love/g, 'vibes') + ' no cap frfr 🔥';
-      // ... add real logic here
-      return text.toUpperCase() + ' ✨'; // fallback
+      // Basic transformation examples
+      if (style === 'shakespeare') return text.replace(/you/g, 'thou').replace(/is/g, 'art').toUpperCase();
+      if (style === 'genz') return text.replace(/good/g, 'fire').replace(/love/g, 'vibes') + ' no cap';
+      if (style === 'old-english') return text.replace(/the/g, 'þe').toUpperCase() + ' FORSOOTH!';
+      // Default: just uppercase + flair
+      return text.toUpperCase();
     }
 
     document.getElementById('transmuteBtn').addEventListener('click', () => {
