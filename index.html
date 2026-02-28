@@ -36,34 +36,23 @@
       position: fixed;
       top: 0;
       width: 100%;
-      padding: 1.2rem 2rem;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(12px);
+      padding: 1.5rem;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
       z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      text-align: center;
     }
 
-    .logo-container {
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .logo-container:hover {
-      transform: scale(1.08);
-    }
-
-    .logo-img {
-      height: 60px;
-      filter: drop-shadow(0 0 10px var(--gold-glow));
+    .logo {
+      height: 90px;
+      filter: drop-shadow(0 0 15px var(--gold-glow));
     }
 
     .mode-buttons {
       display: flex;
       justify-content: center;
-      gap: 1.2rem;
-      margin: 90px 1rem 2rem;
+      gap: 1rem;
+      margin: 110px 1rem 2rem;
       flex-wrap: wrap;
     }
 
@@ -79,7 +68,6 @@
       box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
       transition: all 0.3s ease;
       min-width: 200px;
-      text-align: center;
     }
 
     .mode-btn.active {
@@ -87,13 +75,8 @@
       box-shadow: 0 12px 35px rgba(212, 175, 55, 0.7);
     }
 
-    .mode-btn:hover:not(.active) {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(212, 175, 55, 0.55);
-    }
-
     main {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
@@ -128,7 +111,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
       justify-content: center;
       align-items: center;
     }
@@ -178,13 +161,13 @@
       border: 1px solid #444;
       margin-top: 2rem;
       min-height: 180px;
+      display: none;
     }
 
     .output-text {
       font-size: 1.18rem;
       line-height: 1.7;
       white-space: pre-wrap;
-      word-wrap: break-word;
     }
 
     .output-actions {
@@ -197,62 +180,6 @@
 
     .output-actions button {
       padding: 0.8rem 1.6rem;
-      font-size: 1rem;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin: 4rem 0;
-    }
-
-    .feature {
-      background: rgba(20,20,20,0.9);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      transition: all 0.4s;
-    }
-
-    .feature:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(212, 175, 55, 0.35);
-    }
-
-    .feature h3 {
-      font-size: 1.6rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-
-    .feature p {
-      color: var(--gray);
-      line-height: 1.6;
-    }
-
-    .coming-soon {
-      text-align: center;
-      margin: 6rem 0 4rem;
-      padding: 4rem 1.5rem;
-      background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(40,20,0,0.5));
-      border-radius: 24px;
-      border: 2px solid rgba(212, 175, 55, 0.4);
-      box-shadow: 0 0 80px rgba(212, 175, 55, 0.35);
-      animation: dramaticPulse 6s infinite alternate;
-    }
-
-    @keyframes dramaticPulse {
-      0% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.25); transform: scale(1); }
-      100% { box-shadow: 0 0 100px rgba(212, 175, 55, 0.55); transform: scale(1.01); }
-    }
-
-    .coming-soon h2 {
-      font-size: 3.2rem;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-      text-shadow: 0 0 30px var(--gold-glow);
     }
 
     footer {
@@ -266,17 +193,13 @@
       .mode-buttons { flex-direction: column; }
       .mode-btn { width: 100%; }
       .hero-logo { width: 240px; }
-      .tagline { font-size: 1.6rem; }
-      .coming-soon h2 { font-size: 2.6rem; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="logo-container" onclick="window.open('https://x.com/abiudketerr', '_blank')">
-      <img src="/images/logo-clean.png" alt="Keter Aether" class="logo-img"/>
-    </div>
+    <img src="/images/logo-clean.png" alt="Keter Aether" class="logo" onclick="window.open('https://x.com/abiudketerr','_blank')"/>
   </header>
 
   <div class="mode-buttons">
@@ -319,8 +242,9 @@
         <button onclick="transmuteText()">Transmute ✨</button>
       </div>
 
-      <div id="transmuteOutputSection" class="output-section" style="display:none;">
+      <div id="transmuteOutputSection" class="output-section">
         <div id="transmuteOutput" class="output-text"></div>
+
         <div class="output-actions">
           <button onclick="copyText('transmuteOutput')">Copy</button>
           <button onclick="speakText('transmuteOutput')">Speak Aloud</button>
@@ -329,7 +253,7 @@
       </div>
     </section>
 
-    <!-- Ghostwriter -->
+    <!-- Ghostwriter's Quill -->
     <section id="ghost" class="section">
       <textarea id="ghostPrompt" placeholder="Describe your poem, story, mood, or theme..." rows="6"></textarea>
 
@@ -347,8 +271,9 @@
         <button onclick="generateGhost()">Invoke Quill 🪶</button>
       </div>
 
-      <div id="ghostOutputSection" class="output-section" style="display:none;">
+      <div id="ghostOutputSection" class="output-section">
         <div id="ghostOutput" class="output-text"></div>
+
         <div class="output-actions">
           <button onclick="copyText('ghostOutput')">Copy</button>
           <button onclick="speakText('ghostOutput')">Speak Aloud</button>
@@ -364,8 +289,9 @@
 
       <button onclick="analyzeText()">Analyze 🔍</button>
 
-      <div id="criticOutputSection" class="output-section" style="display:none; margin-top:2rem;">
+      <div id="criticOutputSection" class="output-section">
         <div id="criticOutput" class="output-text"></div>
+
         <div class="output-actions">
           <button onclick="copyText('criticOutput')">Copy</button>
           <button onclick="speakText('criticOutput')">Speak Aloud</button>
@@ -381,111 +307,84 @@
   </footer>
 
   <script>
-    // Mode switching
+    // Switch modes
     function switchMode(mode) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
       document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(mode).classList.add('active');
-      document.querySelector(`button[onclick="switchMode('${mode}')"]`).classList.add('active');
+      document.getElementById(mode).style.display = 'block';
+      event.target.classList.add('active');
     }
 
     // Typewriter
-    function typeWriter(text, element, speed = 35) {
-      let i = 0;
+    function typeWriter(text, element) {
       element.textContent = '';
+      let i = 0;
       const interval = setInterval(() => {
         if (i < text.length) {
           element.textContent += text.charAt(i);
           i++;
-          element.scrollTop = element.scrollHeight;
         } else {
           clearInterval(interval);
         }
-      }, speed);
+      }, 35);
     }
 
-    // Transmutation Engine
+    // Transmute
     function transmuteText() {
       const input = document.getElementById('transmuteInput').value.trim();
-      if (!input) return alert("Type something first...");
-
-      const outputSection = document.getElementById('transmuteOutputSection');
-      const outputText = document.getElementById('transmuteOutput');
-      outputSection.style.display = 'block';
-      outputText.textContent = "Transmuting...";
-
-      // Replace with real Groq call later
-      const style = document.getElementById('styleSelect').value;
-      const result = input.toUpperCase(); // pure output – no prefix
+      if (!input) return alert("Type something...");
+      const output = document.getElementById('transmuteOutput');
+      const section = document.getElementById('transmuteOutputSection');
+      section.style.display = 'block';
+      output.textContent = input; // pure text – no extra words
 
       if (document.getElementById('typewriterSwitch').checked) {
-        typeWriter(result, outputText);
-      } else {
-        outputText.textContent = result;
+        typeWriter(input, output);
       }
     }
 
-    // Ghostwriter
+    // Ghostwriter (placeholder – replace with Groq call)
     function generateGhost() {
       const prompt = document.getElementById('ghostPrompt').value.trim();
-      if (!prompt) return alert("Describe something first...");
-
-      const outputSection = document.getElementById('ghostOutputSection');
-      const outputText = document.getElementById('ghostOutput');
-      outputSection.style.display = 'block';
-      outputText.textContent = "Summoning...";
-
-      // Fake creative generation – replace with Groq
-      const result = `From the void: ${prompt}...\n\nShadows whisper, stars align,\nA tale begins in moonlit rhyme...`;
+      if (!prompt) return alert("Describe something...");
+      const output = document.getElementById('ghostOutput');
+      const section = document.getElementById('ghostOutputSection');
+      section.style.display = 'block';
+      output.textContent = `A poetic response to "${prompt}"...`; // pure output
 
       if (document.getElementById('ghostTypewriterSwitch').checked) {
-        typeWriter(result, outputText);
-      } else {
-        outputText.textContent = result;
+        typeWriter(output.textContent, output);
       }
     }
 
-    // Critic's Eye
+    // Critic (placeholder – replace with Groq)
     function analyzeText() {
       let text = document.getElementById('criticInput').value.trim();
+      if (!text) text = document.getElementById('transmuteOutput').textContent || document.getElementById('ghostOutput').textContent || "";
+      if (!text) return alert("Paste or generate text first...");
+      const output = document.getElementById('criticOutput');
+      const section = document.getElementById('criticOutputSection');
+      section.style.display = 'block';
+      output.textContent = `Analysis of: ${text}`; // pure analysis
 
-      if (!text) {
-        text = document.getElementById('transmuteOutput').textContent ||
-               document.getElementById('ghostOutput').textContent || "";
-        if (!text) return alert("Generate or paste text first!");
-      }
-
-      const outputSection = document.getElementById('criticOutputSection');
-      const outputText = document.getElementById('criticOutput');
-      outputSection.style.display = 'block';
-      outputText.textContent = "Analyzing...";
-
-      // Fake analysis – replace with Groq
-      const result = `Critic's Eye:\n\n- Tone: Dramatic & mystical\n- Structure: Free verse\n- Devices: Metaphor, imagery\n- Suggestion: Add sensory details for immersion.`;
-
-      outputText.textContent = result;
+      // Add typewriter if you want
     }
 
     // Helpers
     function copyText(id) {
-      const text = document.getElementById(id).textContent;
-      navigator.clipboard.writeText(text).then(() => alert("Copied!"));
+      navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => alert("Copied!"));
     }
 
     function speakText(id) {
-      const text = document.getElementById(id).textContent;
-      const ut = new SpeechSynthesisUtterance(text);
+      const ut = new SpeechSynthesisUtterance(document.getElementById(id).textContent);
       speechSynthesis.speak(ut);
     }
 
     function shareText(id) {
       const text = document.getElementById(id).textContent;
-      if (navigator.share) {
-        navigator.share({ title: 'Keter Aether', text });
-      } else {
-        alert("Share not supported");
-      }
+      if (navigator.share) navigator.share({ title: 'Keter Aether', text });
+      else alert("Share not supported");
     }
   </script>
 </body>
-            </html>
+  </html>
