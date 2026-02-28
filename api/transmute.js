@@ -1,74 +1,73 @@
-// /api/transmute.js - Groq OSS 6B model (Fast)
+// /api/transmute.js - Groq + GPT-OSS-120B (120 billion parameter model)
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed – use POST' });
   }
 
   try {
-    const { text, style, mode } = req.body;
+    const { text, style, mode = 'transmute' } = req.body;
 
-    // Validate input
+    // Basic input validation
     if (!text || typeof text !== 'string' || text.trim() === '') {
-      return res.status(400).json({ success: false, error: 'No valid text provided.' });
+      return res.status(400).json({ success: false, error: 'Text is required and must not be empty' });
     }
 
-    // ------------------------
-    // Select model (hardcoded to 6B)
-    // ------------------------
-    const selectedModel = 'gpt-oss-6b';
-
-    // ------------------------
-    // SYSTEM PROMPT BASED ON MODE
-    // ------------------------
-    let systemPrompt = '';
-    switch (mode) {
-      case 'ghostwriter':
-        systemPrompt = `You are a master poet. Write a full, original poem based on the prompt in the style of ${style}.`;
-        break;
-      case 'critic':
-        systemPrompt = `You are a literary critic. Provide a detailed analysis of the following text: meter, rhyme scheme, literary devices, tone, imagery, symbolism.`;
-        break;
-      default:
-        systemPrompt = `You are a master of language styles, dialects, slang and historical tones. Rewrite the following everyday sentence or phrase exactly in the style of ${style}. Keep the meaning similar — just adjust vocabulary, grammar, slang, tone. Output ONLY the rewritten text.`;
+    // Optional: add more validation if needed (max length, etc.)
+    if (text.length > 8000) {
+      return res.status(400).json({ success: false, error: 'Input text is too long (max \~8000 characters)' });
     }
 
-    // ------------------------
-    // Call Groq API
-    // ------------------------
     const GROQ_API_KEY = process.env.GROQ_API_KEY;
+
     if (!GROQ_API_KEY) {
-      return res.status(500).json({ success: false, error: 'GROQ_API_KEY is not set.' });
+      console.error('GROQ_API_KEY not set in environment variables');
+      return res.status(500).json({ success: false, error: 'Server configuration error' });
     }
 
-    const groqResponse = await fetch(`https://api.groq.ai/v1/models/${selectedModel}/completions`, {
-      method: 'POST',
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: selectedModel,
+        model: "openai/gpt-oss-120b",           // ← 120B model (strong & capable)
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: text.trim() }
+          {
+            role: "system",
+            content: `You are Keter Aether – a magical transmutation engine. 
+Transform ONLY the user's input text into the requested ${style} style.
+Return ONLY the transformed text — no explanations, no introductions, no quotes, no prefixes like "Here is..." or "This is a dramatic version...".
+Keep the meaning intact but adapt tone, vocabulary, structure, and style perfectly.`
+          },
+          {
+            role: "user",
+            content: text
+          }
         ],
-        temperature: 0.8,
-        max_tokens: 600,
-        top_p: 0.95
+        temperature: 0.75,           // balanced creativity
+        max_tokens: 1024,
+        top_p: 0.95,
+        stream: false
       })
     });
 
-    if (!groqResponse.ok) {
-      const errorText = await groqResponse.text().catch(() => 'Unknown Groq error');
-      console.error('Groq API error:', errorText);
-      return res.status(groqResponse.status).json({ success: false, error: errorText });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Groq API error:', response.status, errorData);
+      return res.status(response.status).json({
+        success: false,
+        error: errorData.error?.message || `Groq API error: ${response.status}`
+      });
     }
 
-    const data = await groqResponse.json();
-    let result = data.choices?.[0]?.message?.content?.trim() || 'The spirits are silent...';
+    const data = await response.json();
+    let result = data.choices?.[0]?.message?.content?.trim() || '';
 
-    // Remove any markdown/code fences
-    result = result.replace(/^```[\w]*\n?/, '').replace(/```$/, '').trim();
+    // Safety fallback
+    if (!result) {
+      result = text.toUpperCase() + ' ✨';
+    }
 
     return res.status(200).json({ success: true, transmuted: result });
 
