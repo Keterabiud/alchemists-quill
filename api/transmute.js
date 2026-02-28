@@ -1,43 +1,54 @@
-// api/transmute.js - Vercel API route
-
+// api/transmute.js - Vercel API route (production-ready)
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed - use POST' });
   }
 
   try {
-    let body = '';
-    for await (const chunk of req) {
-      body += chunk.toString();
-    }
+    // Parse body
+    const { text, style, mode, modelChoice } = req.body;
 
-    const parsedBody = body ? JSON.parse(body) : {};
-    const { text, style, mode } = parsedBody;
-
+    // Validate input
     if (!text || typeof text !== 'string' || text.trim() === '') {
-      return res.status(400).json({ success: false, error: 'No valid text provided' });
+      return res.status(400).json({ success: false, error: 'No valid text provided.' });
     }
 
+    // ------------------------
+    // MODEL SELECTION
+    // ------------------------
+    const MODEL_MAP = {
+      fast: 'gpt-oss-6b',
+      balanced: 'gpt-oss-13b',
+      premium: 'gpt-oss-120b'
+    };
+    const selectedModel = MODEL_MAP[modelChoice] || MODEL_MAP.balanced;
+
+    // ------------------------
+    // SYSTEM PROMPT BASED ON MODE
+    // ------------------------
     let systemPrompt = '';
-
-    if (mode === 'ghostwriter') {
-      systemPrompt = `You are a master poet. Write a full, original poem based on the prompt in the style of ${style}.`;
-    } else if (mode === 'critic') {
-      systemPrompt = `You are a literary critic. Provide a detailed analysis of the following text: meter, rhyme scheme, literary devices, tone, imagery, symbolism.`;
-    } else {
-      systemPrompt = `You are a master of language styles, dialects, slang and historical tones. Rewrite the following everyday sentence or phrase exactly in the style of ${style}. 
-Keep the original meaning and length similar — just change the vocabulary, grammar, expressions, slang and tone to match that era/culture/dialect perfectly.
-Do NOT turn it into a poem or add extra content unless the mode is ghostwriter. Output ONLY the rewritten text — no introductions, no explanations.`;
+    switch (mode) {
+      case 'ghostwriter':
+        systemPrompt = `You are a master poet. Write a full, original poem based on the prompt in the style of ${style}.`;
+        break;
+      case 'critic':
+        systemPrompt = `You are a literary critic. Provide a detailed analysis of the following text: meter, rhyme scheme, literary devices, tone, imagery, symbolism.`;
+        break;
+      default:
+        systemPrompt = `You are a master of language styles, dialects, slang and historical tones. Rewrite the following everyday sentence or phrase exactly in the style of ${style}. Keep the meaning similar — just adjust vocabulary, grammar, slang, tone. Output ONLY the rewritten text.`;
     }
 
-    const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    // ------------------------
+    // CALL GROQ API
+    // ------------------------
+    const groqResponse = await fetch(`https://api.groq.ai/v1/models/${selectedModel}/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-120b',
+        model: selectedModel,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text.trim() }
@@ -49,28 +60,33 @@ Do NOT turn it into a poem or add extra content unless the mode is ghostwriter. 
     });
 
     if (!groqResponse.ok) {
-      const errorData = await groqResponse.json().catch(() => ({}));
+      const errorText = await groqResponse.text().catch(() => 'Unknown Groq error');
+      console.error('Groq API error:', errorText);
       return res.status(groqResponse.status).json({
         success: false,
-        error: errorData.error?.message || `Groq API error (${groqResponse.status})`
+        error: errorText
       });
     }
 
     const data = await groqResponse.json();
+
+    // Extract the message content
     let result = data.choices?.[0]?.message?.content?.trim() || 'The spirits are silent...';
 
+    // Remove any code fences (``` or ```lang)
     result = result.replace(/^```[\w]*\n?/, '').replace(/```$/, '').trim();
 
+    // Return success
     return res.status(200).json({
       success: true,
       transmuted: result
     });
 
-  } catch (error) {
-    console.error('Function error:', error.message);
+  } catch (err) {
+    console.error('Function error:', err);
     return res.status(500).json({
       success: false,
-      error: error.message || 'Internal server error'
+      error: err.message || 'Internal server error'
     });
   }
 }
