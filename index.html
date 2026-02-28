@@ -45,85 +45,115 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 1rem;
     }
 
     .login-box {
       text-align: center;
-      max-width: 480px;
-      width: 90%;
-      padding: 3.5rem 2.5rem;
-      background: rgba(15, 15, 15, 0.95);
-      border-radius: 28px;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem 1.8rem;
+      background: rgba(15, 15, 15, 0.98);
+      border-radius: 24px;
       box-shadow: var(--shadow);
-      border: 1px solid rgba(212, 175, 55, 0.15);
-      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      backdrop-filter: blur(10px);
     }
 
     .logo {
-      width: 110px;
-      margin-bottom: 2.5rem;
+      width: 90px;
+      margin-bottom: 1.8rem;
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 2.4rem;
       color: var(--gold);
-      margin-bottom: 1.2rem;
-      text-shadow: 0 6px 25px rgba(212, 175, 55, 0.35);
+      margin-bottom: 0.8rem;
+      line-height: 1.1;
     }
 
     .subtitle {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       color: var(--gray);
-      margin-bottom: 3rem;
-      line-height: 1.6;
+      margin-bottom: 2rem;
+      line-height: 1.4;
     }
 
     .auth-form {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
     }
 
-    .auth-form input {
+    .input-group {
+      position: relative;
+      margin-bottom: 1.4rem;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 1.3rem;
+    }
+
+    input {
       width: 100%;
-      padding: 1.1rem 1.1rem 1.1rem 3.2rem;
-      margin: 1rem 0;
+      padding: 1.2rem 1rem 1.2rem 3.5rem;
       background: #1a1a1a;
-      border: 1px solid #2a2a2a;
+      border: 1px solid #333;
       border-radius: 12px;
       color: white;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       transition: all 0.3s ease;
     }
 
-    .auth-form input:focus {
+    input:focus {
       outline: none;
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
     }
 
-    .auth-form button {
+    .btn {
       width: 100%;
-      padding: 1.2rem;
+      padding: 1.3rem;
       background: linear-gradient(90deg, var(--gold), #e5c158);
       color: black;
       border: none;
       border-radius: 12px;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 1rem;
-      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+      margin: 0.8rem 0;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
       transition: all 0.3s ease;
+      touch-action: manipulation;
     }
 
-    .auth-form button:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 50px rgba(212, 175, 55, 0.6);
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    .btn.google {
+      background: #4285F4;
+      color: white;
     }
 
     .create-account {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
+      font-size: 1rem;
       color: var(--gray);
-      font-size: 1.05rem;
     }
 
     .create-account a {
@@ -131,12 +161,27 @@
       text-decoration: none;
     }
 
-    .create-account a:hover {
-      text-decoration: underline;
-    }
-
     #main-site {
       display: none;
+    }
+
+    @media (max-width: 480px) {
+      .login-box {
+        padding: 2rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .btn {
+        padding: 1.2rem;
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
@@ -152,12 +197,14 @@
       <div class="auth-form">
         <div class="input-group">
           <i class="fas fa-envelope input-icon"></i>
-          <input type="email" id="email" placeholder="Enter your email" />
+          <input type="email" id="email" placeholder="Enter your email" required />
         </div>
+
         <div class="input-group">
           <i class="fas fa-lock input-icon"></i>
-          <input type="password" id="password" placeholder="Enter your password" />
+          <input type="password" id="password" placeholder="Enter your password" required />
         </div>
+
         <button onclick="signIn()">Sign In</button>
         <button onclick="signUp()">Create Account</button>
         <button onclick="googleSignIn()">Continue with Google</button>
@@ -283,9 +330,9 @@
 
   <script src="app.js"></script>
 
-  <!-- Firebase Auth logic – pulls config from Vercel env vars -->
+  <!-- Firebase Auth logic – using Vercel env vars -->
   <script>
-    // Load config from Vercel environment variables
+    // Config from Vercel environment variables
     const firebaseConfig = {
       apiKey: process.env.FIREBASE_API_KEY,
       authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -300,15 +347,14 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Sign In with email/password
+    // Sign In
     function signIn() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
       if (!email || !password) return alert("Please enter email and password");
 
       auth.signInWithEmailAndPassword(email, password)
         .then(() => {
-          alert("Signed in successfully!");
           document.getElementById('login-gate').style.display = 'none';
           document.getElementById('main-site').style.display = 'block';
         })
@@ -317,8 +363,8 @@
 
     // Create Account
     function signUp() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
       if (!email || !password) return alert("Please enter email and password");
 
       auth.createUserWithEmailAndPassword(email, password)
@@ -335,7 +381,6 @@
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
         .then(() => {
-          alert("Signed in with Google!");
           document.getElementById('login-gate').style.display = 'none';
           document.getElementById('main-site').style.display = 'block';
         })
@@ -350,86 +395,5 @@
       }
     });
   </script>
-  <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-
-<!-- Auth logic -->
-<script>
-  // Config from Vercel env vars (you already added these)
-  const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID,
-    measurementId: process.env.FIREBASE_MEASUREMENT_ID
-  };
-
-  // Initialize
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  // Debug: show if Firebase loaded
-  console.log("Firebase initialized:", !!auth);
-
-  // Sign In
-  window.signIn = function() {
-    console.log("Sign In clicked");
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if (!email || !password) {
-      alert("Enter email and password");
-      return;
-    }
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        alert("Signed in!");
-        document.getElementById('login-gate').style.display = 'none';
-        document.getElementById('main-site').style.display = 'block';
-      })
-      .catch(err => alert("Sign in failed: " + err.message));
-  };
-
-  // Sign Up
-  window.signUp = function() {
-    console.log("Sign Up clicked");
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if (!email || !password) {
-      alert("Enter email and password");
-      return;
-    }
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        alert("Account created! Check email for verification.");
-        document.getElementById('login-gate').style.display = 'none';
-        document.getElementById('main-site').style.display = 'block';
-      })
-      .catch(err => alert("Sign up failed: " + err.message));
-  };
-
-  // Google
-  window.googleSignIn = function() {
-    console.log("Google clicked");
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(() => {
-        alert("Signed in with Google!");
-        document.getElementById('login-gate').style.display = 'none';
-        document.getElementById('main-site').style.display = 'block';
-      })
-      .catch(err => alert("Google failed: " + err.message));
-  };
-
-  // Auto-login
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      document.getElementById('login-gate').style.display = 'none';
-      document.getElementById('main-site').style.display = 'block';
-    }
-  });
-</script>
 </body>
-</html>
+  </html>
