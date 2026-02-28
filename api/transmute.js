@@ -1,78 +1,166 @@
-// /api/transmute.js - Groq + GPT-OSS-120B (120 billion parameter model)
+// /api/transmute.js
+// Groq + GPT-OSS-120B — FINAL STABLE VERSION
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Method not allowed – use POST' });
+    return res
+      .status(405)
+      .json({ success: false, error: 'Method not allowed – use POST' });
   }
 
   try {
-    const { text, style, mode = 'transmute' } = req.body;
+    const { text, style = 'Modern', mode = 'transmute' } = req.body;
 
-    // Basic input validation
-    if (!text || typeof text !== 'string' || text.trim() === '') {
-      return res.status(400).json({ success: false, error: 'Text is required and must not be empty' });
+    /* -----------------------------
+       VALIDATION
+    -------------------------------- */
+    if (!text || typeof text !== 'string' || !text.trim()) {
+      return res
+        .status(400)
+        .json({ success: false, error: 'Text is required' });
     }
 
-    // Optional: add more validation if needed (max length, etc.)
     if (text.length > 8000) {
-      return res.status(400).json({ success: false, error: 'Input text is too long (max \~8000 characters)' });
+      return res.status(400).json({
+        success: false,
+        error: 'Input text too long (max ~8000 characters)',
+      });
     }
 
     const GROQ_API_KEY = process.env.GROQ_API_KEY;
-
     if (!GROQ_API_KEY) {
-      console.error('GROQ_API_KEY not set in environment variables');
-      return res.status(500).json({ success: false, error: 'Server configuration error' });
+      console.error('Missing GROQ_API_KEY');
+      return res
+        .status(500)
+        .json({ success: false, error: 'Server configuration error' });
     }
 
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-oss-120b",           // ← 120B model (strong & capable)
-        messages: [
-          {
-            role: "system",
-            content: `You are Keter Aether – a magical transmutation engine. 
-Transform ONLY the user's input text into the requested ${style} style.
-Return ONLY the transformed text — no explanations, no introductions, no quotes, no prefixes like "Here is..." or "This is a dramatic version...".
-Keep the meaning intact but adapt tone, vocabulary, structure, and style perfectly.`
-          },
-          {
-            role: "user",
-            content: text
-          }
-        ],
-        temperature: 0.75,           // balanced creativity
-        max_tokens: 1024,
-        top_p: 0.95,
-        stream: false
-      })
-    });
+    /* -----------------------------
+       MODE-AWARE PROMPTING
+    -------------------------------- */
+    let systemPrompt = '';
+    let userPrompt = '';
+
+    if (mode === 'ghostwriter') {
+      systemPrompt = `
+You are Keter Aether, a master poet and literary ghostwriter.
+
+RULES:
+- Write ORIGINAL poetry or prose
+- Do NOT rewrite the user's text
+- Do NOT explain
+- Do NOT add meta commentary
+- Output ONLY the finished literary work
+- Use elegant, expressive modern English
+`;
+
+      userPrompt = `
+Write an original piece in the style of ${style}.
+Theme or idea:
+"${text}"
+`;
+
+    } else if (mode === 'critic') {
+      systemPrompt = `
+You are Keter Aether, a precise and insightful literary critic.
+
+RULES:
+- Write in clear modern English
+- Be constructive, not poetic
+- Use readable formatting
+`;
+
+      userPrompt = `
+Critically analyze the following text.
+
+Include:
+- Brief overview
+- Strengths
+- Weaknesses
+- Suggestions for improvement
+
+Text:
+"${text}"
+`;
+
+    } else {
+      // TRANSMUTATION (DEFAULT)
+      systemPrompt = `
+You are Keter Aether — a refined text transmutation engine.
+
+TASK:
+Rewrite the user's text in the style of ${style}.
+
+STRICT RULES:
+- Preserve the original meaning
+- Use modern, readable English
+- Imitate tone, rhythm, and vocabulary ONLY
+- DO NOT use archaic spellings or symbols (Þ, ð, æ, etc.)
+- Do NOT explain
+- Return ONLY the transformed text
+`;
+
+      userPrompt = `
+Rewrite the following text:
+
+"${text}"
+`;
+    }
+
+    /* -----------------------------
+       GROQ API CALL
+    -------------------------------- */
+    const response = await fetch(
+      'https://api.groq.com/openai/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${GROQ_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-oss-120b',
+          messages: [
+            { role: 'system', content: systemPrompt.trim() },
+            { role: 'user', content: userPrompt.trim() },
+          ],
+          temperature: mode === 'critic' ? 0.4 : 0.75,
+          max_tokens: 1024,
+          top_p: 0.95,
+          stream: false,
+        }),
+      }
+    );
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('Groq API error:', response.status, errorData);
+      const err = await response.json().catch(() => ({}));
+      console.error('Groq API error:', err);
       return res.status(response.status).json({
         success: false,
-        error: errorData.error?.message || `Groq API error: ${response.status}`
+        error: err?.error?.message || 'Groq API error',
       });
     }
 
     const data = await response.json();
-    let result = data.choices?.[0]?.message?.content?.trim() || '';
+    let result = data?.choices?.[0]?.message?.content?.trim();
 
-    // Safety fallback
+    /* -----------------------------
+       SAFETY FALLBACK
+    -------------------------------- */
     if (!result) {
-      result = text.toUpperCase() + ' ✨';
+      result = text;
     }
 
-    return res.status(200).json({ success: true, transmuted: result });
+    return res.status(200).json({
+      success: true,
+      transmuted: result,
+    });
 
-  } catch (err) {
-    console.error('Function error:', err);
-    return res.status(500).json({ success: false, error: err.message || 'Internal server error' });
+  } catch (error) {
+    console.error('Transmutation error:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Internal server error',
+    });
   }
 }
