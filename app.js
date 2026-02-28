@@ -1,188 +1,92 @@
-/**
- * Keter Aether – Final Version
- */
+let currentMode = "transmute";
 
-async function callOpenAI(text, style, mode) {
-  try {
-    const response = await fetch('/api/transmute', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, style, mode })
-    });
+const input = document.getElementById("mainInput");
+const styleSelect = document.getElementById("styleSelect");
+const outputText = document.getElementById("outputText");
+const outputSection = document.getElementById("outputSection");
+const btn = document.getElementById("transmuteBtn");
+const typewriter = document.getElementById("typewriterSwitch");
 
-    const data = await response.json();
+/* MODE SWITCHING */
+document.querySelectorAll(".pill").forEach(pill => {
+  pill.addEventListener("click", () => {
+    document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+    currentMode = pill.dataset.mode;
 
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || `HTTP ${response.status}`);
+    if (currentMode === "critic") {
+      input.placeholder = "Paste text to analyze...";
+      styleSelect.style.display = "none";
+      btn.textContent = "Analyze 🔍";
+    } else if (currentMode === "ghostwriter") {
+      input.placeholder = "Describe the poem, mood, or theme...";
+      styleSelect.style.display = "block";
+      btn.textContent = "Summon the Quill 🪶";
+    } else {
+      input.placeholder = "Utter the forbidden phrase...";
+      styleSelect.style.display = "block";
+      btn.textContent = "Begin the Alchemy ✨";
     }
+  });
+});
 
-    return data.transmuted || 'The spirits whisper faintly...';
-  } catch (error) {
-    console.error('API call failed:', error);
-    alert(`Oops! ${error.message || 'The spirits are acting up. Try again?'}`);
-    return text;
-  }
+/* API CALL */
+async function callOpenAI(text, style, mode) {
+  const res = await fetch("/api/transmute", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, style, mode })
+  });
+  const data = await res.json();
+  if (!res.ok || !data.success) throw new Error(data.error);
+  return data.transmuted;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Mobile menu toggle
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
+/* BUTTON ACTION */
+btn.onclick = async () => {
+  if (!input.value.trim()) return alert("Type something first 😅");
 
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active');
-  });
+  btn.disabled = true;
+  btn.textContent = "Working… ✨";
 
-  navLinks.querySelectorAll('a, button').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      navLinks.classList.remove('active');
-    });
-  });
+  try {
+    const result = await callOpenAI(
+      input.value,
+      styleSelect.value,
+      currentMode
+    );
 
-  // Random button text
-  const buttonPhrases = [
-    "Let's Go! 🚀",
-    "Transmute Now ✨",
-    "Unleash the Words 🪶",
-    "Begin the Alchemy 🔥",
-    "Speak Your Desire 🔮",
-    "Forge the Verse 🌟",
-    "Awaken the Quill 🪄"
-  ];
-  const randomBtnText = buttonPhrases[Math.floor(Math.random() * buttonPhrases.length)];
-  document.getElementById('transmuteBtn').textContent = randomBtnText;
+    outputSection.classList.add("show");
 
-  // Random placeholder
-  const placeholders = [
-    "Type your plea...",
-    "Whisper your desire...",
-    "Offer your words to the void...",
-    "Speak what the soul craves...",
-    "Reveal your hidden incantation...",
-    "Pour forth your essence...",
-    "Utter the forbidden phrase..."
-  ];
-  const randomPlaceholder = placeholders[Math.floor(Math.random() * placeholders.length)];
-  document.getElementById('modernInput').placeholder = randomPlaceholder;
-
-  const styleSelect = document.getElementById('styleSelect');
-  const outputSection = document.getElementById('outputSection');
-  const outputText = document.getElementById('outputText');
-  const styleLabel = document.getElementById('styleLabel');
-  const emojiSwitch = document.getElementById('emojiSwitch');
-  const typewriterSwitch = document.getElementById('typewriterSwitch');
-
-  let currentMode = 'transmute';
-  let addEmojis = true;
-
-  emojiSwitch.addEventListener('change', e => addEmojis = e.target.checked);
-
-  const modeContainer = document.createElement('div');
-  modeContainer.className = 'mode-pills';
-  modeContainer.innerHTML = `
-    <button data-mode="transmute" class="pill active">Transmutation Engine</button>
-    <button data-mode="ghostwriter" class="pill">Ghostwriter's Quill</button>
-    <button data-mode="critic" class="pill">Critic's Eye</button>
-  `;
-
-  transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
-
-  modeContainer.querySelectorAll('.pill').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentMode = btn.dataset.mode;
-      modeContainer.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      if (currentMode === 'transmute') {
-        input.placeholder = randomPlaceholder;
-        styleSelect.style.display = 'block';
-      } else if (currentMode === 'ghostwriter') {
-        input.placeholder = "Describe the poem you want...";
-        styleSelect.style.display = 'block';
-      } else {
-        input.placeholder = "Paste text to analyze...";
-        styleSelect.style.display = 'none';
-      }
-    });
-  });
-
-  transmuteBtn.addEventListener('click', async () => {
-    const value = input.value.trim();
-    if (!value) return alert("Type something first 😅");
-
-    const originalBtnText = transmuteBtn.textContent;
-    transmuteBtn.innerHTML = '<span class="spinner">✨</span> Cooking...';
-    transmuteBtn.disabled = true;
-
-    let result = await callOpenAI(value, styleSelect.value, currentMode);
-
-    if (addEmojis) {
-      const emojis = ['🔥','✨','😎','💫','🌟','🥳','🚀','🪄','💖','😂'];
-      result += ' ' + emojis[Math.floor(Math.random() * emojis.length)];
-    }
-
-    const useTypewriter = typewriterSwitch.checked;
-
-    outputText.classList.toggle('typewriter', useTypewriter);
-
-    if (useTypewriter) {
-      outputText.textContent = '';
-      typeWriter(result);
+    if (typewriter.checked) {
+      outputText.textContent = "";
+      let i = 0;
+      const t = setInterval(() => {
+        outputText.textContent += result[i++];
+        if (i >= result.length) clearInterval(t);
+      }, 30);
     } else {
       outputText.textContent = result;
     }
 
-    styleLabel.textContent = styleSelect.options[styleSelect.selectedIndex].text;
-    outputSection.style.display = 'block';
-    outputSection.scrollIntoView({ behavior: 'smooth' });
-
-    transmuteBtn.textContent = originalBtnText;
-    transmuteBtn.disabled = false;
-  });
-
-  function typeWriter(text, index = 0) {
-    if (index < text.length) {
-      const char = text.charAt(index);
-      outputText.textContent += char;
-
-      const sound = document.getElementById('typewriterClick');
-      if (sound) {
-        sound.currentTime = 0;
-        sound.volume = 0.18;
-        sound.play().catch(() => {});
-      }
-
-      const delay = 50 + Math.random() * 90;
-      setTimeout(() => typeWriter(text, index + 1), delay);
-    }
+  } catch (e) {
+    alert(e.message);
   }
-});
 
+  btn.disabled = false;
+};
+
+/* HELPERS */
 function copyText() {
-  const text = document.getElementById('outputText').textContent;
-  navigator.clipboard.writeText(text).then(() => alert("Copied! 🎉"));
+  navigator.clipboard.writeText(outputText.textContent);
+  alert("Copied ✨");
 }
 
 function speakText() {
-  const text = document.getElementById('outputText').textContent.trim();
-  if (!text) return alert("Nothing to speak yet 😅");
-
   speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.9;
-  utterance.pitch = 1.0;
-  speechSynthesis.speak(utterance);
-}
-
-function stopSpeech() {
-  speechSynthesis.cancel();
+  speechSynthesis.speak(new SpeechSynthesisUtterance(outputText.textContent));
 }
 
 function shareText() {
-  const text = document.getElementById('outputText').textContent;
-  navigator.share?.({ title: "Keter Aether creation", text }) ||
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+  navigator.share?.({ title: "Keter Aether", text: outputText.textContent });
 }
