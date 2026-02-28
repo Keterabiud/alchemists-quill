@@ -1,8 +1,7 @@
 /**
- * Keter Aether – Main logic
+ * Keter Aether – Final Version
  */
 
-// API call to your backend (/api/transmute)
 async function callOpenAI(text, style, mode) {
   try {
     const response = await fetch('/api/transmute', {
@@ -26,7 +25,23 @@ async function callOpenAI(text, style, mode) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Random button text on load
+  // Mobile menu toggle
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+  });
+
+  navLinks.querySelectorAll('a, button').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('active');
+    });
+  });
+
+  // Random button text
   const buttonPhrases = [
     "Let's Go! 🚀",
     "Transmute Now ✨",
@@ -72,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <button data-mode="critic" class="pill">Critic's Eye</button>
   `;
 
-  document.getElementById('transmuteBtn').parentNode.insertBefore(modeContainer, document.getElementById('transmuteBtn'));
+  transmuteBtn.parentNode.insertBefore(modeContainer, transmuteBtn);
 
   modeContainer.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -81,25 +96,25 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
 
       if (currentMode === 'transmute') {
-        document.getElementById('modernInput').placeholder = randomPlaceholder;
+        input.placeholder = randomPlaceholder;
         styleSelect.style.display = 'block';
       } else if (currentMode === 'ghostwriter') {
-        document.getElementById('modernInput').placeholder = "Describe the poem you want...";
+        input.placeholder = "Describe the poem you want...";
         styleSelect.style.display = 'block';
       } else {
-        document.getElementById('modernInput').placeholder = "Paste text to analyze...";
+        input.placeholder = "Paste text to analyze...";
         styleSelect.style.display = 'none';
       }
     });
   });
 
-  document.getElementById('transmuteBtn').addEventListener('click', async () => {
-    const value = document.getElementById('modernInput').value.trim();
+  transmuteBtn.addEventListener('click', async () => {
+    const value = input.value.trim();
     if (!value) return alert("Type something first 😅");
 
-    const originalBtnText = document.getElementById('transmuteBtn').textContent;
-    document.getElementById('transmuteBtn').innerHTML = '<span class="spinner">✨</span> Cooking...';
-    document.getElementById('transmuteBtn').disabled = true;
+    const originalBtnText = transmuteBtn.textContent;
+    transmuteBtn.innerHTML = '<span class="spinner">✨</span> Cooking...';
+    transmuteBtn.disabled = true;
 
     let result = await callOpenAI(value, styleSelect.value, currentMode);
 
@@ -123,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
     outputSection.style.display = 'block';
     outputSection.scrollIntoView({ behavior: 'smooth' });
 
-    document.getElementById('transmuteBtn').textContent = originalBtnText;
-    document.getElementById('transmuteBtn').disabled = false;
+    transmuteBtn.textContent = originalBtnText;
+    transmuteBtn.disabled = false;
   });
 
   function typeWriter(text, index = 0) {
@@ -162,8 +177,12 @@ function speakText() {
   speechSynthesis.speak(utterance);
 }
 
+function stopSpeech() {
+  speechSynthesis.cancel();
+}
+
 function shareText() {
   const text = document.getElementById('outputText').textContent;
   navigator.share?.({ title: "Keter Aether creation", text }) ||
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-        }
+}
