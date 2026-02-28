@@ -1,301 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Keter Aether</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keter Aether</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<style>
-:root {
-  --gold: #d4af37;
-  --gold-glow: rgba(212,175,55,.6);
-  --dark: rgba(15,15,15,.92);
-  --gray: #bbb;
-  --text: #f5f5f5;
-}
-
-/* RESET */
-*{margin:0;padding:0;box-sizing:border-box}
-
-/* BODY */
-body{
-  font-family:'Georgia',serif;
-  background:url('nebula-bg.jpg') center/cover fixed;
-  color:var(--text);
-  min-height:100vh;
-  padding-top:130px;
-}
-
-/* HEADER */
-header{
-  position:fixed;
-  top:0;
-  width:100%;
-  padding:1.4rem;
-  background:rgba(0,0,0,.65);
-  backdrop-filter:blur(12px);
-  text-align:center;
-  z-index:1000;
-}
-
-.logo{
-  height:90px;
-  cursor:pointer;
-  filter:drop-shadow(0 0 15px var(--gold-glow));
-  transition:transform .3s;
-}
-.logo:hover{transform:scale(1.08)}
-
-/* MODE BUTTONS */
-.mode-buttons{
-  display:flex;
-  justify-content:center;
-  gap:1rem;
-  flex-wrap:wrap;
-  margin:1rem;
-}
-
-.mode-btn{
-  min-width:220px;
-  padding:.9rem 1.6rem;
-  font-weight:600;
-  border-radius:14px;
-  border:none;
-  cursor:pointer;
-  background:linear-gradient(90deg,var(--gold),#e5c158);
-  box-shadow:0 8px 25px rgba(212,175,55,.4);
-  transition:.3s;
-}
-
-.mode-btn.active{
-  transform:scale(1.05);
-  box-shadow:0 14px 40px rgba(212,175,55,.75);
-}
-
-/* MAIN */
-main{
-  max-width:1000px;
-  margin:auto;
-  padding:0 1.2rem;
-}
-
-/* SECTIONS */
-.section{
-  opacity:0;
-  transform:translateY(20px);
-  pointer-events:none;
-  transition:.4s ease;
-  background:rgba(20,20,20,.88);
-  border:1px solid #444;
-  border-radius:18px;
-  padding:2rem;
-  margin-bottom:2rem;
-}
-
-.section.active{
-  opacity:1;
-  transform:none;
-  pointer-events:auto;
-}
-
-/* INPUTS */
-textarea,select,button{
-  border-radius:12px;
-  font-size:1rem;
-}
-
-textarea{
-  width:100%;
-  min-height:140px;
-  padding:1.2rem;
-  background:rgba(26,26,26,.92);
-  border:1px solid #444;
-  color:white;
-  margin-bottom:1.2rem;
-}
-
-/* CONTROLS */
-.controls{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:1rem;
-  margin-bottom:1.6rem;
-}
-
-.toggle-group{
-  display:flex;
-  align-items:center;
-  gap:.6rem;
-  color:var(--gray);
-}
-
-/* BUTTONS */
-button{
-  padding:.9rem 1.6rem;
-  font-weight:600;
-  background:linear-gradient(90deg,var(--gold),#e5c158);
-  border:none;
-  cursor:pointer;
-  transition:.3s;
-}
-
-button:hover{
-  transform:translateY(-3px);
-  box-shadow:0 15px 40px rgba(212,175,55,.6);
-}
-
-/* OUTPUT */
-.output-section{
-  display:none;
-  background:rgba(20,20,20,.92);
-  border:1px solid #444;
-  border-radius:14px;
-  padding:1.8rem;
-  margin-top:1.8rem;
-}
-
-.output-section.show{display:block}
-
-.output-text{
-  font-size:1.15rem;
-  line-height:1.7;
-  white-space:pre-wrap;
-}
-
-.output-actions{
-  display:flex;
-  gap:1rem;
-  justify-content:center;
-  margin-top:1.4rem;
-}
-
-/* FOOTER */
-footer{
-  text-align:center;
-  padding:3rem 1rem;
-  color:var(--gray);
-}
-
-/* MOBILE */
-@media(max-width:600px){
-  .mode-btn{width:100%}
-}
-</style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
-<header>
-  <img src="/images/logo-clean.png" class="logo"
-  onclick="window.open('https://x.com/abiudketerr','_blank')">
+<header class="header">
+  <div class="navbar">
+    <img src="/images/logo-clean.png" class="logo-img" alt="Keter Aether"/>
+  </div>
 </header>
 
-<div class="mode-buttons">
-  <button class="mode-btn active" data-mode="transmute">Transmutation Engine</button>
-  <button class="mode-btn" data-mode="ghost">Ghostwriter's Quill</button>
-  <button class="mode-btn" data-mode="critic">Critic's Eye</button>
-</div>
+<section class="hero">
+  <img src="/images/logo-clean.png" class="hero-logo" alt="Keter Aether"/>
+  <h1 class="tagline">Alchemy of Language</h1>
+  <p class="quote">“Give me your words — I shall transfigure them.”</p>
+</section>
 
-<main>
+<section class="input-section">
 
-<section id="transmute" class="section active">
-  <textarea id="transmuteInput" placeholder="Type your plea..."></textarea>
+  <!-- MODE PILLS -->
+  <div class="mode-pills">
+    <button class="pill active" data-mode="transmute">Transmutation</button>
+    <button class="pill" data-mode="ghostwriter">Ghostwriter</button>
+    <button class="pill" data-mode="critic">Critic</button>
+  </div>
+
+  <textarea id="mainInput" placeholder="Utter the forbidden phrase..."></textarea>
 
   <div class="controls">
     <select id="styleSelect">
-      <option>Shakespearean</option>
-      <option>Victorian</option>
-      <option>Poe</option>
-      <option>Romantic</option>
-      <option>Gen Z</option>
-      <option>Kiswahili</option>
+      <optgroup label="Classical">
+        <option value="Shakespearean">Shakespearean</option>
+        <option value="Victorian">Victorian</option>
+        <option value="Old English">Old English</option>
+        <option value="Romantic">Romantic</option>
+        <option value="Poe Gothic">Edgar Allan Poe (Gothic)</option>
+      </optgroup>
+
+      <optgroup label="Modern">
+        <option value="Formal British">Formal British</option>
+        <option value="Gen Z Slang">Gen Z Slang</option>
+      </optgroup>
+
+      <optgroup label="Languages">
+        <option value="Kiswahili">Kiswahili</option>
+        <option value="Sheng">Sheng (Kenyan Street)</option>
+      </optgroup>
     </select>
 
-    <label class="toggle-group">
-      <input type="checkbox" id="typewriterSwitch"> Typewriter
+    <label class="typewriter-toggle">
+      <input type="checkbox" id="typewriterSwitch" checked />
+      Typewriter ASMR
     </label>
-
-    <button onclick="transmuteText()">Transmute ✨</button>
   </div>
 
-  <div id="transmuteOutputSection" class="output-section">
-    <div id="transmuteOutput" class="output-text"></div>
+  <button id="transmuteBtn">Begin the Alchemy ✨</button>
+
+  <div class="output-section" id="outputSection">
+    <div class="output-text" id="outputText"></div>
+
+    <div class="output-actions">
+      <button onclick="copyText()">Copy</button>
+      <button onclick="speakText()">Speak</button>
+      <button onclick="shareText()">Share</button>
+    </div>
   </div>
+
 </section>
 
-<section id="ghost" class="section">
-  <textarea id="ghostPrompt" placeholder="Describe your idea..."></textarea>
-  <button onclick="generateGhost()">Invoke 🪶</button>
-  <div id="ghostOutputSection" class="output-section">
-    <div id="ghostOutput" class="output-text"></div>
-  </div>
-</section>
-
-<section id="critic" class="section">
-  <textarea id="criticInput" placeholder="Paste text..."></textarea>
-  <button onclick="analyzeText()">Analyze 🔍</button>
-  <div id="criticOutputSection" class="output-section">
-    <div id="criticOutput" class="output-text"></div>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  © 2025 Keter Aether — <strong>KETER</strong>
+<footer class="footer">
+  Conjured by <strong>KETER</strong>
 </footer>
 
-<script>
-/* MODE SWITCH */
-document.querySelectorAll('.mode-btn').forEach(btn=>{
-  btn.onclick=()=>{
-    const mode=btn.dataset.mode;
-    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById(mode).classList.add('active');
-    btn.classList.add('active');
-  }
-});
-
-/* TYPEWRITER */
-function typeWriter(text,el){
-  el.textContent='';
-  let i=0;
-  const t=setInterval(()=>{
-    el.textContent+=text[i++]||'';
-    if(i>=text.length)clearInterval(t);
-  },30);
-}
-
-/* PLACEHOLDERS */
-function transmuteText(){
-  const t=document.getElementById('transmuteInput').value.trim();
-  if(!t)return;
-  const out=document.getElementById('transmuteOutput');
-  const box=document.getElementById('transmuteOutputSection');
-  box.classList.add('show');
-  document.getElementById('typewriterSwitch').checked
-    ? typeWriter(t,out)
-    : out.textContent=t;
-}
-
-function generateGhost(){
-  const t=document.getElementById('ghostPrompt').value;
-  const o=document.getElementById('ghostOutput');
-  document.getElementById('ghostOutputSection').classList.add('show');
-  o.textContent=`A poetic vision of "${t}"`;
-}
-
-function analyzeText(){
-  const t=document.getElementById('criticInput').value;
-  const o=document.getElementById('criticOutput');
-  document.getElementById('criticOutputSection').classList.add('show');
-  o.textContent=`Analysis:\n${t}`;
-}
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
