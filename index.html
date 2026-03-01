@@ -1,82 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Keter Aether</title>
 
-<!-- FontAwesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<!-- Styles -->
 <link rel="stylesheet" href="styles.css">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+
 <body>
 
-<header>
-  <img src="/images/logo-clean.png" alt="Keter Aether" class="logo" onclick="window.open('https://x.com/abiudketerr','_blank')">
+<header class="header">
+  <img src="/images/logo-clean.png" class="logo-img">
 </header>
 
-<!-- Mode Pills -->
-<div class="mode-pills" id="modePills">
-  <button class="pill active" data-mode="transmute">Transmutation Engine</button>
-  <button class="pill" data-mode="ghostwriter">Ghostwriter's Quill</button>
-  <button class="pill" data-mode="critic">Critic's Eye</button>
+<div class="mode-buttons">
+  <button class="mode-btn active" data-mode="transmute">Transmutation Engine</button>
+  <button class="mode-btn" data-mode="ghostwriter">Ghostwriter’s Quill</button>
+  <button class="mode-btn" data-mode="critic">Critic’s Eye</button>
 </div>
 
-<!-- Input Section -->
-<div class="input-section">
-  <textarea id="modernInput" placeholder="Type your plea..."></textarea>
+<main>
 
-  <div class="controls">
-    <select id="styleSelect">
-      <option value="shakespeare">Shakespearean</option>
-      <option value="victorian">Victorian</option>
-      <option value="old-english">Old English</option>
-      <option value="poe">Poe (Gothic)</option>
-      <option value="romantic">Romantic</option>
-      <option value="genz">Gen Z Slang</option>
-      <option value="emoji-genz">Emoji-fied Gen Z</option>
-      <option value="sheng">Sheng (Kenyan street)</option>
-      <option value="formal-british">Formal British</option>
-      <option value="kiswahili">Kiswahili</option>
-    </select>
+<section class="panel">
 
-    <label class="typewriter-toggle">
-      <input type="checkbox" id="typewriterSwitch"> Typewriter ASMR
-    </label>
+<textarea id="inputText" placeholder="Type your plea..."></textarea>
 
-    <label class="emoji-toggle">
-      <input type="checkbox" id="emojiSwitch" checked> Add Emojis
-    </label>
+<div class="controls">
+  <select id="styleSelect">
+    <option>Modern English</option>
+    <option>Shakespearean</option>
+    <option>Victorian</option>
+    <option>Romantic</option>
+    <option>Poetic</option>
+    <option>Formal</option>
+  </select>
+
+  <div class="slider-wrap">
+    <label>Style Strength</label>
+    <input type="range" id="strength" min="30" max="100" value="65">
   </div>
 
-  <button id="transmuteBtn">Transmute ✨</button>
-
+  <label><input type="checkbox" id="emojiToggle" checked> Emojis</label>
+  <label><input type="checkbox" id="typeToggle" checked> Typewriter</label>
 </div>
 
-<!-- Output Section -->
-<div id="outputSection" class="output-section">
-  <div id="outputText" class="output-text"></div>
+<div class="remix">
+  <button data-tone="dramatic">✨ Dramatic</button>
+  <button data-tone="playful">😂 Playful</button>
+  <button data-tone="dark">🖤 Dark</button>
+  <button data-tone="gentle">🌸 Gentle</button>
+</div>
+
+<div class="actions">
+  <button id="submitBtn">Transmute ✨</button>
+  <button id="rewriteBtn">Rewrite 🔁</button>
+</div>
+
+<div id="outputBox">
+  <div id="outputText" class="ink"></div>
 
   <div class="output-actions">
-    <button onclick="copyText()"><i class="fa-regular fa-copy"></i> Copy</button>
-    <button onclick="speakText()"><i class="fa-regular fa-comment"></i> Speak</button>
-    <button onclick="shareText()"><i class="fa-solid fa-share"></i> Share</button>
+    <button onclick="speakText()">🔊 Speak</button>
+    <button onclick="exportImage()">🖼 Image</button>
+    <button onclick="exportPDF()">📜 PDF</button>
   </div>
 </div>
 
-<!-- Footer -->
-<footer>
-  © 2025 Keter Aether — <strong>KETER</strong>
-</footer>
+</section>
 
-<!-- Typewriter click sound -->
-<audio id="typewriterClick" src="/sounds/typewriter-click.mp3" preload="auto"></audio>
+<section class="history-panel">
+  <h3>🕯️ History</h3>
+  <div id="historyList"></div>
+</section>
 
-<!-- Scripts -->
+<div class="theme-toggle">
+  <button id="themeBtn">🌑 / ☀️</button>
+</div>
+
+</main>
+
 <script src="app.js"></script>
-
 </body>
 </html>
