@@ -1,77 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Keter Aether</title>
-
-  <link rel="stylesheet" href="/styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keter Aether</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="styles.css">
 </head>
-<body class="dark">
+<body>
 
-  <header class="header">
-    <h1 class="logo">🜏 Keter Aether</h1>
-  </header>
+<header>
+  <img src="/images/logo-clean.png" class="logo" onclick="window.open('https://x.com/abiudketerr','_blank')"/>
+</header>
 
-  <main class="container">
+<div class="mode-pills">
+  <button class="pill active" data-mode="transmute">Transmutation Engine</button>
+  <button class="pill" data-mode="ghostwriter">Ghostwriter's Quill</button>
+  <button class="pill" data-mode="critic">Critic's Eye</button>
+</div>
 
-    <!-- INPUT -->
-    <textarea
-      id="inputText"
-      placeholder="Write or paste your text here..."
-    ></textarea>
-
-    <!-- CONTROLS -->
+<main>
+  <!-- Transmutation -->
+  <section id="transmute" class="section active">
+    <textarea id="inputText" placeholder="Type your plea..."></textarea>
     <div class="controls">
+      <select id="styleSelect">
+        <option>Shakespearean</option>
+        <option>Victorian</option>
+        <option>Old English</option>
+        <option>Poetic</option>
+        <option>Modern Elegant</option>
+        <option>Gen Z</option>
+        <option>Kiswahili</option>
+        <option>French</option>
+        <option>Spanish</option>
+        <option>German</option>
+        <option>Japanese</option>
+        <option>Latin</option>
+        <option>Pirate Speak</option>
+        <option>Fantasy High Speech</option>
+        <option>Cyberpunk / Sci-Fi</option>
+        <option>Haiku</option>
+        <option>Rap / Lyric</option>
+      </select>
 
-      <!-- CUSTOM STYLE DROPDOWN -->
-      <div class="dropdown">
-        <button id="styleBtn" class="dropdown-btn">Poetic ▼</button>
-        <ul id="styleMenu" class="dropdown-menu hidden">
-          <li data-style="poetic">Poetic</li>
-          <li data-style="shakespearean">Shakespearean</li>
-          <li data-style="victorian">Victorian</li>
-          <li data-style="modern elegant">Modern Elegant</li>
-        </ul>
-      </div>
+      <label class="toggle-group">
+        <input type="checkbox" id="emojiSwitch"> Emojis
+      </label>
+      <label class="toggle-group">
+        <input type="checkbox" id="typewriterSwitch"> Typewriter
+      </label>
+      <label class="toggle-group">
+        Style Strength:
+        <input type="range" id="styleStrength" min="0" max="100" value="70">
+      </label>
 
-      <!-- STRENGTH -->
-      <div class="strength">
-        <label>Style Strength</label>
-        <input type="range" id="strength" min="0.2" max="1" step="0.1" value="0.7"/>
-      </div>
-
+      <button id="transmuteBtn">Transmute ✨</button>
     </div>
 
-    <!-- MODES -->
-    <div class="modes">
-      <button class="mode active" data-mode="transmute">Transmute</button>
-      <button class="mode" data-mode="ghostwriter">Ghostwriter</button>
-      <button class="mode" data-mode="critic">Critic’s Eye</button>
-    </div>
-
-    <!-- ACTION -->
-    <button id="transmuteBtn" class="primary">✨ Transmute</button>
-
-    <!-- OUTPUT -->
-    <section id="outputSection" class="output hidden">
-      <pre id="outputText"></pre>
-
+    <div id="outputSection" class="output-section">
+      <div id="outputText" class="output-text"></div>
       <div class="output-actions">
-        <button onclick="rewrite()">🔁 Rewrite</button>
-        <button onclick="copyText()">📋 Copy</button>
-        <button onclick="speak()">🔊 Voice</button>
+        <button onclick="copyText()">Copy</button>
+        <button onclick="speakText()">Speak</button>
+        <button onclick="shareText()">Share</button>
+        <button id="rewriteBtn">Rewrite</button>
+        <button id="exportBtn">Export PDF</button>
       </div>
-    </section>
+    </div>
 
-    <!-- HISTORY -->
-    <section class="history">
-      <h3>📜 History</h3>
-      <ul id="historyList"></ul>
-    </section>
+    <button id="historyToggle">Show History</button>
+    <div id="historySection" class="history-section"></div>
+  </section>
 
-  </main>
+  <!-- Ghostwriter -->
+  <section id="ghostwriter" class="section">
+    <textarea id="ghostInput" placeholder="Describe the poem or story..."></textarea>
+    <div class="controls">
+      <button id="ghostBtn">Invoke 🪶</button>
+    </div>
+    <div id="ghostOutputSection" class="output-section">
+      <div id="ghostOutput" class="output-text"></div>
+    </div>
+  </section>
 
-  <script src="/app.js"></script>
+  <!-- Critic -->
+  <section id="critic" class="section">
+    <textarea id="criticInput" placeholder="Paste text or use last output..."></textarea>
+    <div class="controls">
+      <button id="criticBtn">Analyze 🔍</button>
+    </div>
+    <div id="criticOutputSection" class="output-section">
+      <div id="criticOutput" class="output-text"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2026 Keter Aether — <strong>KETER</strong>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
