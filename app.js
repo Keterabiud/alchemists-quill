@@ -1,92 +1,98 @@
+// app.js — Keter Aether (FINAL WORKING)
+
 let currentMode = "transmute";
 
-const input = document.getElementById("mainInput");
-const styleSelect = document.getElementById("styleSelect");
-const outputText = document.getElementById("outputText");
-const outputSection = document.getElementById("outputSection");
-const btn = document.getElementById("transmuteBtn");
-const typewriter = document.getElementById("typewriterSwitch");
-
-/* MODE SWITCHING */
-document.querySelectorAll(".pill").forEach(pill => {
-  pill.addEventListener("click", () => {
-    document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
-    pill.classList.add("active");
-    currentMode = pill.dataset.mode;
-
-    if (currentMode === "critic") {
-      input.placeholder = "Paste text to analyze...";
-      styleSelect.style.display = "none";
-      btn.textContent = "Analyze 🔍";
-    } else if (currentMode === "ghostwriter") {
-      input.placeholder = "Describe the poem, mood, or theme...";
-      styleSelect.style.display = "block";
-      btn.textContent = "Summon the Quill 🪶";
-    } else {
-      input.placeholder = "Utter the forbidden phrase...";
-      styleSelect.style.display = "block";
-      btn.textContent = "Begin the Alchemy ✨";
-    }
+// -------------------- MODE SWITCHING --------------------
+document.querySelectorAll(".pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".pill").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentMode = btn.dataset.mode;
   });
 });
 
-/* API CALL */
-async function callOpenAI(text, style, mode) {
-  const res = await fetch("/api/transmute", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, style, mode })
-  });
-  const data = await res.json();
-  if (!res.ok || !data.success) throw new Error(data.error);
-  return data.transmuted;
-}
+// -------------------- MAIN TRANSMUTE --------------------
+document.getElementById("transmuteBtn").addEventListener("click", async () => {
+  const text = document.getElementById("modernInput").value.trim();
+  const style = document.getElementById("styleSelect").value;
+  const output = document.getElementById("outputText");
+  const outputSection = document.getElementById("outputSection");
 
-/* BUTTON ACTION */
-btn.onclick = async () => {
-  if (!input.value.trim()) return alert("Type something first 😅");
-
-  btn.disabled = true;
-  btn.textContent = "Working… ✨";
-
-  try {
-    const result = await callOpenAI(
-      input.value,
-      styleSelect.value,
-      currentMode
-    );
-
-    outputSection.classList.add("show");
-
-    if (typewriter.checked) {
-      outputText.textContent = "";
-      let i = 0;
-      const t = setInterval(() => {
-        outputText.textContent += result[i++];
-        if (i >= result.length) clearInterval(t);
-      }, 30);
-    } else {
-      outputText.textContent = result;
-    }
-
-  } catch (e) {
-    alert(e.message);
+  if (!text) {
+    alert("Please enter text first.");
+    return;
   }
 
-  btn.disabled = false;
-};
+  outputSection.style.display = "block";
+  output.textContent = "✨ Transmuting…";
 
-/* HELPERS */
+  try {
+    const res = await fetch("/api/transmute", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text,
+        style,
+        mode: currentMode
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || "Transmutation failed");
+    }
+
+    renderOutput(data.transmuted || data.output || "");
+
+  } catch (err) {
+    console.error(err);
+    output.textContent = "⚠️ Transmutation failed. Check console.";
+  }
+});
+
+// -------------------- OUTPUT RENDER --------------------
+function renderOutput(text) {
+  const output = document.getElementById("outputText");
+  const typewriter = document.getElementById("typewriterSwitch")?.checked;
+
+  output.textContent = "";
+
+  if (!typewriter) {
+    output.textContent = text;
+    return;
+  }
+
+  let i = 0;
+  const click = document.getElementById("typewriterClick");
+
+  const interval = setInterval(() => {
+    output.textContent += text.charAt(i);
+    if (click) click.currentTime = 0, click.play();
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, 20);
+}
+
+// -------------------- ACTIONS --------------------
 function copyText() {
-  navigator.clipboard.writeText(outputText.textContent);
+  navigator.clipboard.writeText(
+    document.getElementById("outputText").innerText
+  );
   alert("Copied ✨");
 }
 
 function speakText() {
-  speechSynthesis.cancel();
-  speechSynthesis.speak(new SpeechSynthesisUtterance(outputText.textContent));
+  const text = document.getElementById("outputText").innerText;
+  if (!text) return;
+  speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }
 
 function shareText() {
-  navigator.share?.({ title: "Keter Aether", text: outputText.textContent });
-}
+  const text = document.getElementById("outputText").innerText;
+  if (navigator.share) {
+    navigator.share({ text });
+  } else {
+    alert("Sharing not supported on this device.");
+  }
+    }
