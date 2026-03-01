@@ -296,3 +296,60 @@ footer strong {
     height: 240px;
   }
   }
+/* INK ANIMATION */
+.ink {
+  animation: inkSpread 1.8s ease-out forwards;
+}
+
+@keyframes inkSpread {
+  0% {
+    filter: blur(6px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+/* REMIX BUTTONS */
+.remix {
+  display:flex;
+  gap:.7rem;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin:1rem 0;
+}
+
+.remix button {
+  background:#222;
+  color:#fff;
+  border:1px solid #555;
+}
+
+/* SLIDER */
+.slider-wrap {
+  display:flex;
+  flex-direction:column;
+  font-size:.8rem;
+}
+
+/* OUTPUT ACTIONS */
+.output-actions {
+  display:flex;
+  gap:.6rem;
+  margin-top:1rem;
+  justify-content:center;
+}
+
+/* LIGHT THEME */
+body.light {
+  background:radial-gradient(circle at top,#fff,#ddd);
+  color:#111;
+}
+
+body.light .panel,
+body.light textarea {
+  background:#f8f8f8;
+  color:#111;
+   }
