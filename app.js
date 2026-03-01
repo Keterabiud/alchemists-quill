@@ -1,169 +1,131 @@
-/* ===============================
-   KETER AETHER — FRONTEND LOGIC
-   =============================== */
+// ===============================
+// KETER AETHER — FINAL APP LOGIC
+// ===============================
+
+let currentStyle = "poetic";
+let currentMode = "transmute";
 
 const input = document.getElementById("inputText");
-const output = document.getElementById("output");
-const styleSelect = document.getElementById("style");
+const outputSection = document.getElementById("outputSection");
+const outputText = document.getElementById("outputText");
 const strengthSlider = document.getElementById("strength");
-
 const transmuteBtn = document.getElementById("transmuteBtn");
-const rewriteBtn = document.getElementById("rewriteBtn");
+const historyList = document.getElementById("historyList");
 
-const exportImgBtn = document.getElementById("exportImg");
-const exportPdfBtn = document.getElementById("exportPdf");
-const speakBtn = document.getElementById("speak");
+// -------------------------------
+// STYLE DROPDOWN
+// -------------------------------
+const styleBtn = document.getElementById("styleBtn");
+const styleMenu = document.getElementById("styleMenu");
 
-const historyList = document.getElementById("history");
-const themeToggle = document.getElementById("themeToggle");
+styleBtn.onclick = () => {
+  styleMenu.classList.toggle("hidden");
+};
 
-let lastResult = "";
-
-/* ===============================
-   CORE TRANSMUTATION
-   =============================== */
-
-async function transmute(text) {
-  if (!text || !text.trim()) return;
-
-  output.textContent = "⏳ Transmuting...";
-  output.classList.remove("animate");
-
-  try {
-    const response = await fetch("/api/transmute", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text,
-        style: styleSelect.value,
-        strength: strengthSlider.value
-      })
-    });
-
-    const data = await response.json();
-
-    if (!data.success) {
-      output.textContent = "❌ Transmutation failed";
-      return;
-    }
-
-    lastResult = data.transmuted;
-    renderOutput(lastResult);
-    saveToHistory(lastResult);
-
-  } catch (err) {
-    output.textContent = "❌ Network error";
-    console.error(err);
-  }
-}
-
-/* ===============================
-   OUTPUT RENDER + ANIMATION
-   =============================== */
-
-function renderOutput(text) {
-  output.textContent = text;
-
-  // restart animation reliably
-  output.classList.remove("animate");
-  void output.offsetWidth;
-  output.classList.add("animate");
-}
-
-/* ===============================
-   BUTTON EVENTS
-   =============================== */
-
-transmuteBtn.addEventListener("click", () => {
-  transmute(input.value);
+styleMenu.querySelectorAll("li").forEach(item => {
+  item.onclick = () => {
+    currentStyle = item.dataset.style;
+    styleBtn.textContent = item.textContent + " ▼";
+    styleMenu.classList.add("hidden");
+  };
 });
 
-rewriteBtn.addEventListener("click", () => {
-  if (!lastResult) return;
-  transmute(lastResult);
+// -------------------------------
+// MODE BUTTONS
+// -------------------------------
+document.querySelectorAll(".mode").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentMode = btn.dataset.mode;
+  };
 });
 
-/* ===============================
-   HISTORY
-   =============================== */
+// -------------------------------
+// MAIN TRANSMUTE
+// -------------------------------
+transmuteBtn.onclick = async () => {
+  const text = input.value.trim();
+  if (!text) return alert("Write something first.");
 
-function saveToHistory(text) {
-  const li = document.createElement("li");
-  li.textContent = text.slice(0, 90) + "...";
+  transmuteBtn.disabled = true;
+  transmuteBtn.textContent = "✨ Working...";
 
-  li.addEventListener("click", () => {
-    renderOutput(text);
-    lastResult = text;
+  const res = await fetch("/api/transmute", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      text,
+      style: currentStyle,
+      mode: currentMode,
+      strength: strengthSlider.value
+    })
   });
 
-  historyList.prepend(li);
+  const data = await res.json();
+  transmuteBtn.disabled = false;
+  transmuteBtn.textContent = "✨ Transmute";
 
-  // keep history short
-  if (historyList.children.length > 10) {
-    historyList.removeChild(historyList.lastChild);
+  if (!data.success) {
+    alert(data.error || "Something failed.");
+    return;
   }
+
+  animateOutput(data.transmuted);
+  saveHistory(data.transmuted);
+};
+
+// -------------------------------
+// TYPEWRITER / INK ANIMATION
+// -------------------------------
+function animateOutput(text) {
+  outputSection.classList.remove("hidden");
+  outputText.textContent = "";
+  let i = 0;
+
+  const interval = setInterval(() => {
+    outputText.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, 18);
 }
 
-/* ===============================
-   EXPORT FUNCTIONS
-   =============================== */
+// -------------------------------
+// REWRITE
+// -------------------------------
+function rewrite() {
+  input.value = outputText.textContent;
+  transmuteBtn.click();
+}
 
-exportImgBtn.addEventListener("click", async () => {
-  const canvas = await html2canvas(output);
-  const link = document.createElement("a");
-  link.download = "keter-aether.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-});
+// -------------------------------
+// COPY
+// -------------------------------
+function copyText() {
+  navigator.clipboard.writeText(outputText.textContent);
+  alert("Copied ✨");
+}
 
-exportPdfBtn.addEventListener("click", async () => {
-  const canvas = await html2canvas(output);
-  const imgData = canvas.toDataURL("image/png");
-
-  const pdf = new jspdf.jsPDF({
-    orientation: "portrait",
-    unit: "mm",
-    format: "a4"
-  });
-
-  pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
-  pdf.save("keter-aether.pdf");
-});
-
-/* ===============================
-   VOICE SYNTHESIS
-   =============================== */
-
-speakBtn.addEventListener("click", () => {
-  if (!output.textContent) return;
-
-  const utter = new SpeechSynthesisUtterance(output.textContent);
-  utter.rate = 0.9;
-  utter.pitch = 1;
-
-  // optional: choose deeper voice if available
-  const voices = speechSynthesis.getVoices();
-  const preferred = voices.find(v => v.lang.startsWith("en"));
-  if (preferred) utter.voice = preferred;
-
+// -------------------------------
+// VOICE (STYLE AWARE)
+// -------------------------------
+function speak() {
   speechSynthesis.cancel();
-  speechSynthesis.speak(utter);
-});
+  const u = new SpeechSynthesisUtterance(outputText.textContent);
+  u.rate = currentStyle === "shakespearean" ? 0.85 : 1;
+  u.pitch = currentStyle === "victorian" ? 0.9 : 1;
+  speechSynthesis.speak(u);
+}
 
-/* ===============================
-   THEME TOGGLE
-   =============================== */
-
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
-
-  themeToggle.textContent =
-    document.body.classList.contains("dark") ? "🌙" : "☀️";
-});
-
-/* ===============================
-   SAFETY: LOAD VOICES
-   =============================== */
-
-window.speechSynthesis.onvoiceschanged = () => {};
+// -------------------------------
+// HISTORY
+// -------------------------------
+function saveHistory(text) {
+  const li = document.createElement("li");
+  li.textContent = text.slice(0, 80) + "...";
+  li.onclick = () => {
+    outputText.textContent = text;
+    outputSection.classList.remove("hidden");
+  };
+  historyList.prepend(li);
+     }
