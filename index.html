@@ -2,70 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Keter Aether</title>
 
-  <link rel="stylesheet" href="styles.css" />
-
-  <!-- PDF / Image export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
-
 <body class="dark">
 
-  <!-- HEADER -->
   <header class="header">
-    <img src="/logo.png" class="logo-img" alt="Keter Aether" />
-    <button id="themeToggle">🌙</button>
+    <h1 class="logo">🜏 Keter Aether</h1>
   </header>
 
-  <!-- MAIN -->
-  <main>
+  <main class="container">
 
     <!-- INPUT -->
-    <section class="panel">
-      <textarea id="inputText" placeholder="Write or paste your text here..."></textarea>
+    <textarea
+      id="inputText"
+      placeholder="Write or paste your text here..."
+    ></textarea>
 
-      <div class="controls">
-        <select id="style">
-          <option value="poetic">Poetic</option>
-          <option value="shakespearean">Shakespearean</option>
-          <option value="victorian">Victorian</option>
-          <option value="modern">Modern Elegant</option>
-        </select>
+    <!-- CONTROLS -->
+    <div class="controls">
 
-        <label>
-          Style Strength
-          <input type="range" id="strength" min="0.3" max="1.2" step="0.1" value="0.8" />
-        </label>
+      <!-- CUSTOM STYLE DROPDOWN -->
+      <div class="dropdown">
+        <button id="styleBtn" class="dropdown-btn">Poetic ▼</button>
+        <ul id="styleMenu" class="dropdown-menu hidden">
+          <li data-style="poetic">Poetic</li>
+          <li data-style="shakespearean">Shakespearean</li>
+          <li data-style="victorian">Victorian</li>
+          <li data-style="modern elegant">Modern Elegant</li>
+        </ul>
       </div>
 
-      <div class="buttons">
-        <button id="transmuteBtn">✨ Transmute</button>
-        <button id="rewriteBtn">♻ Rewrite</button>
+      <!-- STRENGTH -->
+      <div class="strength">
+        <label>Style Strength</label>
+        <input type="range" id="strength" min="0.2" max="1" step="0.1" value="0.7"/>
       </div>
-    </section>
+
+    </div>
+
+    <!-- MODES -->
+    <div class="modes">
+      <button class="mode active" data-mode="transmute">Transmute</button>
+      <button class="mode" data-mode="ghostwriter">Ghostwriter</button>
+      <button class="mode" data-mode="critic">Critic’s Eye</button>
+    </div>
+
+    <!-- ACTION -->
+    <button id="transmuteBtn" class="primary">✨ Transmute</button>
 
     <!-- OUTPUT -->
-    <section class="panel output-panel">
-      <div id="output" class="ink"></div>
+    <section id="outputSection" class="output hidden">
+      <pre id="outputText"></pre>
 
-      <div class="buttons">
-        <button id="exportImg">🖼 Image</button>
-        <button id="exportPdf">📄 PDF</button>
-        <button id="speak">🔊 Voice</button>
+      <div class="output-actions">
+        <button onclick="rewrite()">🔁 Rewrite</button>
+        <button onclick="copyText()">📋 Copy</button>
+        <button onclick="speak()">🔊 Voice</button>
       </div>
     </section>
 
     <!-- HISTORY -->
-    <section class="panel history-panel">
+    <section class="history">
       <h3>📜 History</h3>
-      <ul id="history"></ul>
+      <ul id="historyList"></ul>
     </section>
 
   </main>
 
-  <script src="app.js"></script>
+  <script src="/app.js"></script>
 </body>
-  </html>
+</html>
