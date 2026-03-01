@@ -1,87 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Keter Aether</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keter Aether</title>
 
-<link rel="stylesheet" href="styles.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- PDF / Image export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
-<body>
+<body class="dark">
 
-<header class="header">
-  <img src="/images/logo-clean.png" class="logo-img">
-</header>
+  <!-- HEADER -->
+  <header class="header">
+    <img src="/logo.png" class="logo-img" alt="Keter Aether" />
+    <button id="themeToggle">🌙</button>
+  </header>
 
-<div class="mode-buttons">
-  <button class="mode-btn active" data-mode="transmute">Transmutation Engine</button>
-  <button class="mode-btn" data-mode="ghostwriter">Ghostwriter’s Quill</button>
-  <button class="mode-btn" data-mode="critic">Critic’s Eye</button>
-</div>
+  <!-- MAIN -->
+  <main>
 
-<main>
+    <!-- INPUT -->
+    <section class="panel">
+      <textarea id="inputText" placeholder="Write or paste your text here..."></textarea>
 
-<section class="panel">
+      <div class="controls">
+        <select id="style">
+          <option value="poetic">Poetic</option>
+          <option value="shakespearean">Shakespearean</option>
+          <option value="victorian">Victorian</option>
+          <option value="modern">Modern Elegant</option>
+        </select>
 
-<textarea id="inputText" placeholder="Type your plea..."></textarea>
+        <label>
+          Style Strength
+          <input type="range" id="strength" min="0.3" max="1.2" step="0.1" value="0.8" />
+        </label>
+      </div>
 
-<div class="controls">
-  <select id="styleSelect">
-    <option>Modern English</option>
-    <option>Shakespearean</option>
-    <option>Victorian</option>
-    <option>Romantic</option>
-    <option>Poetic</option>
-    <option>Formal</option>
-  </select>
+      <div class="buttons">
+        <button id="transmuteBtn">✨ Transmute</button>
+        <button id="rewriteBtn">♻ Rewrite</button>
+      </div>
+    </section>
 
-  <div class="slider-wrap">
-    <label>Style Strength</label>
-    <input type="range" id="strength" min="30" max="100" value="65">
-  </div>
+    <!-- OUTPUT -->
+    <section class="panel output-panel">
+      <div id="output" class="ink"></div>
 
-  <label><input type="checkbox" id="emojiToggle" checked> Emojis</label>
-  <label><input type="checkbox" id="typeToggle" checked> Typewriter</label>
-</div>
+      <div class="buttons">
+        <button id="exportImg">🖼 Image</button>
+        <button id="exportPdf">📄 PDF</button>
+        <button id="speak">🔊 Voice</button>
+      </div>
+    </section>
 
-<div class="remix">
-  <button data-tone="dramatic">✨ Dramatic</button>
-  <button data-tone="playful">😂 Playful</button>
-  <button data-tone="dark">🖤 Dark</button>
-  <button data-tone="gentle">🌸 Gentle</button>
-</div>
+    <!-- HISTORY -->
+    <section class="panel history-panel">
+      <h3>📜 History</h3>
+      <ul id="history"></ul>
+    </section>
 
-<div class="actions">
-  <button id="submitBtn">Transmute ✨</button>
-  <button id="rewriteBtn">Rewrite 🔁</button>
-</div>
+  </main>
 
-<div id="outputBox">
-  <div id="outputText" class="ink"></div>
-
-  <div class="output-actions">
-    <button onclick="speakText()">🔊 Speak</button>
-    <button onclick="exportImage()">🖼 Image</button>
-    <button onclick="exportPDF()">📜 PDF</button>
-  </div>
-</div>
-
-</section>
-
-<section class="history-panel">
-  <h3>🕯️ History</h3>
-  <div id="historyList"></div>
-</section>
-
-<div class="theme-toggle">
-  <button id="themeBtn">🌑 / ☀️</button>
-</div>
-
-</main>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
-</html>
+  </html>
